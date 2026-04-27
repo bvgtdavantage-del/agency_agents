@@ -1001,3 +1001,30 @@ support:
       workflow_rules:
         total: 11
         mandatory: true
+
+specialized:
+  - name: Second Brain Manager
+    description: Persistent knowledge and memory manager that stores, organizes, and retrieves information across agent sessions
+    keywords:
+      - second brain
+      - knowledge base
+      - memory
+      - remember
+      - recall
+      - knowledge management
+      - store knowledge
+      - retrieve knowledge
+      - lessons learned
+      - post-mortem
+      - knowledge retrieval
+      - persistent memory
+      - agent memory
+    file_path: agents/specialized/second-brain-manager.md
+    category: specialized
+    is_default: false
+    protocols:
+      requirements_gathering_first: false
+      test_first_development: false
+      workflow_rules:
+        total: 11
+        mandatory: true
