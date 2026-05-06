@@ -1,0 +1,5 @@
+# HackingTool - Security Research Framework
+# All dependencies use Python stdlib only (no external packages required)
+# Optional: install pytest for running tests
+pytest>=7.4.0
+pytest-cov>=4.1.0
