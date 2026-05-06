@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sammy's Adventure</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #1a1a2e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: 'Courier New', monospace;
+      color: #fff;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #f7c948;
+      text-shadow: 2px 2px 0 #c0392b;
+      margin-bottom: 10px;
+      letter-spacing: 3px;
+    }
+    #hud {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+      color: #f7c948;
+    }
+    canvas {
+      border: 4px solid #f7c948;
+      border-radius: 4px;
+      display: block;
+      image-rendering: pixelated;
+    }
+    #controls {
+      margin-top: 10px;
+      color: #aaa;
+      font-size: 0.85rem;
+    }
+    #message {
+      position: absolute;
+      font-size: 2rem;
+      color: #f7c948;
+      text-shadow: 3px 3px 0 #000;
+      pointer-events: none;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>SAMMY'S ADVENTURE</h1>
+  <div id="hud">
+    <span>SCORE: <span id="scoreVal">0</span></span>
+    <span>LIVES: <span id="livesVal">3</span></span>
+    <span>COINS: <span id="coinsVal">0</span></span>
+    <span>LEVEL: <span id="levelVal">1</span></span>
+  </div>
+  <canvas id="game" width="800" height="480"></canvas>
+  <div id="controls">Arrow Keys / WASD: Move &amp; Jump &nbsp;|&nbsp; Space: Jump &nbsp;|&nbsp; R: Restart</div>
+  <div id="message"></div>
+  <script src="game.js"></script>
+</body>
+</html>
