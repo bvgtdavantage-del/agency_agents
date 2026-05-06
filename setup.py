@@ -1,13 +1,13 @@
 """
-Setup configuration for agent_router package
+Setup configuration for agency_agents and hackingtool packages
 """
 
 from setuptools import setup, find_packages
 
 setup(
     name='agency_agents',
-    version='0.2.0',
-    description='Intelligent task routing and persistent knowledge system for specialized agents',
+    version='0.3.0',
+    description='Intelligent task routing, persistent knowledge, and all-in-one security research framework',
     author='Agency Agents',
     packages=find_packages(),
     python_requires='>=3.8',
@@ -23,6 +23,7 @@ setup(
     entry_points={
         'console_scripts': [
             'second-brain=second_brain.cli:main',
+            'hackingtool=hackingtool.cli:main',
         ],
     },
     package_data={

@@ -1,0 +1,43 @@
+from hackingtool.core.utils import Colors, color
+from hackingtool import __version__
+
+
+_BANNER = r"""
+  ██╗  ██╗ █████╗  ██████╗██╗  ██╗██╗███╗   ██╗ ██████╗
+  ██║  ██║██╔══██╗██╔════╝██║ ██╔╝██║████╗  ██║██╔════╝
+  ███████║███████║██║     █████╔╝ ██║██╔██╗ ██║██║  ███╗
+  ██╔══██║██╔══██║██║     ██╔═██╗ ██║██║╚██╗██║██║   ██║
+  ██║  ██║██║  ██║╚██████╗██║  ██╗██║██║ ╚████║╚██████╔╝
+  ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝
+
+  ████████╗ ██████╗  ██████╗ ██╗
+  ╚══██╔══╝██╔═══██╗██╔═══██╗██║
+     ██║   ██║   ██║██║   ██║██║
+     ██║   ██║   ██║██║   ██║██║
+     ██║   ╚██████╔╝╚██████╔╝███████╗
+     ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝
+"""
+
+_TAGLINE = "  All-in-One Security Research Framework"
+_DISCLAIMER = (
+    "  [!] For authorized security testing, CTF challenges & education ONLY.\n"
+    "  [!] Unauthorized use against systems you do not own is illegal."
+)
+
+
+def print_banner() -> None:
+    purple = Colors.PURPLE + Colors.BOLD
+    green = Colors.GREEN + Colors.BOLD
+
+    lines = _BANNER.split("\n")
+    mid = len(lines) // 2
+    colored_lines = []
+    for i, line in enumerate(lines):
+        colored_lines.append(color(line, purple if i <= mid else green))
+
+    print("\n".join(colored_lines))
+    print(color(_TAGLINE, Colors.CYAN + Colors.BOLD))
+    print(color(f"  v{__version__}", Colors.DIM))
+    print()
+    print(color(_DISCLAIMER, Colors.YELLOW))
+    print()
