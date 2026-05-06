@@ -1,0 +1,24 @@
+services:
+  hackingtool:
+    build: .
+    image: hackingtool
+    container_name: hackingtool
+    stdin_open: true
+    tty: true
+    volumes:
+      - hackingtool-data:/app/data
+
+  hackingtool-dev:
+    build: .
+    image: hackingtool
+    container_name: hackingtool-dev
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app
+      - hackingtool-data:/app/data
+    profiles:
+      - dev
+
+volumes:
+  hackingtool-data:
