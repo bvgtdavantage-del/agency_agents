@@ -308,6 +308,81 @@ def cmd_pattern(args: argparse.Namespace) -> int:
     return 0
 
 
+# ---------- Forensics ----------
+
+def cmd_file_analyze(args: argparse.Namespace) -> int:
+    from hackingtool.modules.forensics import FileAnalyzer
+    import pathlib
+
+    path = pathlib.Path(args.file)
+    if not path.exists():
+        print(color(f"[!] File not found: {args.file}", Colors.RED))
+        return 1
+
+    print(color(f"[*] Analyzing: {args.file}", Colors.CYAN))
+    info = FileAnalyzer().analyze(path)
+
+    if not info.success:
+        print(color(f"[!] Error: {info.error}", Colors.RED))
+        return 1
+
+    rows = [
+        ("Type", info.description),
+        ("MIME", info.mime),
+        ("Size", f"{info.size:,} bytes"),
+        ("Entropy", f"{info.entropy:.4f}  ({info.entropy_label})"),
+    ]
+    print(format_table(rows, ["Field", "Value"]))
+
+    if not args.no_strings and info.printable_strings:
+        print(color(f"\n[+] Extracted strings ({len(info.printable_strings)}):", Colors.CYAN))
+        for s in info.printable_strings:
+            print(f"  {s}")
+
+    if args.hex:
+        print(color("\n[+] Hex preview:", Colors.CYAN))
+        print(info.hex_preview)
+
+    return 0
+
+
+def cmd_steg_detect(args: argparse.Namespace) -> int:
+    from hackingtool.modules.forensics import StegDetector
+    import pathlib
+
+    path = pathlib.Path(args.file)
+    if not path.exists():
+        print(color(f"[!] File not found: {args.file}", Colors.RED))
+        return 1
+
+    data = path.read_bytes()
+    print(color(f"[*] Steganography scan: {args.file}", Colors.CYAN))
+    result = StegDetector().detect(data, filename=args.file)
+
+    if not result.success:
+        print(color(f"[!] Error: {result.error}", Colors.RED))
+        return 1
+
+    verdict_color = Colors.RED if result.score >= 70 else Colors.YELLOW if result.score >= 35 else Colors.GREEN
+    print(color(f"\n[+] Suspicion score: {result.score}/100", verdict_color + Colors.BOLD))
+    print(color(f"[+] Verdict: {result.verdict}", verdict_color))
+
+    if result.lsb_chi_p is not None:
+        print(color(f"[+] LSB chi-square p-value: {result.lsb_chi_p:.4f}", Colors.CYAN))
+
+    if result.appended_bytes:
+        print(color(f"[!] Appended data: {result.appended_bytes} bytes after image end", Colors.RED))
+
+    if result.indicators:
+        print(color("\n[!] Indicators:", Colors.YELLOW))
+        for ind in result.indicators:
+            print(f"  - {ind}")
+    else:
+        print(color("[+] No steganography indicators found.", Colors.GREEN))
+
+    return 0
+
+
 # ---------- Argument Parser ----------
 
 def build_parser() -> argparse.ArgumentParser:
@@ -391,6 +466,17 @@ def build_parser() -> argparse.ArgumentParser:
     p_pattern = sub.add_parser("pattern", help="Search text for CTF patterns and secrets")
     p_pattern.add_argument("text")
     p_pattern.set_defaults(func=cmd_pattern)
+
+    # forensics
+    p_file = sub.add_parser("file-analyze", help="Identify file type, entropy, and extract strings")
+    p_file.add_argument("file", help="Path to file")
+    p_file.add_argument("--hex", action="store_true", help="Show hex preview")
+    p_file.add_argument("--no-strings", action="store_true", help="Suppress string extraction")
+    p_file.set_defaults(func=cmd_file_analyze)
+
+    p_steg = sub.add_parser("steg-detect", help="Heuristic steganography detector (PNG/BMP/JPEG)")
+    p_steg.add_argument("file", help="Path to image file")
+    p_steg.set_defaults(func=cmd_steg_detect)
 
     return parser
 

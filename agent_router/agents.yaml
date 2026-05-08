@@ -1002,6 +1002,123 @@ support:
         total: 11
         mandatory: true
 
+security:
+  - name: Penetration Tester
+    description: Expert penetration tester for authorized security assessments, vulnerability discovery, web application testing, and exploitation proof-of-concept development
+    keywords:
+      - penetration test
+      - pentest
+      - pen test
+      - vulnerability assessment
+      - security assessment
+      - exploit
+      - exploitation
+      - privilege escalation
+      - lateral movement
+      - post-exploitation
+      - sql injection
+      - sqli
+      - xss
+      - csrf
+      - ssrf
+      - owasp
+      - burp suite
+      - metasploit
+      - nmap
+      - port scan
+      - security audit
+      - red team
+      - authorized testing
+      - rules of engagement
+      - roe
+    file_path: agents/security/security-penetration-tester.md
+    category: security
+    is_default: false
+    protocols:
+      requirements_gathering_first: true
+      test_first_development: false
+      workflow_rules:
+        total: 11
+        mandatory: true
+
+  - name: CTF Specialist
+    description: Capture The Flag expert covering cryptography, binary exploitation, reverse engineering, steganography, forensics, and web challenges
+    keywords:
+      - ctf
+      - capture the flag
+      - cryptography
+      - cipher
+      - encryption
+      - decryption
+      - hash cracking
+      - reverse engineering
+      - binary exploitation
+      - buffer overflow
+      - rop chain
+      - shellcode
+      - steganography
+      - stego
+      - lsb
+      - forensics
+      - pcap
+      - wireshark
+      - memory dump
+      - ghidra
+      - ida pro
+      - pwn
+      - pwntools
+      - flag
+      - challenge
+      - decode
+      - base64
+      - hex decode
+      - xor
+      - frequency analysis
+    file_path: agents/security/security-ctf-specialist.md
+    category: security
+    is_default: false
+    protocols:
+      requirements_gathering_first: false
+      test_first_development: false
+      workflow_rules:
+        total: 11
+        mandatory: true
+
+  - name: OSINT Analyst
+    description: Open Source Intelligence analyst for passive information gathering, digital footprint analysis, infrastructure mapping, and threat intelligence using only public sources
+    keywords:
+      - osint
+      - open source intelligence
+      - passive recon
+      - reconnaissance
+      - whois
+      - dns enumeration
+      - subdomain discovery
+      - ip lookup
+      - geolocation
+      - certificate transparency
+      - shodan
+      - censys
+      - social media investigation
+      - username lookup
+      - email harvesting
+      - google dorking
+      - threat intelligence
+      - ioc
+      - infrastructure mapping
+      - attack surface
+      - digital footprint
+      - public records
+    file_path: agents/security/security-osint-analyst.md
+    category: security
+    is_default: false
+    protocols:
+      requirements_gathering_first: true
+      test_first_development: false
+      workflow_rules:
+        total: 11
+        mandatory: true
+
 specialized:
   - name: Second Brain Manager
     description: Persistent knowledge and memory manager that stores, organizes, and retrieves information across agent sessions
