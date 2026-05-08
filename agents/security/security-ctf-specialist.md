@@ -66,6 +66,14 @@ hackingtool pattern "...binary data or text..."
 
 # Morse code
 hackingtool cipher morse-d ".... . .-.. .-.. ---"
+
+# Forensics — identify file type, entropy, and extract strings
+hackingtool file-analyze suspicious.bin --hex
+hackingtool file-analyze mystery.png
+
+# Steganography detection (PNG/BMP/JPEG)
+hackingtool steg-detect image.png
+hackingtool steg-detect photo.jpg
 ```
 
 ## CTF Methodology
