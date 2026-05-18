@@ -251,6 +251,83 @@ def cmd_ip(args: argparse.Namespace) -> int:
     return 0
 
 
+# ---------- OSINT (extended) ----------
+
+def cmd_certs(args: argparse.Namespace) -> int:
+    from hackingtool.modules.osint import CertTransparency
+    cfg = _make_config(args)
+    print(color(f"[*] Certificate transparency lookup: {args.domain}", Colors.CYAN))
+    result = CertTransparency(cfg).lookup(args.domain)
+    if not result.success:
+        print(color(f"[!] Error: {result.error}", Colors.RED))
+        return 1
+    print(color(f"[+] Found {len(result.records)} certificate records, {len(result.subdomains)} unique subdomains", Colors.GREEN))
+    if result.subdomains:
+        print(color("\n[+] Subdomains:", Colors.CYAN))
+        for sub in result.subdomains:
+            print(f"  - {sub}")
+    if args.records and result.records:
+        print(color(f"\n[+] Certificate records (first {min(10, len(result.records))}):", Colors.CYAN))
+        rows = [(r.domain[:50], r.issuer[:30], r.not_after[:10]) for r in result.records[:10]]
+        print(format_table(rows, ["Domain", "Issuer", "Expires"]))
+    return 0
+
+
+def cmd_emails(args: argparse.Namespace) -> int:
+    from hackingtool.modules.osint import EmailHarvester
+    print(color(f"[*] Email pattern discovery: {args.domain}", Colors.CYAN))
+    result = EmailHarvester().generate_patterns(
+        args.domain,
+        first_name=args.first,
+        last_name=args.last,
+    )
+    if not result.success:
+        print(color(f"[!] Error: {result.error}", Colors.RED))
+        return 1
+    print(color("\n[+] Email format patterns:", Colors.CYAN))
+    rows = [(p.format, p.example, p.confidence) for p in result.patterns]
+    print(format_table(rows, ["Format", "Example", "Confidence"]))
+    if args.samples and result.sample_emails:
+        print(color(f"\n[+] Sample emails ({len(result.sample_emails)}):", Colors.CYAN))
+        for email in result.sample_emails[:20]:
+            print(f"  {email}")
+    return 0
+
+
+def cmd_username(args: argparse.Namespace) -> int:
+    from hackingtool.modules.osint import UsernameChecker
+    cfg = _make_config(args)
+    print(color(f"[*] Username lookup: {args.username}", Colors.CYAN))
+    print(color("[*] Checking platforms (this may take a moment)...", Colors.DIM))
+    result = UsernameChecker(cfg).check(args.username)
+    if not result.success:
+        print(color(f"[!] Error: {result.error}", Colors.RED))
+        return 1
+    print(color(f"\n[+] Found on {result.found_count} platform(s):", Colors.GREEN + Colors.BOLD))
+    if result.found:
+        rows = [(r.platform, r.url) for r in result.found]
+        print(format_table(rows, ["Platform", "URL"]))
+    else:
+        print(color("  No accounts found.", Colors.YELLOW))
+    if args.show_all and result.not_found:
+        print(color(f"\n[-] Not found on {len(result.not_found)} platform(s):", Colors.DIM))
+        for r in result.not_found:
+            print(f"  {r.platform}")
+    return 0
+
+
+def cmd_dorks(args: argparse.Namespace) -> int:
+    from hackingtool.modules.osint import DorkGenerator
+    print(color(f"[*] Generating Google dorks for: {args.domain}", Colors.CYAN))
+    result = DorkGenerator().generate(args.domain)
+    category = args.category
+    queries = result.by_category(category) if category else result.queries
+    print(color(f"\n[+] {len(queries)} dork queries generated:", Colors.GREEN))
+    rows = [(q.category, q.query, q.description[:50]) for q in queries]
+    print(format_table(rows, ["Category", "Query", "Description"]))
+    return 0
+
+
 # ---------- CTF ----------
 
 def cmd_cipher(args: argparse.Namespace) -> int:
@@ -448,6 +525,31 @@ def build_parser() -> argparse.ArgumentParser:
     p_ip.add_argument("target", nargs="?", help="IP address or hostname")
     p_ip.add_argument("--me", action="store_true", help="Look up your own public IP")
     p_ip.set_defaults(func=cmd_ip)
+
+    p_certs = sub.add_parser("certs", help="Certificate transparency log lookup (passive subdomain discovery)")
+    p_certs.add_argument("domain", help="Target domain (e.g. example.com)")
+    p_certs.add_argument("--records", action="store_true", help="Show raw certificate records")
+    p_certs.set_defaults(func=cmd_certs)
+
+    p_emails = sub.add_parser("emails", help="Email format pattern discovery for a domain")
+    p_emails.add_argument("domain", help="Target domain (e.g. example.com)")
+    p_emails.add_argument("--first", help="First name for specific email generation")
+    p_emails.add_argument("--last", help="Last name for specific email generation")
+    p_emails.add_argument("--samples", action="store_true", help="Show sample emails")
+    p_emails.set_defaults(func=cmd_emails)
+
+    p_username = sub.add_parser("username", help="Check username across major platforms")
+    p_username.add_argument("username", help="Username to investigate")
+    p_username.add_argument("--show-all", action="store_true", help="Also show platforms where not found")
+    p_username.set_defaults(func=cmd_username)
+
+    p_dorks = sub.add_parser("dorks", help="Generate Google dork queries for passive recon")
+    p_dorks.add_argument("domain", help="Target domain (e.g. example.com)")
+    p_dorks.add_argument("--category", choices=[
+        "exposed_files", "login_pages", "tech_stack",
+        "subdomains", "sensitive_dirs", "emails", "code_repos"
+    ], help="Filter by category")
+    p_dorks.set_defaults(func=cmd_dorks)
 
     # ctf
     p_cipher = sub.add_parser("cipher", help="Classic cipher tools")
