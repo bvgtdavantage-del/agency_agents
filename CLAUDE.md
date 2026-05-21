@@ -6,9 +6,9 @@ This repository is an **intelligent agent routing and tooling system** with thre
 
 1. **`agent_router/`** — Routes tasks to the appropriate specialized agent via keyword scoring
 2. **`second_brain/`** — Persistent JSON-backed knowledge store for cross-session agent memory
-3. **`hackingtool/`** — CLI security research framework (WHOIS, DNS, port scanning, crypto, OSINT, CTF)
+3. **`hackingtool/`** — CLI security research framework (WHOIS, DNS, port scanning, crypto, OSINT, CTF, forensics)
 
-It also contains **`agents/`**, a library of 50+ Claude agent definition markdown files, and **`protocols/`**, mandatory development workflow documentation.
+It also contains **`agents/`**, a library of 55 Claude agent definition markdown files (41 registered in `agents.yaml`), and **`protocols/`**, mandatory development workflow documentation.
 
 ---
 
@@ -19,16 +19,18 @@ agency_agents/
 ├── agent_router/           # Task-to-agent routing engine
 │   ├── router.py           # AgentRouter: select_agent(), analyze_task()
 │   ├── config.py           # AgentConfig singleton, YAML loader/validator
+│   ├── personality.py      # AgentPersonality: loads/parses agent .md files
 │   ├── agents.yaml         # All agent definitions with keywords and metadata
 │   ├── coordination.py     # Multi-agent coordination planning
-│   ├── protocols.py        # Protocol enforcement stubs
-│   └── errors.py           # RoutingError, AgentConfigError, ValidationError
+│   ├── protocols.py        # Protocol enforcement (11 mandatory rules)
+│   └── errors.py           # RoutingError, AgentConfigError, PersonalityLoadError, ValidationError
 │
 ├── second_brain/           # Persistent knowledge store
 │   ├── knowledge.py        # KnowledgeItem dataclass (title, content, category, tags)
 │   ├── memory.py           # MemoryStore: atomic JSON CRUD (saves to ~/.agency_second_brain/)
 │   ├── retrieval.py        # KnowledgeRetriever: keyword search with relevance scoring
-│   └── cli.py              # `second-brain` CLI entry point
+│   ├── cli.py              # `second-brain` CLI entry point
+│   └── __main__.py         # Module entry: `python -m second_brain`
 │
 ├── hackingtool/            # Security research CLI (stdlib-only runtime)
 │   ├── cli.py              # `hackingtool` entry point, all sub-commands
@@ -38,17 +40,18 @@ agency_agents/
 │       ├── web/            # HeaderAnalyzer, SSLChecker
 │       ├── crypto/         # HashIdentifier, HashGenerator, Encoder
 │       ├── osint/          # IPLookup
-│       └── ctf/            # CipherTools (caesar, vigenere, morse, xor), PatternSearch
+│       ├── ctf/            # CipherTools (caesar, vigenere, morse, xor), PatternSearch
+│       └── forensics/      # FileAnalyzer, SteganographyDetector
 │
 ├── agents/                 # Claude agent personality definition files (.md)
 │   ├── design/             # 6 agents (UI Designer, UX Architect, UX Researcher, etc.)
 │   ├── engineering/        # 7 agents (Senior Developer [default], Frontend, Backend, AI, etc.)
 │   ├── marketing/          # 8 agents (Content Creator, Social Media, TikTok, Reddit, etc.)
 │   ├── product/            # 3 agents (Sprint Prioritizer, Feedback Synthesizer, Trend Researcher)
-│   ├── project-management/ # 5 agents
+│   ├── project-management/ # 5 agents (Project Shepherd, Experiment Tracker, Studio Producer, etc.)
 │   ├── security/           # 3 agents (CTF Specialist, OSINT Analyst, Penetration Tester)
-│   ├── spatial-computing/  # 6 agents (visionOS, XR, macOS Metal, etc.)
-│   ├── specialized/        # 3 agents (Agents Orchestrator, Second Brain Manager, LSP Engineer)
+│   ├── spatial-computing/  # 6 agents (visionOS, XR Immersive, XR Interface, XR Cockpit, macOS Metal, Terminal)
+│   ├── specialized/        # 4 agents (Agents Orchestrator, Second Brain Manager, LSP Engineer, Data Analytics Reporter)
 │   ├── support/            # 6 agents (Analytics, Finance, Legal, Infrastructure, etc.)
 │   └── testing/            # 7 agents (Reality Checker, API Tester, Performance, etc.)
 │
@@ -58,10 +61,12 @@ agency_agents/
 │   ├── TEST-FIRST-DEVELOPMENT.md          # TDD standards (352 lines)
 │   └── GIT-WORKFLOW-PROTOCOL.md           # Git hygiene (4 mandatory checks)
 │
-├── tests/                  # Pytest test suite
+├── tests/                  # Pytest test suite (9 .py files + 7 hackingtool module tests)
 ├── templates/              # project-brief-template.md
 ├── setup.py                # Package config (v0.3.0, Python >=3.8)
 ├── conftest.py             # Root: adds project root to sys.path
+├── batch_test_agents.py    # Utility: batch-test routing for specific agents
+├── CONTRIBUTING.md         # Contribution guidelines
 └── TODO.md                 # Task tracking (In Progress / Pending / Completed)
 ```
 
@@ -81,7 +86,7 @@ pip install PyYAML>=6.0
 pip install -r requirements-hackingtool.txt
 ```
 
-Python requirement: **>=3.8**. Shared venv convention: `/Users/gagan/Desktop/gagan_projects/venv` (original author path — adapt to your local path).
+Python requirement: **>=3.8**. Use a virtual environment — activate it before running any commands.
 
 ---
 
@@ -94,8 +99,11 @@ pytest tests/ -v --cov=agent_router --cov=second_brain --cov=hackingtool
 # Run a specific test file
 pytest tests/test_agent_router.py -v
 
-# Run all 37-agent integration test
+# Run the multi-agent integration test
 pytest tests/test_all_37_agents.py -v
+
+# Run only fast unit tests (skip integration)
+pytest tests/ -v -k "not integration"
 ```
 
 Coverage minimum: **80%**. All tests must pass before any commit.
@@ -136,6 +144,8 @@ When writing new tests for `agent_router`, rely on the autouse fixture in `tests
 
 **AgentConfig singleton** (`config.py`): Loads `agents.yaml` once and caches it. Validates required fields (`name`, `description`, `keywords`, `file_path`) and that `file_path` exists on disk. Call `AgentConfig.clear_cache()` to reset between tests.
 
+**AgentPersonality** (`personality.py`): Loads and parses agent `.md` files at runtime. Extracts frontmatter (YAML), sections (identity, mission, tools, workflow), tone, examples, deliverables, and critical rules. Results are cached per agent name. Raises `PersonalityLoadError` on parse failure.
+
 **Adding a new agent**: Add an entry to `agent_router/agents.yaml` under the appropriate category. Required fields: `name`, `description`, `keywords` (list), `file_path` (must exist), `category`, `is_default` (bool), `protocols`.
 
 ### Second Brain (`second_brain/`)
@@ -148,9 +158,14 @@ When writing new tests for `agent_router`, rely on the autouse fixture in `tests
 
 ```bash
 second-brain add --title "Title" --content "..." --category engineering --tags tag1 tag2
+second-brain get <item-id>
+second-brain update <item-id> --title "New Title" --content "..."
+second-brain delete <item-id>
 second-brain search "react performance"
 second-brain list --category engineering
 second-brain related <item-id>
+second-brain tags
+second-brain categories
 second-brain stats
 ```
 
@@ -158,7 +173,24 @@ second-brain stats
 
 - Entry point: `hackingtool` CLI
 - **Zero runtime external dependencies** — uses Python stdlib only
-- Sub-commands: `whois`, `dns`, `scan`, `headers`, `ssl`, `hash-id`, `hash-gen`, `encode`, `ip`, `cipher`, `pattern`
+- Sub-commands:
+
+| Sub-command    | Module    | Purpose |
+|----------------|-----------|---------|
+| `whois`        | recon     | WHOIS domain lookup |
+| `dns`          | recon     | DNS record enumeration |
+| `scan`         | recon     | TCP port scanner |
+| `headers`      | web       | HTTP security header analysis |
+| `ssl`          | web       | SSL/TLS certificate checker |
+| `hash-id`      | crypto    | Identify hash type |
+| `hash-gen`     | crypto    | Generate hashes |
+| `encode`       | crypto    | Encode/decode data (base64, hex, url, rot13) |
+| `ip`           | osint     | IP/hostname geolocation lookup |
+| `cipher`       | ctf       | Classic cipher tools (caesar, vigenere, morse, xor) |
+| `pattern`      | ctf       | Search text for CTF patterns and secrets |
+| `file-analyze` | forensics | Identify file type, entropy, and extract strings |
+| `steg-detect`  | forensics | Heuristic steganography detector (PNG/BMP/JPEG) |
+
 - Global flags: `--timeout`, `--threads`, `--verbose`, `--no-banner`
 - `Config` dataclass (`core/config.py`): `timeout`, `verbose`, `max_threads`
 
@@ -223,9 +255,21 @@ color: blue
 
 The body contains the agent's identity, mission, tools, workflow, and communication style. These files are the source of truth for agent behavior — `agents.yaml` references them via `file_path`.
 
-The `agents.yaml` `file_path` values are currently absolute paths from the original author's machine (`/Users/gaganarora/...`). When deploying, either update these paths or make them relative to the project root. The `AgentConfig._validate_agent` method calls `os.path.exists(agent['file_path'])` and will raise `AgentConfigError` if the path doesn't exist.
+### Known Issue: Unregistered Agent Files
 
-**Workaround for local development**: Ensure `file_path` values in `agents.yaml` point to valid local paths, or update `_validate_agent` to skip the existence check in dev environments.
+14 agent `.md` files exist in `agents/` subdirectories but are **not registered in `agents.yaml`**:
+
+- `agents/specialized/`: `agents-orchestrator.md`, `data-analytics-reporter.md`, `lsp-index-engineer.md`
+- `agents/project-management/`: `project-management-experiment-tracker.md`, `project-management-project-shepherd.md`, `project-management-studio-operations.md`, `project-management-studio-producer.md`, `project-manager-senior.md`
+- `agents/spatial-computing/`: `macos-spatial-metal-engineer.md`, `terminal-integration-specialist.md`, `visionos-spatial-engineer.md`, `xr-cockpit-interaction-specialist.md`, `xr-immersive-developer.md`, `xr-interface-architect.md`
+
+To activate these agents, add their entries to `agent_router/agents.yaml` with correct local `file_path` values.
+
+### Absolute Path Issue
+
+The `agents.yaml` `file_path` values are absolute paths from the original author's machine (`/Users/gaganarora/...`). The `AgentConfig._validate_agent` method calls `os.path.exists(agent['file_path'])` and raises `AgentConfigError` if the path doesn't exist.
+
+**Fix for local development**: Update `file_path` values in `agents.yaml` to point to your local absolute paths, or modify `_validate_agent` to resolve paths relative to the project root.
 
 ---
 
@@ -243,9 +287,21 @@ No code changes needed — categories are free-form strings on `KnowledgeItem`. 
 ### Extend the routing score
 Edit `AgentRouter._calculate_agent_score` in `agent_router/router.py`. Keyword specificity bonuses and pattern detection live in `_detect_multi_agent_patterns`.
 
-### Run only fast unit tests (skip integration)
-```bash
-pytest tests/ -v -k "not integration"
+### Register an unregistered agent
+Add to `agent_router/agents.yaml`:
+```yaml
+- name: Agent Name
+  description: One-line description
+  keywords: [keyword1, keyword2]
+  file_path: /absolute/path/to/agents/category/filename.md
+  category: category-name
+  is_default: false
+  protocols:
+    requirements_gathering_first: true
+    test_first_development: true
+    workflow_rules:
+      total: 11
+      mandatory: true
 ```
 
 ---
@@ -257,3 +313,4 @@ pytest tests/ -v -k "not integration"
 - Do not commit `__pycache__/`, `.env`, or `*.pyc` files
 - Do not skip the `AgentConfig.clear_cache()` in test fixtures — it causes cross-test contamination
 - Do not update `agents.yaml` `file_path` values to non-existent paths without updating the validation logic
+- Do not add the 14 unregistered agents to `agents.yaml` without first verifying their `.md` files parse correctly via `AgentPersonality.load_agent()`
