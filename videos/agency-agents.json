@@ -1,0 +1,169 @@
+{
+  "theme": "flat-motion-graphics",
+  "cuts": [
+    {
+      "id": "aa-hook",
+      "source": "",
+      "type": "hero_title",
+      "in_seconds": 0,
+      "out_seconds": 4.2,
+      "text": "Agency Agents",
+      "subtitle": "Inside an intelligent agent routing system — 55 agents, one router, zero guesswork",
+      "backgroundColor": "#0F172A"
+    },
+    {
+      "id": "aa-agents",
+      "source": "",
+      "type": "stat_card",
+      "in_seconds": 4.2,
+      "out_seconds": 8.2,
+      "stat": "55",
+      "subtitle": "Specialized agent personalities — 41 wired into the router",
+      "accentColor": "#22D3EE",
+      "backgroundColor": "#0F172A"
+    },
+    {
+      "id": "aa-categories",
+      "source": "",
+      "type": "bar_chart",
+      "in_seconds": 8.2,
+      "out_seconds": 14,
+      "title": "Agent library by category",
+      "chartData": [
+        { "label": "Marketing", "value": 8 },
+        { "label": "Engineering", "value": 7 },
+        { "label": "Testing", "value": 7 },
+        { "label": "Design", "value": 6 },
+        { "label": "Spatial", "value": 6 },
+        { "label": "Support", "value": 6 }
+      ],
+      "chartColors": ["#F59E0B", "#22D3EE", "#34D399", "#A78BFA", "#F472B6", "#38BDF8"],
+      "showGrid": true,
+      "showValues": true,
+      "backgroundColor": "#0F172A"
+    },
+    {
+      "id": "aa-router-demo",
+      "source": "",
+      "type": "terminal_scene",
+      "in_seconds": 14,
+      "out_seconds": 23,
+      "title": "agent_router",
+      "accentColor": "#22D3EE",
+      "backgroundColor": "#0F172A",
+      "steps": [
+        { "kind": "cmd", "text": "python -m agent_router \"build a landing page with React\"" },
+        { "kind": "out", "text": "Scoring 41 agents by keyword match..." },
+        { "kind": "out", "text": "  Frontend Developer   score 9.5" },
+        { "kind": "out", "text": "  UI Designer          score 6.0" },
+        { "kind": "pill", "text": "Routed → Frontend Developer", "color": "#34D399" },
+        { "kind": "cmd", "text": "python -m agent_router \"make it pop\"" },
+        { "kind": "out", "text": "confidence 0.0 < threshold 2.0 — falling back" },
+        { "kind": "pill", "text": "Fallback → Senior Developer", "color": "#F59E0B" }
+      ]
+    },
+    {
+      "id": "aa-threshold",
+      "source": "",
+      "type": "comparison",
+      "in_seconds": 23,
+      "out_seconds": 28.5,
+      "title": "A confidence threshold routes every task",
+      "leftLabel": "Score ≥ 2.0",
+      "leftValue": "Best-match specialist",
+      "rightLabel": "Score < 2.0",
+      "rightValue": "Senior Developer",
+      "accentColor": "#A78BFA",
+      "backgroundColor": "#0F172A",
+      "color": "#F8FAFC"
+    },
+    {
+      "id": "aa-brain",
+      "source": "",
+      "type": "pie_chart",
+      "in_seconds": 28.5,
+      "out_seconds": 34.5,
+      "title": "Second Brain retrieval weights",
+      "chartData": [
+        { "label": "Title match", "value": 3 },
+        { "label": "Tag match", "value": 2 },
+        { "label": "Content match", "value": 1 }
+      ],
+      "chartColors": ["#A78BFA", "#22D3EE", "#34D399"],
+      "donut": true,
+      "centerLabel": "Title",
+      "centerValue": "3×",
+      "showLegend": true,
+      "backgroundColor": "#0F172A"
+    },
+    {
+      "id": "aa-hackingtool",
+      "source": "",
+      "type": "terminal_scene",
+      "in_seconds": 34.5,
+      "out_seconds": 43.5,
+      "title": "hackingtool",
+      "accentColor": "#F59E0B",
+      "backgroundColor": "#0F172A",
+      "steps": [
+        { "kind": "cmd", "text": "hackingtool cipher caesar --shift 13 \"Uryyb, Jbeyq\"" },
+        { "kind": "out", "text": "Hello, World" },
+        { "kind": "cmd", "text": "hackingtool scan example.com --ports 1-1024" },
+        { "kind": "out", "text": "  22/tcp   open   ssh" },
+        { "kind": "out", "text": "  443/tcp  open   https" },
+        { "kind": "pill", "text": "13 sub-commands · stdlib only", "color": "#F59E0B" }
+      ]
+    },
+    {
+      "id": "aa-discipline",
+      "source": "",
+      "type": "progress_bar",
+      "in_seconds": 43.5,
+      "out_seconds": 48.5,
+      "title": "Engineering discipline, enforced",
+      "progress": 0.8,
+      "progressLabel": "80% minimum test coverage — every agent follows 11 mandatory workflow rules",
+      "progressColor": "#34D399",
+      "backgroundColor": "#0F172A"
+    },
+    {
+      "id": "aa-close",
+      "source": "",
+      "type": "text_card",
+      "in_seconds": 48.5,
+      "out_seconds": 53,
+      "text": "Route the task. Remember the context. Ship with discipline.",
+      "color": "#F8FAFC",
+      "backgroundColor": "#0F172A"
+    }
+  ],
+  "overlays": [
+    {
+      "type": "section_title",
+      "in_seconds": 14.3,
+      "out_seconds": 17.3,
+      "text": "The Router",
+      "subtitle": "Keyword scoring picks the right specialist",
+      "accentColor": "#22D3EE"
+    },
+    {
+      "type": "section_title",
+      "in_seconds": 28.8,
+      "out_seconds": 31.8,
+      "text": "Second Brain",
+      "subtitle": "Persistent memory across sessions",
+      "accentColor": "#A78BFA"
+    },
+    {
+      "type": "stat_reveal",
+      "in_seconds": 44,
+      "out_seconds": 47.5,
+      "text": "11",
+      "subtitle": "Mandatory workflow rules",
+      "accentColor": "#34D399",
+      "position": "bottom-right"
+    }
+  ],
+  "captions": [],
+  "audio": {}
+}
