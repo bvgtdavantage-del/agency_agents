@@ -8,9 +8,11 @@ Following Test-First Development Protocol:
 - Tests will initially fail, then implementation will make them pass
 """
 
+import os
+
 import pytest
 from agent_router.router import AgentRouter
-from agent_router.config import AgentConfig
+from agent_router.config import PROJECT_ROOT, AgentConfig
 
 
 class TestAgentRouterInitialization:
@@ -242,7 +244,9 @@ class TestAgentMetadataRetrieval:
         router = AgentRouter()
 
         agent = router.get_agent_by_name('Frontend Developer')
-        expected_path = '/Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/engineering/engineering-frontend-developer.md'
+        expected_path = os.path.join(
+            PROJECT_ROOT, 'agents', 'engineering', 'engineering-frontend-developer.md'
+        )
 
         assert agent['file_path'] == expected_path
 

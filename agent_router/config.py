@@ -8,6 +8,8 @@ import yaml
 from typing import Dict, List, Optional
 from .errors import AgentConfigError
 
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 class AgentConfig:
     """Loads and manages agent configuration"""
@@ -110,9 +112,19 @@ class AgentConfig:
         if not isinstance(agent['keywords'], list) or len(agent['keywords']) == 0:
             raise AgentConfigError(f"Agent {agent['name']} must have keywords list")
 
-        # Validate file path
-        if not os.path.exists(agent['file_path']):
+        # Validate file path. Resolved in place so downstream consumers
+        # (AgentPersonality) always receive an absolute, openable path.
+        resolved = self.resolve_agent_path(agent['file_path'])
+        if not os.path.exists(resolved):
             raise AgentConfigError(f"Agent file not found: {agent['file_path']}")
+        agent['file_path'] = resolved
+
+    @staticmethod
+    def resolve_agent_path(file_path: str) -> str:
+        """Resolve a possibly repo-relative agent path against the project root"""
+        if os.path.isabs(file_path):
+            return file_path
+        return os.path.normpath(os.path.join(PROJECT_ROOT, file_path))
 
     def _check_duplicates(self):
         """Check for duplicate agent names"""

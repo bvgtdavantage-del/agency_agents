@@ -9,7 +9,11 @@ Following Test-First Development Protocol:
 
 import pytest
 import os
-from agent_router.config import AgentConfig, AgentConfigError
+import re
+
+import yaml
+
+from agent_router.config import PROJECT_ROOT, AgentConfig, AgentConfigError
 
 
 class TestConfigLoading:
@@ -23,7 +27,7 @@ class TestConfigLoading:
 
     def test_config_file_exists_at_expected_path(self):
         """Config file should exist at agent_router/agents.yaml"""
-        expected_path = '/Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/agent_router/agents.yaml'
+        expected_path = os.path.join(PROJECT_ROOT, 'agent_router', 'agents.yaml')
         config = AgentConfig()
 
         assert os.path.exists(expected_path)
@@ -84,6 +88,36 @@ class TestAgentDefinitionValidation:
                 file_path = agent['file_path']
                 assert file_path.endswith('.md')
                 assert os.path.exists(file_path), f"Agent file not found: {file_path}"
+
+    def test_yaml_file_paths_are_repo_relative(self):
+        """Raw YAML must not carry machine-specific absolute paths"""
+        config_path = os.path.join(PROJECT_ROOT, 'agent_router', 'agents.yaml')
+        with open(config_path) as f:
+            raw = yaml.safe_load(f)
+
+        for category, agents in raw.items():
+            for agent in agents:
+                file_path = agent['file_path']
+                assert not os.path.isabs(file_path), (
+                    f"{agent['name']} has absolute path: {file_path}"
+                )
+                assert file_path.startswith('agents/')
+
+    def test_agent_file_paths_resolve_under_project_root(self):
+        """Loaded paths should resolve to real files inside this checkout"""
+        config = AgentConfig()
+
+        for agent in config.get_all_agents():
+            file_path = agent['file_path']
+            assert os.path.isabs(file_path)
+            assert file_path.startswith(PROJECT_ROOT)
+            assert os.path.exists(file_path)
+
+    def test_resolve_agent_path_leaves_absolute_paths_untouched(self):
+        """Absolute entries stay as authored"""
+        absolute = os.path.join(PROJECT_ROOT, 'agents', 'engineering', 'x.md')
+
+        assert AgentConfig.resolve_agent_path(absolute) == absolute
 
     def test_agent_names_are_unique(self):
         """Agent names should be unique across all categories"""

@@ -35,7 +35,7 @@ engineering:
       - web app
       - bundle
       - optimize bundle
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/engineering/engineering-frontend-developer.md
+    file_path: agents/engineering/engineering-frontend-developer.md
     category: engineering
     is_default: false
     protocols:
@@ -75,7 +75,7 @@ engineering:
       - query optimization
       - optimize database
       - performance
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/engineering/engineering-backend-architect.md
+    file_path: agents/engineering/engineering-backend-architect.md
     category: engineering
     is_default: false
     protocols:
@@ -118,7 +118,7 @@ engineering:
       - prediction
       - forecasting
       - time series
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/engineering/engineering-ai-engineer.md
+    file_path: agents/engineering/engineering-ai-engineer.md
     category: engineering
     is_default: false
     protocols:
@@ -147,7 +147,7 @@ engineering:
       - code quality
       - build system
       - build authentication system
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/engineering/engineering-senior-developer.md
+    file_path: agents/engineering/engineering-senior-developer.md
     category: engineering
     is_default: true
     protocols:
@@ -171,7 +171,7 @@ engineering:
       - mobile app
       - cross-platform
       - native
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/engineering/engineering-mobile-app-builder.md
+    file_path: agents/engineering/engineering-mobile-app-builder.md
     category: engineering
     is_default: false
     protocols:
@@ -203,7 +203,7 @@ engineering:
       - cloud functions
       - prometheus
       - grafana
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/engineering/engineering-devops-automator.md
+    file_path: agents/engineering/engineering-devops-automator.md
     category: engineering
     is_default: false
     protocols:
@@ -228,7 +228,7 @@ engineering:
       - rapid prototype
       - build prototype
       - functional demo
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/engineering/engineering-rapid-prototyper.md
+    file_path: agents/engineering/engineering-rapid-prototyper.md
     category: engineering
     is_default: false
     protocols:
@@ -260,7 +260,7 @@ design:
       - design dark mode
       - visual hierarchy
       - establish visual hierarchy
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/design/design-ui-designer.md
+    file_path: agents/design/design-ui-designer.md
     category: design
     is_default: false
     protocols:
@@ -290,7 +290,7 @@ design:
       - interaction patterns
       - navigation structure
       - design information architecture
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/design/design-ux-architect.md
+    file_path: agents/design/design-ux-architect.md
     category: design
     is_default: false
     protocols:
@@ -318,7 +318,7 @@ design:
       - user feedback
       - insights
       - analyze user feedback and insights
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/design/design-ux-researcher.md
+    file_path: agents/design/design-ux-researcher.md
     category: design
     is_default: false
     protocols:
@@ -339,7 +339,7 @@ design:
       - visual identity
       - brand voice
       - style guide
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/design/design-brand-guardian.md
+    file_path: agents/design/design-brand-guardian.md
     category: design
     is_default: false
     protocols:
@@ -362,7 +362,7 @@ design:
       - infographics for
       - visual stories
       - compelling visual stories
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/design/design-visual-storyteller.md
+    file_path: agents/design/design-visual-storyteller.md
     category: design
     is_default: false
     protocols:
@@ -388,7 +388,7 @@ design:
       - personality to error
       - whimsical loading
       - loading states
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/design/design-whimsy-injector.md
+    file_path: agents/design/design-whimsy-injector.md
     category: design
     is_default: false
     protocols:
@@ -417,7 +417,7 @@ testing:
       - cross-browser
       - compatibility
       - browser compatibility
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/testing/testing-reality-checker.md
+    file_path: agents/testing/testing-reality-checker.md
     category: testing
     is_default: false
     protocols:
@@ -449,7 +449,7 @@ testing:
       - perform api load testing
       - test api authentication
       - api authentication
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/testing/testing-api-tester.md
+    file_path: agents/testing/testing-api-tester.md
     category: testing
     is_default: false
     protocols:
@@ -479,7 +479,7 @@ testing:
       - profile memory usage
       - profile memory
       - profile cpu
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/testing/testing-performance-benchmarker.md
+    file_path: agents/testing/testing-performance-benchmarker.md
     category: testing
     is_default: false
     protocols:
@@ -506,7 +506,7 @@ testing:
       - create test reports
       - gather evidence
       - evidence for bug reports
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/testing/testing-evidence-collector.md
+    file_path: agents/testing/testing-evidence-collector.md
     category: testing
     is_default: false
     protocols:
@@ -533,7 +533,7 @@ testing:
       - test patterns
       - testing insights
       - generate testing insights
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/testing/testing-test-results-analyzer.md
+    file_path: agents/testing/testing-test-results-analyzer.md
     category: testing
     is_default: false
     protocols:
@@ -563,7 +563,7 @@ testing:
       - recommend tools
       - recommend best tools
       - best tools for workflow
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/testing/testing-tool-evaluator.md
+    file_path: agents/testing/testing-tool-evaluator.md
     category: testing
     is_default: false
     protocols:
@@ -590,7 +590,7 @@ testing:
       - optimize ci/cd
       - optimize ci/cd pipeline
       - improve ci/cd
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/testing/testing-workflow-optimizer.md
+    file_path: agents/testing/testing-workflow-optimizer.md
     category: testing
     is_default: false
     protocols:
@@ -619,7 +619,7 @@ marketing:
       - write technical documentation
       - social media content
       - create social media content
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/marketing/marketing-content-creator.md
+    file_path: agents/marketing/marketing-content-creator.md
     category: marketing
     is_default: false
     protocols:
@@ -637,7 +637,7 @@ marketing:
       - social strategy
       - campaign
       - social presence
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/marketing/marketing-social-media-strategist.md
+    file_path: agents/marketing/marketing-social-media-strategist.md
     category: marketing
     is_default: false
     protocols:
@@ -664,7 +664,7 @@ marketing:
       - user acquisition strategies
       - acquisition strategies
       - user acquisition
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/marketing/marketing-growth-hacker.md
+    file_path: agents/marketing/marketing-growth-hacker.md
     category: marketing
     is_default: false
     protocols:
@@ -689,7 +689,7 @@ marketing:
       - write tweets
       - write engaging tweets
       - engaging tweets
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/marketing/marketing-twitter-engager.md
+    file_path: agents/marketing/marketing-twitter-engager.md
     category: marketing
     is_default: false
     protocols:
@@ -707,7 +707,7 @@ marketing:
       - instagram post
       - instagram story
       - instagram marketing
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/marketing/marketing-instagram-curator.md
+    file_path: agents/marketing/marketing-instagram-curator.md
     category: marketing
     is_default: false
     protocols:
@@ -733,7 +733,7 @@ marketing:
       - viral tiktok
       - viral tiktok campaigns
       - plan viral tiktok
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/marketing/marketing-tiktok-strategist.md
+    file_path: agents/marketing/marketing-tiktok-strategist.md
     category: marketing
     is_default: false
     protocols:
@@ -754,7 +754,7 @@ marketing:
       - reddit content
       - create reddit content
       - reddit posts
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/marketing/marketing-reddit-community-builder.md
+    file_path: agents/marketing/marketing-reddit-community-builder.md
     category: marketing
     is_default: false
     protocols:
@@ -772,7 +772,7 @@ marketing:
       - app store optimization
       - app listing
       - app description
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/marketing/marketing-app-store-optimizer.md
+    file_path: agents/marketing/marketing-app-store-optimizer.md
     category: marketing
     is_default: false
     protocols:
@@ -797,7 +797,7 @@ product:
       - rank features
       - prioritize bug fixes
       - bug fixes vs features
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/product/product-sprint-prioritizer.md
+    file_path: agents/product/product-sprint-prioritizer.md
     category: product
     is_default: false
     protocols:
@@ -822,7 +822,7 @@ product:
       - user complaints
       - analyze user feedback
       - extract insights from user research
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/product/product-feedback-synthesizer.md
+    file_path: agents/product/product-feedback-synthesizer.md
     category: product
     is_default: false
     protocols:
@@ -844,7 +844,7 @@ product:
       - emerging technologies
       - identify emerging technologies
       - emerging tech
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/product/product-trend-researcher.md
+    file_path: agents/product/product-trend-researcher.md
     category: product
     is_default: false
     protocols:
@@ -870,7 +870,7 @@ support:
       - handle inquiries
       - support documentation
       - create support documentation
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/support/support-support-responder.md
+    file_path: agents/support/support-support-responder.md
     category: support
     is_default: false
     protocols:
@@ -894,7 +894,7 @@ support:
       - analytics dashboard
       - conversion data
       - analyze conversion data
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/support/support-analytics-reporter.md
+    file_path: agents/support/support-analytics-reporter.md
     category: support
     is_default: false
     protocols:
@@ -920,7 +920,7 @@ support:
       - revenue metrics
       - analyze revenue metrics
       - financial projections
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/support/support-finance-tracker.md
+    file_path: agents/support/support-finance-tracker.md
     category: support
     is_default: false
     protocols:
@@ -947,7 +947,7 @@ support:
       - update dependencies
       - cloud resources
       - manage cloud resources
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/support/support-infrastructure-maintainer.md
+    file_path: agents/support/support-infrastructure-maintainer.md
     category: support
     is_default: false
     protocols:
@@ -970,7 +970,7 @@ support:
       - check legal requirements
       - privacy policy
       - privacy policy adherence
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/support/support-legal-compliance-checker.md
+    file_path: agents/support/support-legal-compliance-checker.md
     category: support
     is_default: false
     protocols:
@@ -992,7 +992,7 @@ support:
       - summarize
       - project status
       - summarize project status
-    file_path: /Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/support/support-executive-summary-generator.md
+    file_path: agents/support/support-executive-summary-generator.md
     category: support
     is_default: false
     protocols:

@@ -6,9 +6,22 @@ Last Updated: 2024-10-14 (Final Update)
 - No tasks currently in progress
 
 ## Pending
-- No pending tasks
+- [ ] Align agent protocol flags in `agents.yaml`
+  - 4 agents have `test_first_development: false` (Penetration Tester, CTF Specialist,
+    OSINT Analyst, Second Brain Manager), failing 2 protocol adherence tests
+- [ ] Reconcile agent count with `tests/test_all_37_agents.py`
+  - Test asserts 37 agents; `agents.yaml` registers 41
+- [ ] Register the 14 unregistered agent `.md` files in `agents.yaml`
 
 ## Recent Updates
+- [x] Make `agents.yaml` agent paths portable
+  - Completed: 2026-08-12
+  - Converted all 41 `file_path` values from the original author's absolute paths
+    to repo-relative `agents/<category>/<file>.md`
+  - `AgentConfig.resolve_agent_path` resolves them against the project root
+  - Fixes `AgentConfigError` that made `AgentRouter()` unconstructible on any
+    machine but the author's
+
 - [x] README.md updated with complete documentation
   - Completed: 2024-10-14
   - Commit: 2c635ec
