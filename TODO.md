@@ -9,6 +9,11 @@ Last Updated: 2024-10-14 (Final Update)
 - No pending tasks
 
 ## Recent Updates
+- [x] Gulf AI Academy training app (`gulf_ai_academy/`)
+  - Completed: 2026-08-19
+  - Self-contained learning app: 6 modules, 24 quiz questions, animations, certificate
+  - Based on the AI-Native Workforce briefing PDF (Four-Signal framework)
+
 - [x] README.md updated with complete documentation
   - Completed: 2024-10-14
   - Commit: 2c635ec
