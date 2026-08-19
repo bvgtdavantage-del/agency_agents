@@ -1,6 +1,6 @@
-# Gulf AI Academy
+# Benable AI Academy
 
-An interactive, self-contained training application for knowledge workers at large Gulf (GCC) enterprises — UAE, Saudi Arabia, Qatar, Bahrain, Kuwait, Oman — covering prompt engineering and AI adoption in daily corporate work.
+An interactive, self-contained training application by **benable ai** for knowledge workers at large Gulf (GCC) enterprises — UAE, Saudi Arabia, Qatar, Bahrain, Kuwait, Oman — covering prompt engineering and AI adoption in daily corporate work.
 
 The curriculum is adapted from the *AI-Native Workforce* enterprise briefing (the source PDF) and its Four-Signal capability framework: **Recognition, Direction, Judgement, Refinement**.
 
@@ -20,8 +20,8 @@ Six modules, each with lesson cards and a 4-question quiz (pass mark 3/4):
 - Animated stat counters, module transitions, quiz feedback micro-animations (respects `prefers-reduced-motion`)
 - Instant answer feedback with an explanation for every question
 - Progress saved in `localStorage`; per-module scores and a header progress ring
-- Printable completion certificate with the learner's name
-- English content with Arabic module accents; single dark "executive briefing" theme
+- Printable completion certificate with the learner's name, benable ai branded
+- English content with Arabic module accents; light product theme with a full dark-mode variant (system preference and explicit `data-theme` both supported)
 
 ## Running
 
@@ -31,4 +31,4 @@ No build, no dependencies — open the file in a browser:
 open gulf_ai_academy/index.html
 ```
 
-Fonts (Marcellus, Karla, Amiri) load from Google Fonts; without network access the declared fallback stacks are used.
+Fonts (Bricolage Grotesque, Schibsted Grotesk, Spline Sans Mono) load from Google Fonts; without network access the declared fallback stacks are used.
