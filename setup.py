@@ -10,7 +10,7 @@ setup(
     description='Intelligent task routing, persistent knowledge, and all-in-one security research framework',
     author='Agency Agents',
     packages=find_packages(),
-    python_requires='>=3.8',
+    python_requires='>=3.9',
     install_requires=[
         'PyYAML>=6.0',
     ],
