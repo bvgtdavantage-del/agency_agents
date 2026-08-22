@@ -1,6 +1,6 @@
 # Agency Agents Project To-Do List
 
-Last Updated: 2024-10-14 (Final Update)
+Last Updated: 2026-08-22
 
 ## In Progress
 - No tasks currently in progress
@@ -9,6 +9,13 @@ Last Updated: 2024-10-14 (Final Update)
 - No pending tasks
 
 ## Recent Updates
+- [x] Register Robin dark web OSINT integration
+  - Completed: 2026-08-22
+  - Branch: claude/robin-repo-setup-fssu1p
+  - Added: integrations/robin/ (setup guide + .env.example), Robin sections in the OSINT Analyst agent
+  - Added: 12 dark web keywords on the OSINT Analyst entry in agents.yaml
+  - Tests: tests/test_robin_integration.py (23 passing), tests/validation/test_robin_routing.sh (9 passing)
+
 - [x] README.md updated with complete documentation
   - Completed: 2024-10-14
   - Commit: 2c635ec
