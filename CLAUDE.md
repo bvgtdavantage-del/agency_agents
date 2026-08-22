@@ -178,7 +178,7 @@ second-brain stats
 | Sub-command    | Module    | Purpose |
 |----------------|-----------|---------|
 | `whois`        | recon     | WHOIS domain lookup |
-| `dns`          | recon     | DNS record enumeration |
+| `dns`          | recon     | DNS record enumeration (A/AAAA via stdlib; MX/NS/TXT need `dig`) |
 | `scan`         | recon     | TCP port scanner |
 | `headers`      | web       | HTTP security header analysis |
 | `ssl`          | web       | SSL/TLS certificate checker |
@@ -193,6 +193,9 @@ second-brain stats
 
 - Global flags: `--timeout`, `--threads`, `--verbose`, `--no-banner`
 - `Config` dataclass (`core/config.py`): `timeout`, `verbose`, `max_threads`
+- `dns` resolves A/AAAA with the Python stdlib and shells out to `dig` for MX/NS/TXT. When `dig` is
+  absent those types are skipped and `DNSResult.warnings` carries a message the CLI prints — install
+  `dnsutils` (Debian/Ubuntu) or `bind` (macOS) for full enumeration.
 
 ---
 

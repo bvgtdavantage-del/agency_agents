@@ -1,7 +1,12 @@
+import logging
+import shutil
 import socket
+import subprocess
 from dataclasses import dataclass, field
 from typing import Optional
 from hackingtool.core.config import Config
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -14,6 +19,7 @@ class DNSRecord:
 class DNSResult:
     domain: str
     records: list[DNSRecord] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
     error: Optional[str] = None
 
     @property
@@ -25,7 +31,13 @@ class DNSResult:
 
 
 class DNSEnumerator:
-    RECORD_TYPES = ["A", "AAAA", "MX", "NS", "TXT", "CNAME", "SOA"]
+    DIG_RECORD_TYPES = ["MX", "NS", "TXT"]
+    RECORD_TYPES = ["A", "AAAA"] + DIG_RECORD_TYPES
+
+    DIG_MISSING_WARNING = (
+        "dig not found: {types} records were not queried. "
+        "Install it with `sudo apt install dnsutils` or `brew install bind`."
+    )
 
     def __init__(self, config: Optional[Config] = None):
         self.config = config or Config()
@@ -58,62 +70,36 @@ class DNSEnumerator:
         except socket.gaierror:
             return []
 
-    def _resolve_mx(self, domain: str) -> list[DNSRecord]:
+    def _resolve_via_dig(self, domain: str, record_type: str) -> list[DNSRecord]:
         try:
-            import subprocess
-            result = subprocess.run(
-                ["dig", "+short", "MX", domain],
+            completed = subprocess.run(
+                ["dig", "+short", record_type, domain],
                 capture_output=True, text=True, timeout=self.config.timeout
             )
-            records = []
-            for line in result.stdout.strip().splitlines():
-                line = line.strip()
-                if line:
-                    records.append(DNSRecord("MX", line))
-            return records
         except Exception:
             return []
-
-    def _resolve_ns(self, domain: str) -> list[DNSRecord]:
-        try:
-            import subprocess
-            result = subprocess.run(
-                ["dig", "+short", "NS", domain],
-                capture_output=True, text=True, timeout=self.config.timeout
-            )
-            records = []
-            for line in result.stdout.strip().splitlines():
-                line = line.strip()
-                if line:
-                    records.append(DNSRecord("NS", line))
-            return records
-        except Exception:
-            return []
-
-    def _resolve_txt(self, domain: str) -> list[DNSRecord]:
-        try:
-            import subprocess
-            result = subprocess.run(
-                ["dig", "+short", "TXT", domain],
-                capture_output=True, text=True, timeout=self.config.timeout
-            )
-            records = []
-            for line in result.stdout.strip().splitlines():
-                line = line.strip().strip('"')
-                if line:
-                    records.append(DNSRecord("TXT", line))
-            return records
-        except Exception:
-            return []
+        records = []
+        for line in completed.stdout.strip().splitlines():
+            line = line.strip().strip('"')
+            if line:
+                records.append(DNSRecord(record_type, line))
+        return records
 
     def enumerate(self, domain: str) -> DNSResult:
         result = DNSResult(domain=domain)
         try:
             result.records.extend(self._resolve_a(domain))
             result.records.extend(self._resolve_aaaa(domain))
-            result.records.extend(self._resolve_mx(domain))
-            result.records.extend(self._resolve_ns(domain))
-            result.records.extend(self._resolve_txt(domain))
+
+            if shutil.which("dig"):
+                for record_type in self.DIG_RECORD_TYPES:
+                    result.records.extend(self._resolve_via_dig(domain, record_type))
+            else:
+                warning = self.DIG_MISSING_WARNING.format(
+                    types=", ".join(self.DIG_RECORD_TYPES)
+                )
+                result.warnings.append(warning)
+                logger.warning(warning)
         except Exception as exc:
             result.error = str(exc)
         return result

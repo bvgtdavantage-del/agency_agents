@@ -1,6 +1,6 @@
 # Agency Agents Project To-Do List
 
-Last Updated: 2024-10-14 (Final Update)
+Last Updated: 2026-08-22
 
 ## In Progress
 - No tasks currently in progress
@@ -9,6 +9,14 @@ Last Updated: 2024-10-14 (Final Update)
 - No pending tasks
 
 ## Recent Updates
+- [x] Fix silent DNS record loss when dig is unavailable
+  - Completed: 2026-08-22
+  - Branch: claude/hackingtool-dns-dig-warning
+  - Fixed: MX/NS/TXT were dropped without notice when dig was not installed
+  - Fixed: RECORD_TYPES advertised CNAME and SOA, which have no resolver
+  - Refactor: three duplicate dig resolvers collapsed into _resolve_via_dig
+  - Tests: 9 new cases in tests/hackingtool/test_recon.py (191 hackingtool tests passing)
+
 - [x] README.md updated with complete documentation
   - Completed: 2024-10-14
   - Commit: 2c635ec
