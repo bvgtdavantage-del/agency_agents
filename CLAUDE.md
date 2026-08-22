@@ -55,6 +55,7 @@ agency_agents/
 │   ├── support/            # 6 agents (Analytics, Finance, Legal, Infrastructure, etc.)
 │   └── testing/            # 7 agents (Reality Checker, API Tester, Performance, etc.)
 │
+├── .github/workflows/      # CI: ci.yml (narrow gate, see Continuous Integration)
 ├── integrations/           # Setup guides for external tools (source stays upstream)
 │   └── robin/              # Robin dark web OSINT: README.md, .env.example
 │
@@ -213,6 +214,32 @@ git checkout.
 - Tests: `tests/test_robin_integration.py`; bash validation: `tests/validation/test_robin_routing.sh`
 
 Full setup and operating constraints: `integrations/robin/README.md`.
+
+## Continuous Integration
+
+`.github/workflows/ci.yml` runs on pull requests, pushes to `main`, and manual dispatch.
+
+**What it gates — and it is deliberately narrow.** Two jobs:
+
+| Job | Scope |
+|---|---|
+| `tests (narrow: hackingtool + second_brain + robin)` | 248 tests on Python 3.9, 3.12, 3.14, plus an import smoke of all three packages and a CLI smoke of `hackingtool` and `second-brain` |
+| `checks (coverage, network isolation, hygiene)` | Coverage floor 65% on the gated packages, a guard proving no gated test performs real network or subprocess I/O, a tracked-artifact check, and a floor on the gate's own test count |
+
+**What it does NOT gate.** The 8 `agent_router` test files are excluded — they contribute 254 failures, every one terminating in `AgentConfigError` from the absolute `file_path` values described under "Absolute Path Issue" below. The job names say "narrow" so a green check is never mistaken for a green repo: a PR touching only `agent_router/`, `agents.yaml`, or `protocols.py` gets a passing CI that proves nothing about the change.
+
+**Widening the gate** takes more than fixing `agents.yaml`. Six failures survive a path fix and are currently masked by the config error:
+
+- `test_agent_config.py:26-30` and `test_agent_router.py:245-249` hardcode the original author's Mac paths and cannot pass on any machine
+- `test_agent_config.py:257-268` asserts `'agency_agents' in file_path`, coupling the suite to the checkout directory's name
+- `test_all_37_agents.py:655-660` asserts 37 agents; `agents.yaml` registers 41
+- two `test_agent_router.py` protocol tests assert every agent sets `requirements_gathering_first` and `test_first_development` true, but 2 and 4 agents respectively set them false — a product decision, not a mechanical fix
+
+Order: fix path resolution in `AgentConfig._validate_agent`, rewrite the three machine-coupled tests, settle the 41-vs-37 count and the protocol-flag contradiction, then replace the two gate paths with `tests/` and drop "narrow" from the job names.
+
+**Coverage is a regression guard, not a correctness signal.** Measured 68.7% on the gated packages against a 65% floor. Line coverage overstates rigour here: `second_brain/memory.py` reports 100% while its documented atomic-write invariant has no test — replacing `os.replace` with a non-atomic copy leaves the suite green.
+
+**Python floor is 3.9, not 3.8.** Ten modules use PEP 585 builtin generics (`list[tuple]`, `dict[str, str]`) in runtime-evaluated annotations without `from __future__ import annotations`, so 3.8 aborts collection with import errors before any test runs. `setup.py` declares `>=3.9` accordingly.
 
 ---
 

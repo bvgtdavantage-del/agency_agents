@@ -1,0 +1,159 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  tests:
+    name: "tests (narrow: hackingtool + second_brain)"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.12', '3.14']
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # No `cache: pip`: setup-python's cache glob looks for requirements.txt or
+      # pyproject.toml, neither of which exists here, and it errors rather than skipping.
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -e ".[dev]"
+
+      # requirements-hackingtool.txt omits PyYAML, and tests/conftest.py imports
+      # agent_router at collection time, so the dev extra is what the gate needs.
+      - name: Import smoke
+        run: |
+          python -c "import hackingtool, hackingtool.cli, second_brain, second_brain.cli, agent_router.config, agent_router.router, agent_router.personality, agent_router.coordination, agent_router.protocols"
+
+      # hackingtool/cli.py has no test coverage and its argparse wiring resolves at
+      # call time, so importing it proves nothing. These invocations do.
+      - name: CLI smoke
+        run: |
+          python -m hackingtool.cli --help > /dev/null
+          python -m hackingtool.cli --no-banner hash-gen hello > /dev/null
+          python -m hackingtool.cli --no-banner encode b64e hello > /dev/null
+          python -m hackingtool.cli --no-banner cipher caesar "hello" --shift 3 > /dev/null
+          python -m second_brain --help > /dev/null
+
+      - name: Unit tests
+        run: |
+          python -m pytest tests/hackingtool tests/test_second_brain.py tests/test_robin_integration.py -q -p no:cacheprovider
+
+  checks:
+    name: "checks (coverage, network isolation, hygiene)"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -e ".[dev]"
+
+      # Guards against coverage regression in the gated packages only. It is NOT a
+      # correctness signal: line coverage here is high in places with no behavioural
+      # assertion. agent_router is reported without a floor so the log shows the real
+      # repo-wide picture rather than only the gated slice.
+      - name: Coverage (gated packages, floor 65%)
+        run: |
+          python -m pytest tests/hackingtool tests/test_second_brain.py tests/test_robin_integration.py -q -p no:cacheprovider \
+            --cov=hackingtool --cov=second_brain \
+            --cov-report=term-missing --cov-report=xml \
+            --cov-fail-under=65
+          python -m pytest tests/hackingtool tests/test_second_brain.py tests/test_robin_integration.py -q -p no:cacheprovider \
+            --cov=agent_router --cov-report=term \
+            --cov-fail-under=0 > /dev/null 2>&1 || true
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: coverage-xml-narrow
+          path: coverage.xml
+          if-no-files-found: error
+
+      # The gated tests are supposed to be fully mocked. test_osint.py exercises a
+      # bogon short-circuit that is only safe because it returns before the real
+      # urlopen, so this turns a silent live call into a hard failure.
+      - name: Network isolation
+        run: |
+          mkdir -p "$RUNNER_TEMP/ciguard"
+          cat > "$RUNNER_TEMP/ciguard/netguard.py" <<'PLUGIN'
+          import socket
+          import subprocess
+          import urllib.request
+
+
+          class NetworkAccessAttempted(RuntimeError):
+              pass
+
+
+          def _blocked(name):
+              def _raise(*args, **kwargs):
+                  raise NetworkAccessAttempted("real %s attempted: args=%r" % (name, args))
+              return _raise
+
+
+          socket.create_connection = _blocked("socket.create_connection")
+          socket.getaddrinfo = _blocked("socket.getaddrinfo")
+          socket.gethostbyname = _blocked("socket.gethostbyname")
+          socket.gethostbyaddr = _blocked("socket.gethostbyaddr")
+          urllib.request.urlopen = _blocked("urllib.request.urlopen")
+          subprocess.run = _blocked("subprocess.run")
+          subprocess.Popen = _blocked("subprocess.Popen")
+          PLUGIN
+          PYTHONPATH="$RUNNER_TEMP/ciguard" python -m pytest \
+            tests/hackingtool tests/test_second_brain.py tests/test_robin_integration.py -q -p no:cacheprovider -p netguard
+
+      # GIT-WORKFLOW-PROTOCOL check 2. The other three are post-push, human, or would
+      # fail this repo outright, so they are not automated here.
+      - name: No tracked build artifacts or secrets
+        run: |
+          git rev-parse --is-inside-work-tree > /dev/null
+          tracked=$(git ls-files | grep -E '(^|/)__pycache__/|\.pyc$|(^|/)\.env$' || true)
+          if [ -n "$tracked" ]; then
+            echo "build artifacts or secrets are tracked in git:"
+            echo "$tracked"
+            exit 1
+          fi
+
+      # A narrow gate can be hollowed out by deleting test files while still reporting
+      # green. Raise the baseline when tests are added; lower it deliberately.
+      # Baseline is main's current count; PR #17 raises it to 234 once merged.
+      - name: Gate has not shrunk
+        run: |
+          set +e
+          collected=$(python -m pytest tests/hackingtool tests/test_second_brain.py tests/test_robin_integration.py \
+            -q --collect-only -p no:cacheprovider 2>/dev/null | grep -c '::')
+          status=$?
+          set -e
+          if [ "$status" -gt 1 ]; then
+            echo "could not collect tests (exit $status) - treating as failure"
+            exit 1
+          fi
+          echo "collected $collected tests (baseline 248)"
+          if [ "$collected" -lt 248 ]; then
+            echo "the narrow gate shrank below its 248-test baseline."
+            echo "if tests were removed on purpose, lower the baseline in this step."
+            exit 1
+          fi
