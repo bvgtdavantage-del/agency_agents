@@ -17,6 +17,13 @@ Last Updated: 2026-08-22
   - Fixed: setup.py python_requires was '>=3.8' but PEP 585 annotations require 3.9
   - Excluded: the 8 agent_router test files (254 pre-existing failures) - widening path documented in CLAUDE.md
 
+- [x] Register Robin dark web OSINT integration
+  - Completed: 2026-08-22
+  - Branch: claude/robin-repo-setup-fssu1p
+  - Added: integrations/robin/ (setup guide + .env.example), Robin sections in the OSINT Analyst agent
+  - Added: 12 dark web keywords on the OSINT Analyst entry in agents.yaml
+  - Tests: tests/test_robin_integration.py (23 passing), tests/validation/test_robin_routing.sh (9 passing)
+
 - [x] README.md updated with complete documentation
   - Completed: 2024-10-14
   - Commit: 2c635ec

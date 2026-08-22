@@ -1085,7 +1085,7 @@ security:
         mandatory: true
 
   - name: OSINT Analyst
-    description: Open Source Intelligence analyst for passive information gathering, digital footprint analysis, infrastructure mapping, and threat intelligence using only public sources
+    description: Open Source Intelligence analyst for passive information gathering, digital footprint analysis, infrastructure mapping, dark web investigation via Robin, and threat intelligence using only public sources
     keywords:
       - osint
       - open source intelligence
@@ -1109,6 +1109,17 @@ security:
       - attack surface
       - digital footprint
       - public records
+      - dark web
+      - darkweb
+      - onion
+      - tor
+      - hidden service
+      - deep web
+      - leak site
+      - ransomware leak site
+      - data dump
+      - threat actor
+      - robin
     file_path: agents/security/security-osint-analyst.md
     category: security
     is_default: false

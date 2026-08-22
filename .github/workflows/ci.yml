@@ -54,7 +54,7 @@ jobs:
 
       - name: Unit tests
         run: |
-          python -m pytest tests/hackingtool tests/test_second_brain.py -q -p no:cacheprovider
+          python -m pytest tests/hackingtool tests/test_second_brain.py tests/test_robin_integration.py -q -p no:cacheprovider
 
   checks:
     name: "checks (coverage, network isolation, hygiene)"
@@ -78,11 +78,11 @@ jobs:
       # repo-wide picture rather than only the gated slice.
       - name: Coverage (gated packages, floor 65%)
         run: |
-          python -m pytest tests/hackingtool tests/test_second_brain.py -q -p no:cacheprovider \
+          python -m pytest tests/hackingtool tests/test_second_brain.py tests/test_robin_integration.py -q -p no:cacheprovider \
             --cov=hackingtool --cov=second_brain \
             --cov-report=term-missing --cov-report=xml \
             --cov-fail-under=65
-          python -m pytest tests/hackingtool tests/test_second_brain.py -q -p no:cacheprovider \
+          python -m pytest tests/hackingtool tests/test_second_brain.py tests/test_robin_integration.py -q -p no:cacheprovider \
             --cov=agent_router --cov-report=term \
             --cov-fail-under=0 > /dev/null 2>&1 || true
 
@@ -123,7 +123,7 @@ jobs:
           subprocess.Popen = _blocked("subprocess.Popen")
           PLUGIN
           PYTHONPATH="$RUNNER_TEMP/ciguard" python -m pytest \
-            tests/hackingtool tests/test_second_brain.py -q -p no:cacheprovider -p netguard
+            tests/hackingtool tests/test_second_brain.py tests/test_robin_integration.py -q -p no:cacheprovider -p netguard
 
       # GIT-WORKFLOW-PROTOCOL check 2. The other three are post-push, human, or would
       # fail this repo outright, so they are not automated here.
@@ -143,7 +143,7 @@ jobs:
       - name: Gate has not shrunk
         run: |
           set +e
-          collected=$(python -m pytest tests/hackingtool tests/test_second_brain.py \
+          collected=$(python -m pytest tests/hackingtool tests/test_second_brain.py tests/test_robin_integration.py \
             -q --collect-only -p no:cacheprovider 2>/dev/null | grep -c '::')
           status=$?
           set -e
@@ -151,9 +151,9 @@ jobs:
             echo "could not collect tests (exit $status) - treating as failure"
             exit 1
           fi
-          echo "collected $collected tests (baseline 225)"
-          if [ "$collected" -lt 225 ]; then
-            echo "the narrow gate shrank below its 225-test baseline."
+          echo "collected $collected tests (baseline 248)"
+          if [ "$collected" -lt 248 ]; then
+            echo "the narrow gate shrank below its 248-test baseline."
             echo "if tests were removed on purpose, lower the baseline in this step."
             exit 1
           fi

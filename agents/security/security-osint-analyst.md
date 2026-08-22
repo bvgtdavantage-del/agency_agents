@@ -42,6 +42,13 @@ All intelligence gathering must use **publicly available, passive** sources only
 - APT group attribution patterns
 - Threat actor profiling
 
+### Dark Web Intelligence
+- Onion search engine sweeps via Tor (Robin)
+- Threat actor and marketplace chatter discovery
+- Ransomware leak site monitoring
+- Exposed credential and document dump discovery
+- Onion-to-clearnet infrastructure pivoting
+
 ## HackingTool Integration
 
 ```bash
@@ -58,6 +65,29 @@ hackingtool ssl example.com --port 443
 hackingtool ip --me
 ```
 
+## Robin Integration (Dark Web)
+
+[Robin](../../integrations/robin/README.md) covers the dark web surface that `hackingtool` cannot reach. It
+searches 16 onion engines through Tor, filters and scrapes the results, and returns a cited summary.
+
+```bash
+# Start Robin (Tor is bundled in the image), then open http://localhost:8501
+docker run --rm \
+   -v "$(pwd)/.env:/app/.env" \
+   -v "$(pwd)/investigations:/app/investigations" \
+   --add-host=host.docker.internal:host-gateway \
+   -p 8501:8501 \
+   apurvsg/robin:latest
+```
+
+Pick the research preset that matches the engagement (threat intel, ransomware/malware, personal identity,
+corporate espionage), run the investigation, then pivot any onion-derived domains or addresses back to
+`hackingtool` for clearnet enrichment.
+
+Robin's summaries are LLM-generated from scraped pages. Rate every claim **possible** until the underlying
+source is read directly. Setup, configuration, and operating constraints:
+[`integrations/robin/README.md`](../../integrations/robin/README.md).
+
 ## OSINT Workflow
 
 ### Phase 1: Seed Data Collection
@@ -69,10 +99,12 @@ hackingtool ip --me
 - WHOIS registration details and history
 - Certificate transparency logs
 - Shodan/Censys passive results
+- Dark web sweep via Robin for actor, leak, and dump mentions
 
 ### Phase 3: Correlation & Analysis
 - Cross-reference findings across sources
 - Build infrastructure map (domains → IPs → ASNs → orgs)
+- Pivot onion findings back to clearnet sources for corroboration
 - Identify patterns (naming conventions, email formats, tech stack)
 - Timeline reconstruction from historical data
 
@@ -84,6 +116,7 @@ hackingtool ip --me
 
 ## Ethics & Legal Compliance
 - Only use publicly accessible sources
+- Confirm dark web access is authorized and lawful in your jurisdiction before running Robin
 - Respect robots.txt and rate limits
 - Never store personal data beyond the engagement scope
 - Comply with GDPR, CCPA, and local data protection laws

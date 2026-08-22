@@ -8,7 +8,7 @@ This repository is an **intelligent agent routing and tooling system** with thre
 2. **`second_brain/`** — Persistent JSON-backed knowledge store for cross-session agent memory
 3. **`hackingtool/`** — CLI security research framework (WHOIS, DNS, port scanning, crypto, OSINT, CTF, forensics)
 
-It also contains **`agents/`**, a library of 55 Claude agent definition markdown files (41 registered in `agents.yaml`), and **`protocols/`**, mandatory development workflow documentation.
+It also contains **`agents/`**, a library of 55 Claude agent definition markdown files (41 registered in `agents.yaml`), **`protocols/`**, mandatory development workflow documentation, and **`integrations/`**, setup and operating guides for external tools the agents drive (currently Robin for dark web OSINT).
 
 ---
 
@@ -56,6 +56,8 @@ agency_agents/
 │   └── testing/            # 7 agents (Reality Checker, API Tester, Performance, etc.)
 │
 ├── .github/workflows/      # CI: ci.yml (narrow gate, see Continuous Integration)
+├── integrations/           # Setup guides for external tools (source stays upstream)
+│   └── robin/              # Robin dark web OSINT: README.md, .env.example
 │
 ├── protocols/              # Mandatory workflow documentation
 │   ├── DEVELOPMENT-WORKFLOW-PROTOCOL.md   # 11 mandatory rules (932 lines)
@@ -63,7 +65,7 @@ agency_agents/
 │   ├── TEST-FIRST-DEVELOPMENT.md          # TDD standards (352 lines)
 │   └── GIT-WORKFLOW-PROTOCOL.md           # Git hygiene (4 mandatory checks)
 │
-├── tests/                  # Pytest test suite (9 .py files + 7 hackingtool module tests)
+├── tests/                  # Pytest test suite (10 .py files + 7 hackingtool module tests)
 ├── templates/              # project-brief-template.md
 ├── setup.py                # Package config (v0.3.0, Python >=3.8)
 ├── conftest.py             # Root: adds project root to sys.path
@@ -198,6 +200,21 @@ second-brain stats
 
 ---
 
+### Robin — Dark Web OSINT (`integrations/robin/`)
+
+[Robin](https://github.com/apurvsinghgautam/robin) (MIT, upstream) is the dark web counterpart to
+`hackingtool`'s clearnet reconnaissance. It is **not vendored** — the integration directory holds only the
+setup guide and an `.env.example`; Robin itself runs from the `apurvsg/robin` Docker image or a separate
+git checkout.
+
+- Requires Tor on `127.0.0.1:9050` (bundled in the Docker image) and one LLM provider key
+- Streamlit UI on `http://localhost:8501`
+- Pipeline: LLM query refinement → 16 onion search engines over Tor → LLM relevance filter → scrape → cited summary
+- Registered against the **OSINT Analyst** agent (`dark web`, `onion`, `tor`, `leak site`, `threat actor` keywords)
+- Tests: `tests/test_robin_integration.py`; bash validation: `tests/validation/test_robin_routing.sh`
+
+Full setup and operating constraints: `integrations/robin/README.md`.
+
 ## Continuous Integration
 
 `.github/workflows/ci.yml` runs on pull requests, pushes to `main`, and manual dispatch.
@@ -206,7 +223,7 @@ second-brain stats
 
 | Job | Scope |
 |---|---|
-| `tests (narrow: hackingtool + second_brain)` | 225 tests on Python 3.9, 3.12, 3.14, plus an import smoke of all three packages and a CLI smoke of `hackingtool` and `second-brain` |
+| `tests (narrow: hackingtool + second_brain + robin)` | 248 tests on Python 3.9, 3.12, 3.14, plus an import smoke of all three packages and a CLI smoke of `hackingtool` and `second-brain` |
 | `checks (coverage, network isolation, hygiene)` | Coverage floor 65% on the gated packages, a guard proving no gated test performs real network or subprocess I/O, a tracked-artifact check, and a floor on the gate's own test count |
 
 **What it does NOT gate.** The 8 `agent_router` test files are excluded — they contribute 254 failures, every one terminating in `AgentConfigError` from the absolute `file_path` values described under "Absolute Path Issue" below. The job names say "narrow" so a green check is never mistaken for a green repo: a PR touching only `agent_router/`, `agents.yaml`, or `protocols.py` gets a passing CI that proves nothing about the change.
@@ -310,6 +327,15 @@ The `agents.yaml` `file_path` values are absolute paths from the original author
 2. Export it from the category's `__init__.py`
 3. Add `cmd_<name>` function in `hackingtool/cli.py`
 4. Register the subparser in `build_parser()`
+
+### Add an external tool integration
+1. Create `integrations/<tool>/README.md` with prerequisites, install, configuration, and operating constraints
+2. Add an `.env.example` if the tool needs credentials — keys only, never values
+3. Reference it from the driving agent's `.md` file under `agents/`
+4. Add the tool's domain keywords to that agent's entry in `agent_router/agents.yaml`
+5. Cover routing and doc integrity in `tests/`, and add a bash check under `tests/validation/`
+
+Keep the tool's own source upstream — vendoring it forks the dependency.
 
 ### Add a new Second Brain category
 No code changes needed — categories are free-form strings on `KnowledgeItem`. Just use the new string in `--category`.
