@@ -9,6 +9,14 @@ Last Updated: 2026-08-22
 - No pending tasks
 
 ## Recent Updates
+- [x] Add GitHub Actions CI
+  - Completed: 2026-08-22
+  - Branch: claude/ci-workflow-setup
+  - Added: .github/workflows/ci.yml gating 225 tests on Python 3.9/3.12/3.14
+  - Added: import smoke, CLI smoke, coverage floor 65%, network-isolation guard, tracked-artifact check, gate-size floor
+  - Fixed: setup.py python_requires was '>=3.8' but PEP 585 annotations require 3.9
+  - Excluded: the 8 agent_router test files (254 pre-existing failures) - widening path documented in CLAUDE.md
+
 - [x] Fix silent DNS record loss when dig is unavailable
   - Completed: 2026-08-22
   - Branch: claude/hackingtool-dns-dig-warning
