@@ -180,7 +180,7 @@ second-brain stats
 | Sub-command    | Module    | Purpose |
 |----------------|-----------|---------|
 | `whois`        | recon     | WHOIS domain lookup |
-| `dns`          | recon     | DNS record enumeration |
+| `dns`          | recon     | DNS record enumeration (A/AAAA via stdlib; MX/NS/TXT need `dig`) |
 | `scan`         | recon     | TCP port scanner |
 | `headers`      | web       | HTTP security header analysis |
 | `ssl`          | web       | SSL/TLS certificate checker |
@@ -195,6 +195,9 @@ second-brain stats
 
 - Global flags: `--timeout`, `--threads`, `--verbose`, `--no-banner`
 - `Config` dataclass (`core/config.py`): `timeout`, `verbose`, `max_threads`
+- `dns` resolves A/AAAA with the Python stdlib and shells out to `dig` for MX/NS/TXT. When `dig` is
+  absent those types are skipped and `DNSResult.warnings` carries a message the CLI prints — install
+  `dnsutils` (Debian/Ubuntu) or `bind` (macOS) for full enumeration.
 
 ---
 
@@ -206,7 +209,7 @@ second-brain stats
 
 | Job | Scope |
 |---|---|
-| `tests (narrow: hackingtool + second_brain)` | 225 tests on Python 3.9, 3.12, 3.14, plus an import smoke of all three packages and a CLI smoke of `hackingtool` and `second-brain` |
+| `tests (narrow: hackingtool + second_brain)` | 234 tests on Python 3.9, 3.12, 3.14, plus an import smoke of all three packages and a CLI smoke of `hackingtool` and `second-brain` |
 | `checks (coverage, network isolation, hygiene)` | Coverage floor 65% on the gated packages, a guard proving no gated test performs real network or subprocess I/O, a tracked-artifact check, and a floor on the gate's own test count |
 
 **What it does NOT gate.** The 8 `agent_router` test files are excluded — they contribute 254 failures, every one terminating in `AgentConfigError` from the absolute `file_path` values described under "Absolute Path Issue" below. The job names say "narrow" so a green check is never mistaken for a green repo: a PR touching only `agent_router/`, `agents.yaml`, or `protocols.py` gets a passing CI that proves nothing about the change.

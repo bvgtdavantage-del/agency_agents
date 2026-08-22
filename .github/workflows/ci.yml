@@ -139,7 +139,7 @@ jobs:
 
       # A narrow gate can be hollowed out by deleting test files while still reporting
       # green. Raise the baseline when tests are added; lower it deliberately.
-      # Baseline is main's current count; PR #17 raises it to 234 once merged.
+      # Raised to 234 when the dig-warning tests landed.
       - name: Gate has not shrunk
         run: |
           set +e
@@ -151,9 +151,9 @@ jobs:
             echo "could not collect tests (exit $status) - treating as failure"
             exit 1
           fi
-          echo "collected $collected tests (baseline 225)"
-          if [ "$collected" -lt 225 ]; then
-            echo "the narrow gate shrank below its 225-test baseline."
+          echo "collected $collected tests (baseline 234)"
+          if [ "$collected" -lt 234 ]; then
+            echo "the narrow gate shrank below its 234-test baseline."
             echo "if tests were removed on purpose, lower the baseline in this step."
             exit 1
           fi

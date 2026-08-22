@@ -17,6 +17,14 @@ Last Updated: 2026-08-22
   - Fixed: setup.py python_requires was '>=3.8' but PEP 585 annotations require 3.9
   - Excluded: the 8 agent_router test files (254 pre-existing failures) - widening path documented in CLAUDE.md
 
+- [x] Fix silent DNS record loss when dig is unavailable
+  - Completed: 2026-08-22
+  - Branch: claude/hackingtool-dns-dig-warning
+  - Fixed: MX/NS/TXT were dropped without notice when dig was not installed
+  - Fixed: RECORD_TYPES advertised CNAME and SOA, which have no resolver
+  - Refactor: three duplicate dig resolvers collapsed into _resolve_via_dig
+  - Tests: 9 new cases in tests/hackingtool/test_recon.py (191 hackingtool tests passing)
+
 - [x] README.md updated with complete documentation
   - Completed: 2024-10-14
   - Commit: 2c635ec

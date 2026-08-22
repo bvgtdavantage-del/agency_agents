@@ -45,6 +45,8 @@ def cmd_dns(args: argparse.Namespace) -> int:
     if not result.success:
         print(color(f"[!] Error: {result.error}", Colors.RED))
         return 1
+    for warning in result.warnings:
+        print(color(f"[!] {warning}", Colors.YELLOW))
     if not result.records:
         print(color("[!] No records found.", Colors.YELLOW))
         return 0

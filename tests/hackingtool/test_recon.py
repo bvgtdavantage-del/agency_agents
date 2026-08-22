@@ -1,5 +1,7 @@
+import logging
 import pytest
 import socket
+from types import SimpleNamespace
 from unittest.mock import patch, MagicMock
 from hackingtool.modules.recon.whois_lookup import WhoisLookup, WhoisResult
 from hackingtool.modules.recon.dns_enum import DNSEnumerator, DNSResult, DNSRecord
@@ -90,6 +92,65 @@ class TestDNSEnumerator:
         with patch("socket.getaddrinfo", side_effect=socket.gaierror):
             records = self.dns._resolve_a("nonexistent.invalid")
         assert records == []
+
+    def test_record_types_are_all_implemented(self):
+        assert DNSEnumerator.RECORD_TYPES == ["A", "AAAA", "MX", "NS", "TXT"]
+
+    def test_dig_record_types_are_a_subset_of_record_types(self):
+        assert set(DNSEnumerator.DIG_RECORD_TYPES) <= set(DNSEnumerator.RECORD_TYPES)
+
+    def test_resolve_via_dig_parses_short_output(self):
+        completed = SimpleNamespace(stdout="10 mail.example.com.\n20 alt.example.com.\n")
+        with patch("subprocess.run", return_value=completed):
+            records = self.dns._resolve_via_dig("example.com", "MX")
+        assert [r.value for r in records] == ["10 mail.example.com.", "20 alt.example.com."]
+        assert all(r.record_type == "MX" for r in records)
+
+    def test_resolve_via_dig_strips_txt_quotes(self):
+        completed = SimpleNamespace(stdout='"v=spf1 -all"\n')
+        with patch("subprocess.run", return_value=completed):
+            records = self.dns._resolve_via_dig("example.com", "TXT")
+        assert records[0].value == "v=spf1 -all"
+
+    def test_resolve_via_dig_returns_empty_on_failure(self):
+        with patch("subprocess.run", side_effect=OSError):
+            records = self.dns._resolve_via_dig("example.com", "NS")
+        assert records == []
+
+    def test_enumerate_warns_when_dig_is_missing(self):
+        with patch("shutil.which", return_value=None), \
+             patch.object(DNSEnumerator, "_resolve_a", return_value=[]), \
+             patch.object(DNSEnumerator, "_resolve_aaaa", return_value=[]):
+            result = self.dns.enumerate("example.com")
+        assert len(result.warnings) == 1
+        assert "dig not found" in result.warnings[0]
+        for record_type in DNSEnumerator.DIG_RECORD_TYPES:
+            assert record_type in result.warnings[0]
+
+    def test_enumerate_still_succeeds_when_dig_is_missing(self):
+        with patch("shutil.which", return_value=None), \
+             patch.object(DNSEnumerator, "_resolve_a", return_value=[DNSRecord("A", "1.2.3.4")]), \
+             patch.object(DNSEnumerator, "_resolve_aaaa", return_value=[]):
+            result = self.dns.enumerate("example.com")
+        assert result.success is True
+        assert [r.value for r in result.records] == ["1.2.3.4"]
+
+    def test_enumerate_queries_dig_types_when_available(self):
+        with patch("shutil.which", return_value="/usr/bin/dig"), \
+             patch.object(DNSEnumerator, "_resolve_a", return_value=[]), \
+             patch.object(DNSEnumerator, "_resolve_aaaa", return_value=[]), \
+             patch.object(DNSEnumerator, "_resolve_via_dig", return_value=[]) as dig:
+            result = self.dns.enumerate("example.com")
+        assert result.warnings == []
+        assert [call.args[1] for call in dig.call_args_list] == DNSEnumerator.DIG_RECORD_TYPES
+
+    def test_enumerate_logs_warning_when_dig_is_missing(self, caplog):
+        with patch("shutil.which", return_value=None), \
+             patch.object(DNSEnumerator, "_resolve_a", return_value=[]), \
+             patch.object(DNSEnumerator, "_resolve_aaaa", return_value=[]):
+            with caplog.at_level(logging.WARNING):
+                self.dns.enumerate("example.com")
+        assert any("dig not found" in record.message for record in caplog.records)
 
     def test_reverse_lookup_returns_hostname(self):
         with patch("socket.gethostbyaddr", return_value=("example.com", [], [])):
