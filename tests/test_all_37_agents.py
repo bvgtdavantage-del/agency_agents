@@ -650,17 +650,17 @@ class TestSupportAgents:
 
 
 class TestAllAgentsExist:
-    """Verify all 37 agents are defined in config"""
+    """Verify all agents are defined in config"""
 
-    def test_all_37_agents_exist(self):
-        """Config should have exactly 37 agents defined"""
+    def test_minimum_agent_count(self):
+        """Config should have at least 41 agents defined (37 core + 4 security/specialized)"""
         router = AgentRouter()
         all_agents = router.get_all_agents()
 
-        assert len(all_agents) == 37, f"Expected 37 agents, found {len(all_agents)}"
+        assert len(all_agents) >= 41, f"Expected at least 41 agents, found {len(all_agents)}"
 
     def test_all_agent_names_unique(self):
-        """All 37 agent names should be unique"""
+        """All agent names should be unique"""
         router = AgentRouter()
         all_agents = router.get_all_agents()
 
@@ -668,7 +668,7 @@ class TestAllAgentsExist:
         assert len(names) == len(set(names)), "Found duplicate agent names"
 
     def test_all_agents_have_keywords(self):
-        """All 37 agents should have keywords defined"""
+        """All agents should have keywords defined"""
         router = AgentRouter()
         all_agents = router.get_all_agents()
 
@@ -676,7 +676,7 @@ class TestAllAgentsExist:
             assert len(agent['keywords']) >= 3, f"{agent['name']} has too few keywords"
 
     def test_all_agents_have_file_paths(self):
-        """All 37 agents should have valid file paths"""
+        """All agents should have valid file paths"""
         import os
         router = AgentRouter()
         all_agents = router.get_all_agents()
