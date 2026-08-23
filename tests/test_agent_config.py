@@ -23,11 +23,9 @@ class TestConfigLoading:
 
     def test_config_file_exists_at_expected_path(self):
         """Config file should exist at agent_router/agents.yaml"""
-        expected_path = '/Users/gaganarora/Desktop/gagan_projects/Agency/agency_agents/agent_router/agents.yaml'
         config = AgentConfig()
-
-        assert os.path.exists(expected_path)
-        assert config.config_path == expected_path
+        assert os.path.exists(config.config_path)
+        assert config.config_path.endswith('agents.yaml')
 
     def test_config_has_all_categories(self):
         """Config should have all agent categories"""
@@ -260,12 +258,10 @@ class TestConfigValidationRules:
 
         for agent in config.get_all_agents():
             file_path = agent['file_path']
-            # Should be absolute path
-            assert file_path.startswith('/')
-            # Should contain agency_agents directory
-            assert 'agency_agents' in file_path
             # Should end with .md
             assert file_path.endswith('.md')
+            # Should exist on disk (validated by config loader)
+            assert os.path.exists(file_path), f"Missing: {file_path}"
 
     def test_validates_description_length(self):
         """Descriptions should be between 10 and 500 characters"""
