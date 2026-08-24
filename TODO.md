@@ -1,6 +1,6 @@
 # Agency Agents Project To-Do List
 
-Last Updated: 2024-10-14 (Final Update)
+Last Updated: 2026-08-22
 
 ## In Progress
 - No tasks currently in progress
@@ -9,6 +9,14 @@ Last Updated: 2024-10-14 (Final Update)
 - No pending tasks
 
 ## Recent Updates
+- [x] Add GitHub Actions CI
+  - Completed: 2026-08-22
+  - Branch: claude/ci-workflow-setup
+  - Added: .github/workflows/ci.yml gating 225 tests on Python 3.9/3.12/3.14
+  - Added: import smoke, CLI smoke, coverage floor 65%, network-isolation guard, tracked-artifact check, gate-size floor
+  - Fixed: setup.py python_requires was '>=3.8' but PEP 585 annotations require 3.9
+  - Excluded: the 8 agent_router test files (254 pre-existing failures) - widening path documented in CLAUDE.md
+
 - [x] Gulf AI Academy training app (`gulf_ai_academy/`)
   - Completed: 2026-08-19
   - Self-contained learning app: 6 modules, 24 quiz questions, animations, certificate
