@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Benable AI Academy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,700;1,400&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#F6F5F1;
+    --surface:#FFFFFF;
+    --surface-2:#EDEFEA;
+    --line:#DCE0D9;
+    --ink:#182420;
+    --ink-dim:#3F4C46;
+    --muted:#6C7871;
+    --brand:#0E6B4E;
+    --brand-strong:#0A5039;
+    --brand-tint:#E3F0E9;
+    --on-brand:#FFFFFF;
+    --good:#0E6B4E;
+    --good-tint:#E3F0E9;
+    --bad:#BE4B32;
+    --bad-tint:#F9ECE8;
+    --code-bg:#14201B;
+    --code-ink:#CFDAD2;
+    --shadow:0 1px 2px rgba(24,36,32,.05), 0 8px 24px rgba(24,36,32,.06);
+    --radius:12px;
+    --disp:'Bricolage Grotesque','Trebuchet MS',Arial,sans-serif;
+    --body:'Schibsted Grotesk','Segoe UI',Arial,sans-serif;
+    --mono:'Spline Sans Mono','Courier New',monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#111614;
+      --surface:#181F1C;
+      --surface-2:#1F2823;
+      --line:#2B352F;
+      --ink:#E8EDEA;
+      --ink-dim:#C0CBC5;
+      --muted:#8B968F;
+      --brand:#43BD8E;
+      --brand-strong:#5FD2A5;
+      --brand-tint:#18332A;
+      --on-brand:#0B1511;
+      --good:#43BD8E;
+      --good-tint:#18332A;
+      --bad:#E07B5F;
+      --bad-tint:#39231C;
+      --code-bg:#0C120F;
+      --code-ink:#C6D1CA;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#111614;
+    --surface:#181F1C;
+    --surface-2:#1F2823;
+    --line:#2B352F;
+    --ink:#E8EDEA;
+    --ink-dim:#C0CBC5;
+    --muted:#8B968F;
+    --brand:#43BD8E;
+    --brand-strong:#5FD2A5;
+    --brand-tint:#18332A;
+    --on-brand:#0B1511;
+    --good:#43BD8E;
+    --good-tint:#18332A;
+    --bad:#E07B5F;
+    --bad-tint:#39231C;
+    --code-bg:#0C120F;
+    --code-ink:#C6D1CA;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:16.5px;
+    line-height:1.6;
+    min-height:100vh;
+  }
+  ::selection{background:var(--brand);color:var(--on-brand)}
+  a{color:var(--brand)}
+  button{font-family:var(--body)}
+  button:focus-visible, input:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+
+  .shell{max-width:1040px;margin:0 auto;padding:0 24px 88px}
+
+  header.top{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 0;border-bottom:1px solid var(--line);margin-bottom:8px;
+  }
+  .brand{display:flex;align-items:center;gap:9px}
+  .brand .word{font-family:var(--disp);font-weight:700;font-size:21px;letter-spacing:-.01em;color:var(--ink)}
+  .brand .ai{
+    font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.02em;
+    background:var(--brand);color:var(--on-brand);border-radius:6px;padding:2px 8px 3px;
+  }
+  .brand .sub{color:var(--muted);font-size:13px;margin-left:6px;border-left:1px solid var(--line);padding-left:14px}
+  .top-progress{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;font-weight:500}
+  .ring{width:36px;height:36px;transform:rotate(-90deg)}
+  .ring circle{fill:none;stroke-width:3.5}
+  .ring .track{stroke:var(--line)}
+  .ring .fill{stroke:var(--brand);stroke-linecap:round;transition:stroke-dashoffset .8s cubic-bezier(.22,1,.36,1)}
+
+  .screen{animation:screenIn .5s cubic-bezier(.22,1,.36,1) both}
+  @keyframes screenIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  /* ---------- hero ---------- */
+  .hero{padding:64px 0 44px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+    color:var(--brand);margin-bottom:24px;
+  }
+  .eyebrow::before{content:"";width:22px;height:2px;background:var(--brand);border-radius:1px}
+  h1{
+    font-family:var(--disp);font-weight:700;font-size:clamp(38px,6vw,62px);
+    line-height:1.06;letter-spacing:-.025em;text-wrap:balance;max-width:16ch;
+  }
+  h1 .hl{color:var(--brand)}
+  .hero .ar-line{color:var(--muted);font-size:clamp(17px,2.5vw,21px);margin-top:16px}
+  .hero p.lede{max-width:56ch;color:var(--ink-dim);margin-top:20px;font-size:18px}
+  .hero .cta-row{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;cursor:pointer;
+    border-radius:10px;padding:13px 26px;font-size:15px;font-weight:700;letter-spacing:.01em;
+    border:1px solid transparent;transition:transform .15s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .btn:active{transform:scale(.97)}
+  .btn-primary{background:var(--brand);color:var(--on-brand);box-shadow:var(--shadow)}
+  .btn-primary:hover{background:var(--brand-strong)}
+  .btn-ghost{background:var(--surface);color:var(--ink);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--brand);color:var(--brand)}
+  .btn[disabled]{opacity:.45;cursor:not-allowed}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:52px 0 10px}
+  .stat{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 24px;box-shadow:var(--shadow);
+  }
+  .stat .num{
+    font-family:var(--disp);font-weight:700;font-size:42px;color:var(--brand);
+    font-variant-numeric:tabular-nums;line-height:1.1;letter-spacing:-.02em;
+  }
+  .stat .lbl{color:var(--muted);font-size:14px;margin-top:8px;line-height:1.45}
+  .stats-src{color:var(--muted);font-size:12.5px;margin-bottom:36px}
+
+  /* ---------- module grid ---------- */
+  .sec-title{font-family:var(--disp);font-weight:700;font-size:29px;letter-spacing:-.02em;margin:44px 0 6px}
+  .sec-sub{color:var(--muted);margin-bottom:24px;max-width:60ch}
+  .mod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .mod-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:24px 22px 20px;cursor:pointer;text-align:left;color:var(--ink);
+    display:flex;flex-direction:column;gap:11px;box-shadow:var(--shadow);
+    transition:border-color .25s ease, transform .25s ease;
+  }
+  .mod-card:hover{border-color:var(--brand);transform:translateY(-3px)}
+  .mod-card .idx{
+    font-size:11.5px;letter-spacing:.14em;color:var(--brand);text-transform:uppercase;font-weight:700;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .mod-card h3{font-family:var(--disp);font-weight:600;font-size:19.5px;line-height:1.3;letter-spacing:-.01em;text-wrap:balance}
+  .mod-card .ar{color:var(--muted);font-size:14.5px}
+  .mod-card p{color:var(--ink-dim);font-size:14.5px;flex:1}
+  .mod-card .meta{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+  .chip{border-radius:999px;padding:3px 12px;font-size:12px;font-weight:700;letter-spacing:.03em}
+  .chip-todo{background:var(--surface-2);color:var(--muted)}
+  .chip-done{background:var(--good-tint);color:var(--good)}
+  .chip-part{background:var(--bad-tint);color:var(--bad)}
+  .mod-card .bar{height:4px;border-radius:2px;background:var(--surface-2);overflow:hidden}
+  .mod-card .bar i{display:block;height:100%;background:var(--brand);transition:width .6s ease}
+
+  /* ---------- lesson ---------- */
+  .crumbs{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13.5px;margin:28px 0 8px}
+  .crumbs button{background:none;border:none;color:var(--brand);cursor:pointer;font-size:13.5px;font-weight:600;padding:4px 0}
+  .crumbs button:hover{text-decoration:underline}
+  .lesson-head{margin:8px 0 22px}
+  .lesson-head h2{font-family:var(--disp);font-weight:700;font-size:clamp(27px,4vw,38px);letter-spacing:-.02em;text-wrap:balance}
+  .lesson-head .ar{color:var(--muted);font-size:17px;margin-top:4px}
+  .dots{display:flex;gap:7px;margin:16px 0 20px}
+  .dots i{width:26px;height:4px;border-radius:2px;background:var(--line);transition:background .3s}
+  .dots i.on{background:var(--brand)}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:34px 36px;box-shadow:var(--shadow);
+    animation:cardIn .45s cubic-bezier(.22,1,.36,1) both;
+  }
+  @keyframes cardIn{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:none}}
+  .card h4{font-family:var(--disp);font-weight:600;font-size:23px;letter-spacing:-.015em;margin-bottom:15px}
+  .card p{color:var(--ink-dim);margin-bottom:14px;max-width:66ch}
+  .card p strong, .card li strong{color:var(--ink)}
+  .card ul{margin:0 0 14px 20px;color:var(--ink-dim)}
+  .card li{margin-bottom:9px;max-width:62ch}
+  .card .callout{
+    border-left:3px solid var(--brand);background:var(--brand-tint);border-radius:0 8px 8px 0;
+    padding:14px 18px;margin:18px 0;color:var(--ink);font-size:15.5px;max-width:66ch;
+  }
+  .prompt-box{
+    font-family:var(--mono);font-size:13.5px;line-height:1.55;
+    background:var(--code-bg);border-radius:8px;
+    padding:16px 18px;margin:14px 0;color:var(--code-ink);overflow-x:auto;
+    white-space:pre-wrap;
+  }
+  .prompt-box.good{box-shadow:inset 3px 0 0 var(--good)}
+  .prompt-box.bad{box-shadow:inset 3px 0 0 var(--bad)}
+  .tag{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;display:inline-block;margin-bottom:4px}
+  .tag.g{color:var(--good)} .tag.b{color:var(--bad)}
+  .lesson-nav{display:flex;justify-content:space-between;margin-top:24px;gap:12px}
+
+  .compass{display:flex;justify-content:center;margin:8px 0 18px}
+  .compass svg{max-width:340px;width:100%;height:auto}
+  .compass .c-ring{stroke:var(--line);fill:none}
+  .compass .c-line{stroke:var(--brand)}
+  .compass .c-node{fill:var(--brand)}
+  .compass .c-label{fill:var(--ink);font-family:var(--disp);font-weight:600;font-size:15px}
+  .compass .c-center{fill:var(--ink)}
+  .compass .spoke{opacity:0;animation:spokeIn .6s ease forwards}
+  .compass .spoke:nth-of-type(2){animation-delay:.15s}
+  .compass .spoke:nth-of-type(3){animation-delay:.3s}
+  .compass .spoke:nth-of-type(4){animation-delay:.45s}
+  @keyframes spokeIn{from{opacity:0}to{opacity:1}}
+
+  /* ---------- quiz ---------- */
+  .q-count{color:var(--muted);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:14px}
+  .q-text{font-family:var(--disp);font-weight:600;font-size:clamp(20px,3vw,25px);line-height:1.4;letter-spacing:-.01em;margin-bottom:24px;text-wrap:balance;max-width:32ch}
+  .opts{display:flex;flex-direction:column;gap:11px}
+  .opt{
+    display:flex;gap:14px;align-items:flex-start;text-align:left;cursor:pointer;
+    background:var(--bg);border:1px solid var(--line);border-radius:10px;
+    padding:15px 18px;color:var(--ink);font-size:15.5px;line-height:1.5;
+    transition:border-color .2s, background .2s, transform .12s;
+  }
+  .opt:not([disabled]):hover{border-color:var(--brand);transform:translateX(4px)}
+  .opt .key{
+    flex:none;width:26px;height:26px;border-radius:8px;border:1px solid var(--line);
+    background:var(--surface);display:grid;place-items:center;
+    font-size:12.5px;font-weight:700;color:var(--muted);margin-top:1px;
+  }
+  .opt.correct{border-color:var(--good);background:var(--good-tint);animation:pulseG .5s ease}
+  .opt.correct .key{border-color:var(--good);color:var(--good)}
+  .opt.wrong{border-color:var(--bad);background:var(--bad-tint);animation:shake .4s ease}
+  .opt.wrong .key{border-color:var(--bad);color:var(--bad)}
+  .opt[disabled]{cursor:default}
+  @keyframes pulseG{0%{transform:scale(1)}40%{transform:scale(1.015)}100%{transform:scale(1)}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .explain{
+    margin-top:20px;border-radius:10px;padding:16px 20px;font-size:15px;line-height:1.55;
+    animation:cardIn .4s ease both;max-width:70ch;color:var(--ink-dim);
+  }
+  .explain.ok{background:var(--good-tint)}
+  .explain.no{background:var(--bad-tint)}
+  .explain .verdict{font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:12.5px;display:block;margin-bottom:6px}
+  .explain.ok .verdict{color:var(--good)} .explain.no .verdict{color:var(--bad)}
+
+  /* ---------- results / certificate ---------- */
+  .result-hero{text-align:center;padding:40px 20px 10px}
+  .score-ring{width:150px;height:150px;margin:0 auto 20px;transform:rotate(-90deg)}
+  .score-ring circle{fill:none;stroke-width:9}
+  .score-ring .t{stroke:var(--surface-2)}
+  .score-ring .f{stroke:var(--brand);stroke-linecap:round;stroke-dasharray:408;stroke-dashoffset:408;animation:ringFill 1.2s .2s cubic-bezier(.22,1,.36,1) forwards}
+  @keyframes ringFill{to{stroke-dashoffset:var(--target)}}
+  .score-num{font-family:var(--disp);font-weight:700;font-size:42px;color:var(--brand);letter-spacing:-.02em}
+  .result-hero .sec-sub{margin:10px auto 0;max-width:52ch;text-align:center}
+  .cert{
+    border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);
+    padding:52px 40px;text-align:center;margin-top:28px;box-shadow:var(--shadow);
+    position:relative;overflow:hidden;
+  }
+  .cert::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:var(--brand)}
+  .cert .cert-brand{font-family:var(--disp);font-weight:700;font-size:16px;color:var(--brand);letter-spacing:.01em;margin-bottom:16px}
+  .cert h2{font-family:var(--disp);font-weight:700;font-size:33px;letter-spacing:-.02em;margin-bottom:6px}
+  .cert .who{
+    font-family:var(--disp);font-weight:600;font-size:29px;color:var(--brand);margin:22px 0 4px;
+    border-bottom:2px solid var(--brand-tint);display:inline-block;padding:0 26px 8px;min-width:280px;
+  }
+  .cert p{color:var(--ink-dim);max-width:52ch;margin:10px auto}
+  .cert input{
+    background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--ink);
+    padding:12px 16px;font-size:16px;width:min(340px,100%);margin:16px auto 6px;display:block;text-align:center;
+    font-family:var(--body);
+  }
+  .name-error{color:var(--bad);font-size:13.5px;min-height:20px;margin-bottom:4px}
+
+  footer{margin-top:64px;border-top:1px solid var(--line);padding-top:22px;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  @media (max-width:700px){
+    .stats{grid-template-columns:1fr}
+    .card{padding:26px 20px}
+    .hero{padding:44px 0 34px}
+    .brand .sub{display:none}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-delay:0ms !important;transition-duration:.01ms !important}
+  }
+  @media print{
+    body{background:#fff;color:#111}
+    header.top, .no-print, footer{display:none !important}
+    .cert{border-color:#bbb;background:#fff;box-shadow:none}
+    .cert .who{color:#0E6B4E}
+    .cert p{color:#333}
+    .cert h2{color:#111}
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <header class="top">
+    <div class="brand">
+      <span class="word">benable</span><span class="ai">ai</span>
+      <span class="sub">Enterprise AI Capability Program</span>
+    </div>
+    <div class="top-progress" role="status">
+      <svg class="ring" viewBox="0 0 38 38" aria-hidden="true">
+        <circle class="track" cx="19" cy="19" r="16"></circle>
+        <circle class="fill" id="ringFill" cx="19" cy="19" r="16" stroke-dasharray="100.5" stroke-dashoffset="100.5"></circle>
+      </svg>
+      <span id="ringLabel">0 / 6 modules</span>
+    </div>
+  </header>
+  <main id="app"></main>
+  <footer>
+    <span>benable ai · Curriculum adapted from the <em>AI-Native Workforce</em> enterprise briefing · Four-Signal capability framework</span>
+    <span>UAE · KSA · Qatar · Bahrain · Kuwait · Oman</span>
+  </footer>
+</div>
+
+<script>
+'use strict';
+
+const MODULES = [
+  {
+    id:'mandate',
+    title:'The AI-Native Mandate',
+    ar:'لماذا الآن؟',
+    tagline:'Why Gulf boards are asking a question your org chart cannot answer.',
+    lessons:[
+      {h:'Output stopped being proof', body:`
+        <p>For a century, enterprises judged people by what they produced: the memo, the model, the deck. Generative AI broke that link. <strong>~92% of recent graduates</strong> entering corporate funnels now routinely use generative AI in their work — up from 56% in 2024. A polished deliverable no longer tells you who is capable.</p>
+        <p>At the same time, <strong>40% of HR leaders</strong> say their existing assessment tools are "no longer fit for purpose" in an AI-saturated environment. Resumes look the same. Take-home tests are AI-written. Interviews reward articulate output.</p>
+        <div class="callout">The core shift: value moved from <strong>producing output</strong> to <strong>directing, judging, and refining</strong> AI-produced output. This course trains exactly that.</div>`},
+      {h:'The 3–5× spread', body:`
+        <p>Give two knowledge workers the same AI tools and the same problem, and you will observe a <strong>3–5× spread in real productivity</strong> between the AI-capable and the AI-incapable. Some turn a $40/month subscription into five times their output. Others turn it into plausible-looking work.</p>
+        <p>The return on an AI subscription is determined by the <strong>human</strong>, not the tool — and from the outside, you cannot see who is who. That is why capability, not tool adoption, is the metric that matters.</p>
+        <ul>
+          <li><strong>Tool adoption</strong> answers: "Do our people have licenses?"</li>
+          <li><strong>Capability density</strong> answers: "How many of our people turn those licenses into genuine leverage?"</li>
+        </ul>`},
+      {h:'The Gulf context', body:`
+        <p>Nowhere is this more urgent than in the Gulf. National strategies — the <strong>UAE National AI Strategy 2031</strong>, <strong>Saudi Vision 2030</strong> with SDAIA driving data-and-AI transformation, and <strong>Qatar's National AI Strategy</strong> — commit governments and flagship corporations to becoming AI-native economies within a decade.</p>
+        <p>For a Gulf enterprise this means boards, regulators, and sovereign shareholders are already asking: <em>"Are we becoming AI-native or not?"</em> Pointing at tool adoption is not a defensible answer. A measured, auditable view of workforce capability is.</p>
+        <div class="callout">Your role in this program: become one of the people who raise your organization's capability density — and learn to recognize it in others.</div>`},
+    ],
+    quiz:[
+      {q:'Roughly what share of recent graduates entering corporate hiring funnels routinely use generative AI in their work?',
+       o:['About 25%','About 56%','About 92%','Almost none — it is still rare'],c:2,
+       e:'~92% of recent graduates routinely use generative AI at work, up from 56% in 2024. Any process that assumes deliverables are unaided is already obsolete.'},
+      {q:'Two analysts get identical AI tools and identical problems. What productivity spread should you realistically expect between the most and least AI-capable?',
+       o:['None — the tool equalizes them','About 10–20%','3–5×','100× in every case'],c:2,
+       e:'The observed spread is 3–5×. The tool is a multiplier; the human sets the multiplicand. This is why capability matters more than licenses.'},
+      {q:'Why is "we rolled out AI tools to all staff" NOT a defensible answer when a board asks if the company is AI-native?',
+       o:['Because AI tools are too expensive to roll out widely','Because adoption says nothing about whether people convert tools into real leverage','Because boards prefer headcount metrics','Because AI tools are banned for listed companies in the Gulf'],c:1,
+       e:'Adoption measures access, not capability. The return on AI spend is determined by the human using it — capability density is the defensible metric.'},
+      {q:'What is the fundamental shift generative AI caused in how professional value is created?',
+       o:['Typing speed became the bottleneck','Value moved from producing output to directing, judging, and refining AI-produced output','Only engineers create value now','Output quality no longer matters at all'],c:1,
+       e:'Output became cheap and abundant. The scarce skills are now recognizing the real problem, directing the tool, judging the result, and refining it — the themes of the next module.'},
+    ],
+  },
+  {
+    id:'signals',
+    title:'The Four Signals',
+    ar:'الإشارات الأربع',
+    tagline:'Recognition, Direction, Judgement, Refinement — the anatomy of AI capability.',
+    lessons:[
+      {h:'A framework, not a vibe', body:`
+        <p>"Good with AI" is not one skill. Enterprise capability programs measure four <strong>orthogonal signals</strong> — each independent of the others. Together they identify the people who turn an AI subscription into genuine leverage.</p>
+        <div class="compass">
+          <svg viewBox="0 0 340 340" role="img" aria-label="Four-signal compass: Recognition, Direction, Judgement, Refinement">
+            <circle class="c-ring" cx="170" cy="170" r="150" stroke-width="1"/>
+            <circle class="c-ring" cx="170" cy="170" r="96" stroke-width="1" stroke-dasharray="4 6"/>
+            <g class="spoke"><line class="c-line" x1="170" y1="170" x2="170" y2="46" stroke-width="1.5"/><circle class="c-node" cx="170" cy="46" r="5"/><text class="c-label" x="170" y="28" text-anchor="middle">Recognition</text></g>
+            <g class="spoke"><line class="c-line" x1="170" y1="170" x2="294" y2="170" stroke-width="1.5"/><circle class="c-node" cx="294" cy="170" r="5"/><text class="c-label" x="294" y="196" text-anchor="middle">Direction</text></g>
+            <g class="spoke"><line class="c-line" x1="170" y1="170" x2="170" y2="294" stroke-width="1.5"/><circle class="c-node" cx="170" cy="294" r="5"/><text class="c-label" x="170" y="320" text-anchor="middle">Judgement</text></g>
+            <g class="spoke"><line class="c-line" x1="170" y1="170" x2="46" y2="170" stroke-width="1.5"/><circle class="c-node" cx="46" cy="170" r="5"/><text class="c-label" x="46" y="196" text-anchor="middle">Refinement</text></g>
+            <circle class="c-center" cx="170" cy="170" r="7"/>
+          </svg>
+        </div>
+        <p>Because the signals are orthogonal, a person can be brilliant at one and weak at another — a superb prompt-writer who cannot spot a hallucinated statistic, or a sharp critic who never iterates.</p>`},
+      {h:'Recognition & Direction', body:`
+        <p><strong>Recognition — understanding the problem and the context.</strong> Before touching a tool: What is actually being asked? Who is the audience? What constraints (regulatory, cultural, commercial) shape a good answer? A Doha treasury analyst who recognizes that a "cash report" is really a board-risk question will out-perform any prompt template.</p>
+        <p><strong>Direction — understanding and defining the output required.</strong> Translating the recognized problem into precise instructions for the AI: the role it should take, the context it needs, the exact deliverable, the format, the constraints. Direction is where prompt engineering lives — Module 3 trains it in depth.</p>
+        <div class="callout">Weak Recognition with strong Direction produces beautifully-formatted answers to the wrong question.</div>`},
+      {h:'Judgement & Refinement', body:`
+        <p><strong>Judgement (taste) — experience and discernment.</strong> Reading an AI output and knowing: is this right, is this good, is this appropriate here? Judgement catches the invented citation, the tone that would misfire with a Saudi ministry client, the analysis that is fluent but hollow.</p>
+        <p><strong>Refinement — iteration and polish.</strong> The first output is a draft, never the deliverable. Refinement is the discipline of critiquing, re-prompting, tightening, and verifying until the work meets a professional bar. Module 4 trains the iteration loop.</p>
+        <ul>
+          <li>Recognition asks: <strong>What is the real problem?</strong></li>
+          <li>Direction asks: <strong>What exactly do I need, and how do I ask for it?</strong></li>
+          <li>Judgement asks: <strong>Is this actually good and true?</strong></li>
+          <li>Refinement asks: <strong>How do I get from draft to deliverable?</strong></li>
+        </ul>`},
+      {h:'Process over output', body:`
+        <p>Modern capability assessment watches <strong>process traces, not just the final artifact</strong>. In a live-work session, an assessor (human or AI interviewer) observes how you work with the tools: what you notice, how you direct, where you push back, how you refine.</p>
+        <p>This is also how you should evaluate your own team. A finished deck tells you nothing; watching a colleague spend three minutes framing the problem before prompting tells you a great deal.</p>
+        <div class="callout">Everything measurable here is trainable. The four signals are the syllabus of this academy, not a fixed verdict on anyone.</div>`},
+    ],
+    quiz:[
+      {q:'The four capability signals are described as "orthogonal." What does that imply in practice?',
+       o:['They must be learned in a fixed order','Strength in one signal does not imply strength in another','Only one of them matters per role','They cannot be measured'],c:1,
+       e:'Orthogonal means independent: a superb prompt-writer (Direction) can still miss hallucinations (Judgement). Each signal must be developed and measured separately.'},
+      {q:'A manager in Riyadh asks AI for "a summary of the vendor contracts." The real board concern is renewal-risk exposure. Which signal failed if the summary is polished but useless?',
+       o:['Refinement','Judgement','Recognition','None — the AI failed'],c:2,
+       e:'Recognition is understanding the problem and its context before prompting. A beautifully-directed answer to the wrong question is a Recognition failure, not a tool failure.'},
+      {q:'Which signal is exercised when you notice an AI-drafted client letter cites a UAE regulation that does not exist?',
+       o:['Judgement','Direction','Recognition','Tool adoption'],c:0,
+       e:'Judgement (taste) is the discernment to evaluate output: spotting the invented citation, the wrong tone, the hollow analysis. It is the primary defense against confident nonsense.'},
+      {q:'Why do serious capability assessments capture process traces rather than only grading the final artifact?',
+       o:['Final artifacts are too long to read','The process reveals capability; the artifact may simply be AI output submitted verbatim','Regulators require screen recordings','Process traces are cheaper to store'],c:1,
+       e:'When ~92% of candidates use AI, the artifact proves little. How a person recognizes, directs, judges, and refines is where capability is visible.'},
+    ],
+  },
+  {
+    id:'direction',
+    title:'Prompt Engineering I — Direction',
+    ar:'هندسة الأوامر',
+    tagline:'The anatomy of a prompt that earns its answer.',
+    lessons:[
+      {h:'The five-part prompt', body:`
+        <p>A strong professional prompt has a repeatable anatomy. Before sending, check that you have given the model:</p>
+        <ul>
+          <li><strong>Role</strong> — who the model should be: <em>"You are a senior credit analyst at a GCC bank."</em></li>
+          <li><strong>Context</strong> — the situation and facts it needs: audience, background, data, what has already been decided.</li>
+          <li><strong>Task</strong> — one precise instruction, not a vague topic.</li>
+          <li><strong>Constraints</strong> — length, tone, language, what to exclude, red lines.</li>
+          <li><strong>Format</strong> — the exact shape of the output: table, memo, bullet brief, bilingual sections.</li>
+        </ul>
+        <div class="callout">Rule of thumb: if a capable new hire could not act on your instruction without asking questions, neither can the model — it will guess instead of asking.</div>`},
+      {h:'Weak vs strong — a Gulf example', body:`
+        <span class="tag b">Weak prompt</span>
+        <div class="prompt-box bad">Write about our Q3 results for the leadership meeting.</div>
+        <p>No role, no audience, no numbers, no format, no length. The model will produce generic filler — plausible-looking work.</p>
+        <span class="tag g">Strong prompt</span>
+        <div class="prompt-box good">You are the FP&amp;A lead of a Dubai-based logistics group.
+Draft a one-page executive brief for the CEO and CFO ahead of Sunday's leadership meeting.
+
+Context: Q3 revenue AED 412M (+9% YoY), EBITDA margin fell 14.2% → 12.8% on fuel costs; Saudi corridor volumes +31%; Qatar flat.
+
+Task: Summarize performance and flag the two decisions leadership must take.
+
+Constraints: max 300 words, neutral factual tone, no jargon, do not speculate beyond the data given.
+
+Format: three sections — Headline, What changed, Decisions required.</div>
+        <p>Same tool, same person, same minute of effort — a completely different class of output. That difference <em>is</em> the Direction signal.</p>`},
+      {h:'Give examples, set the bar', body:`
+        <p>Two force-multipliers on top of the five parts:</p>
+        <p><strong>1. Show, don't only tell.</strong> Paste an example of a past deliverable you consider excellent and say "match this structure and standard." Models imitate examples far more reliably than they follow adjectives like "professional."</p>
+        <p><strong>2. Tell it what to do when unsure.</strong> Add: <em>"If any required information is missing, list your assumptions explicitly instead of inventing figures."</em> This single line converts silent hallucination into visible, checkable assumptions.</p>
+        <div class="callout">For bilingual Gulf workflows, specify language explicitly: <em>"Respond in formal Modern Standard Arabic, then provide an English executive summary."</em> Never leave language choice to chance.</div>`},
+      {h:'One task per prompt, chain the rest', body:`
+        <p>Long, tangled requests ("analyze this, then write a memo, then make slides, then translate") degrade quality. Decompose: <strong>one prompt, one task</strong>, feeding each output into the next step. You review at each junction — which is exactly where your Judgement enters the process.</p>
+        <ul>
+          <li>Prompt 1: extract and structure the facts.</li>
+          <li>Prompt 2 (after your review): draft the memo from the verified facts.</li>
+          <li>Prompt 3: adapt the approved memo into slide bullets.</li>
+        </ul>
+        <p>Chaining keeps every step inspectable and turns the model from an oracle into a production line you supervise.</p>`},
+    ],
+    quiz:[
+      {q:'Which element is missing from this prompt: "You are an HR director at a Qatari bank. Write something about our new hybrid-work policy."',
+       o:['Role','A precise task with audience, constraints, and format','Politeness','Nothing — it is complete'],c:1,
+       e:'It has a role but no defined deliverable: for whom, what exactly, how long, in what format. "Write something about X" invites generic filler.'},
+      {q:'Why is pasting an example of a past excellent deliverable so effective?',
+       o:['It makes the prompt longer, and longer is always better','Models imitate concrete examples more reliably than they follow abstract adjectives like "professional"','It hides confidential data','It reduces the token cost'],c:1,
+       e:'"Match this structure and standard" plus a real example anchors the model to your actual bar. Adjectives are ambiguous; examples are not.'},
+      {q:'What does adding "If information is missing, state your assumptions explicitly instead of inventing figures" accomplish?',
+       o:['It converts silent hallucination into visible, checkable assumptions','It makes the model refuse to answer','It guarantees factual accuracy','It shortens the output'],c:0,
+       e:'The model will fill gaps either way; this line forces the gaps into the open where your Judgement can catch them.'},
+      {q:'You need analysis, a memo, and slides from one dataset. What is the recommended approach?',
+       o:['One giant prompt requesting all three at once','Three chained prompts — one task each — with your review between steps','Ask for slides first since they are hardest','Let the model choose the order'],c:1,
+       e:'One task per prompt keeps quality high and inserts your judgement at every junction. Chaining turns the model into a supervised production line.'},
+    ],
+  },
+  {
+    id:'refinement',
+    title:'Prompt Engineering II — Refinement',
+    ar:'التحسين والتكرار',
+    tagline:'From plausible draft to professional deliverable.',
+    lessons:[
+      {h:'The first answer is never the deliverable', body:`
+        <p>The single largest behavioral gap between AI-capable and AI-incapable professionals: the incapable <strong>accept the first output</strong>. The capable treat it as a first draft from a fast, tireless, occasionally overconfident junior — and start the review loop.</p>
+        <p>The loop has three moves, repeated until the work meets your bar:</p>
+        <ul>
+          <li><strong>Critique</strong> — name what is wrong or weak, specifically.</li>
+          <li><strong>Re-direct</strong> — a targeted follow-up prompt fixing exactly that.</li>
+          <li><strong>Verify</strong> — check every fact, figure, and citation you intend to rely on.</li>
+        </ul>
+        <div class="callout">Time saved by AI is meant to be partially reinvested in refinement. Sending the raw first draft to a client is how "plausible-looking work" enters your brand.</div>`},
+      {h:'Make the model critique itself', body:`
+        <p>Before you critique, make the model do a pass:</p>
+        <div class="prompt-box good">Review the memo you just drafted as if you were a skeptical CFO in Abu Dhabi.
+List the three weakest claims, any figure that lacks a source, and anything a reader could misinterpret. Do not rewrite yet — critique only.</div>
+        <p>Then decide which critiques matter (Judgement) and instruct the fix (Direction). Separating <em>critique</em> from <em>rewrite</em> keeps you in control of what changes.</p>
+        <p>Other refinement instruments: <strong>ask for two contrasting versions</strong> and pick; <strong>ask "what questions should I have asked you?"</strong> to surface missing context; <strong>ask it to argue the opposite</strong> to stress-test a recommendation.</p>`},
+      {h:'Verification is non-negotiable', body:`
+        <p>Language models generate <strong>fluent, confident text that can be wrong</strong> — invented statistics, misremembered regulations, citations that do not exist. Fluency is not evidence.</p>
+        <ul>
+          <li><strong>Numbers</strong>: recompute anything that feeds a decision. Never let the model do final arithmetic unchecked.</li>
+          <li><strong>Regulations &amp; law</strong>: verify against the primary source — a Central Bank circular, DIFC/QFC rulebook, the Gazette — never against the model's memory.</li>
+          <li><strong>Citations &amp; quotes</strong>: open the source. If you cannot find it, it does not exist.</li>
+        </ul>
+        <div class="callout">The professional rule: <strong>you own every word you forward.</strong> "The AI wrote it" has never survived contact with a regulator, a court, or a chairman.</div>`},
+      {h:'Confidentiality and responsible use', body:`
+        <p>Refinement discipline includes knowing what never enters a prompt. Before pasting, ask: <em>would I email this content to an external consultant without an NDA?</em></p>
+        <ul>
+          <li>Use your organization's <strong>approved, enterprise-grade AI tools</strong> — not personal accounts on public tools — for anything involving client, employee, or strategic data.</li>
+          <li>Data-protection regimes apply: <strong>UAE PDPL, Saudi PDPL, Qatar's data privacy law</strong>, plus sector rules from central banks and regulators.</li>
+          <li>Anonymize where possible: "a GCC retail client with AED 2B revenue" usually works as well as the real name.</li>
+        </ul>
+        <p>Capability includes restraint. The fastest way to end an AI program is one leaked dataset.</p>`},
+    ],
+    quiz:[
+      {q:'What most distinguishes AI-capable professionals from AI-incapable ones using the same tools?',
+       o:['Typing speed','They accept the first output vs. they run a critique–re-direct–verify loop','The capable use more expensive models','The capable write longer prompts'],c:1,
+       e:'The defining behavior is the refinement loop: treat the first output as a junior’s draft, critique it, re-direct, and verify before anything ships.'},
+      {q:'Why ask the model to critique its own draft before rewriting?',
+       o:['It is faster than reading the draft yourself','Separating critique from rewrite lets you judge which fixes matter before anything changes','The model refuses to rewrite without critiquing','Critique mode disables hallucinations'],c:1,
+       e:'Critique-only passes surface weaknesses while keeping you in control: your Judgement selects the critiques, your Direction instructs the fix.'},
+      {q:'An AI-drafted client note cites "Article 14 of the 2024 QFC Digital Assets Rulebook." What must happen before the note is sent?',
+       o:['Nothing, if the wording sounds official','Ask the model to confirm it is sure','Verify the article against the primary source; if you cannot find it, it does not exist','Add a disclaimer that AI was used'],c:2,
+       e:'Models invent authoritative-sounding citations. Regulations are verified against the primary source, never against the model’s memory — you own every word you forward.'},
+      {q:'Which of these is the correct confidentiality test before pasting content into an AI tool?',
+       o:['"Is the output likely to be good?"','"Would I email this to an external consultant without an NDA?"','"Is the file smaller than 10 MB?"','"Has my manager seen the prompt?"'],c:1,
+       e:'If content could not leave the building without an NDA, it enters only approved enterprise tools — under UAE/Saudi PDPL and sector rules, this is compliance, not etiquette.'},
+    ],
+  },
+  {
+    id:'daily',
+    title:'AI in the Daily Workflow',
+    ar:'في العمل اليومي',
+    tagline:'Where the hours actually come from — and the ROI math behind them.',
+    lessons:[
+      {h:'The five daily arenas', body:`
+        <p>Across Gulf enterprises, five recurring workflows yield the largest reliable returns. Master these before anything exotic:</p>
+        <ul>
+          <li><strong>Synthesis</strong> — collapsing long inputs (tender documents, regulations, meeting transcripts) into decision-ready briefs.</li>
+          <li><strong>Drafting</strong> — first versions of memos, board papers, client emails, job descriptions, contracts-for-review.</li>
+          <li><strong>Bilingual work</strong> — Arabic ⇄ English drafting and adaptation, with the crucial caveat that formal or legal Arabic requires human review before release.</li>
+          <li><strong>Analysis</strong> — structuring data, generating hypotheses, drafting the questions to interrogate a dataset.</li>
+          <li><strong>Preparation</strong> — rehearsing negotiations, anticipating a minister’s or board’s hardest questions, red-teaming your own proposal.</li>
+        </ul>
+        <div class="callout">Pattern in all five: the AI compresses the <strong>production</strong> hours; the professional keeps the <strong>decision</strong> minutes.</div>`},
+      {h:'A day, rebuilt', body:`
+        <p>A strategy manager at a Doha holding company, before and after:</p>
+        <p><strong>Before</strong> — 3 hours reading a 140-page tender, 2 hours drafting the internal brief, 1 hour making it bilingual. The thinking happened in the gaps, tired.</p>
+        <p><strong>After</strong> — 20 minutes directing extraction of the tender’s commercial terms and risk clauses (with page references to verify), 30 minutes verifying against the source and thinking about the actual decision, 20 minutes refining a drafted brief, 10 minutes reviewing the Arabic version. <strong>Two hours reclaimed — and the thinking got the best hours, not the leftovers.</strong></p>
+        <p>Note what did <em>not</em> happen: the manager did not skip reading the risk clauses the model flagged. Verification stayed in the loop.</p>`},
+      {h:'The ROI arithmetic', body:`
+        <p>Why do boards care about capability density? Because the numbers are enormous. The enterprise math for a Fortune-500-scale employer, 200 knowledge-worker hires per year:</p>
+        <ul>
+          <li>Average fully-loaded compensation: <strong>$180,000</strong></li>
+          <li>Annual hiring spend: 200 × $180K = <strong>$36.0M</strong></li>
+          <li>Mis-hire rate in an AI-saturated funnel (industry midpoint): <strong>~25%</strong></li>
+          <li>Cost of one mis-hire (industry 1–2× salary, midpoint 1.5×): <strong>$270,000</strong></li>
+          <li>Annual mis-hire cost: 50 × $270K = <strong>$13.5M</strong></li>
+        </ul>
+        <p>The same asymmetry applies to your own output: a $40/month subscription either becomes a 5× multiplier or a generator of plausible-looking work. The subscription is a rounding error; the human capability decides the sign of the return.</p>`},
+      {h:'Habits that compound', body:`
+        <p>Four habits separate professionals whose advantage compounds from those who plateau:</p>
+        <ul>
+          <li><strong>Default-to-AI triage</strong>: for every task over 15 minutes, ask "what part of this should the model do?" — consciously, every time.</li>
+          <li><strong>A personal prompt library</strong>: save and version your best prompts for recurring deliverables; refine them like code.</li>
+          <li><strong>Share the wins</strong>: a prompt that saves your team 4 hours a week is worth more circulated than hoarded — capability density is a team metric.</li>
+          <li><strong>Log the misses</strong>: when the model failed you, note why. Most misses trace back to a signal — unclear Direction, skipped Refinement.</li>
+        </ul>
+        <div class="callout">Fifteen deliberate minutes a day beats a quarterly training webinar. Capability is built in the workflow, not beside it.</div>`},
+    ],
+    quiz:[
+      {q:'Across the five daily arenas (synthesis, drafting, bilingual work, analysis, preparation), what is the common division of labor?',
+       o:['The AI makes the decisions; the human produces the documents','The AI compresses production hours; the human keeps the decision minutes','The AI handles Arabic; the human handles English','Each arena requires a different AI vendor'],c:1,
+       e:'In every arena the model accelerates production (reading, drafting, structuring) while the professional retains framing, verification, and the decision itself.'},
+      {q:'In the enterprise scenario (200 hires/year, $180K loaded comp, ~25% mis-hire rate, $270K per mis-hire), what is the annual cost of mis-hires?',
+       o:['$2.7M','$36.0M','$13.5M','$270K'],c:2,
+       e:'50 mis-hires (25% of 200) × $270K = $13.5M per year — which is why capability assessment is a board topic, not an HR detail.'},
+      {q:'The tender-analysis example reclaimed ~2 hours. Which step would have been professionally negligent to skip?',
+       o:['Asking for page references and verifying flagged risk clauses against the source document','Making the brief bilingual','Using a prompt template','Reporting the time saved to HR'],c:0,
+       e:'The efficiency came from redirecting reading, not eliminating verification. Relying on unverified extraction of risk clauses is how plausible-looking work becomes a liability.'},
+      {q:'Why maintain and share a personal prompt library?',
+       o:['To prove tool adoption to the IT department','Recurring deliverables get better, versioned prompts — and shared prompts raise the whole team’s capability density','Because prompts expire monthly','To reduce subscription costs'],c:1,
+       e:'Prompts for recurring work are assets: refine them like code, share them like playbooks. Capability density is an organizational metric, not a private one.'},
+    ],
+  },
+  {
+    id:'organization',
+    title:'The AI-Native Organization',
+    ar:'المؤسسة الجاهزة للمستقبل',
+    tagline:'Assessment, embedded training, continuous evaluation — and why standards beat rubrics.',
+    lessons:[
+      {h:'Three stages of the capability stack', body:`
+        <p>Organizations that get this right build a pipeline, not an event:</p>
+        <ul>
+          <li><strong>Assessment</strong> — measure the four signals at the point of hiring and internally, against a calibrated cohort, producing an auditable capability score rather than an interviewer’s impression.</li>
+          <li><strong>Embedded training</strong> — develop the signals inside real workflows (exactly what this program does), not in abstract courseware.</li>
+          <li><strong>Continuous evaluation</strong> — capability is re-measured over time and feeds development, staffing, and (as leading adopters are doing) compensation and promotion cycles.</li>
+        </ul>
+        <p>One stage without the others fails: assessment without training labels people; training without measurement cannot prove ROI.</p>`},
+      {h:'Why an AI interviewer, not a test or a panel', body:`
+        <p>Compare the instruments against what an AI-saturated funnel requires:</p>
+        <ul>
+          <li><strong>Static tests</strong>: fixed questions — the candidate pastes them into a chatbot and submits. Only the artifact is graded; the process is invisible. Cheap, and cheapness is part of the problem.</li>
+          <li><strong>Human interviewers</strong>: the best probe adaptively, but it falls apart at scale — inter-rater variance is the largest single source of hiring noise, a senior interviewer hour costs $200–400 fully loaded, and the knowledge stays in one person’s head.</li>
+          <li><strong>AI interviewer</strong>: probes adaptively when an answer is weak, captures process traces, stays identical across 200+ candidates, costs under $50 per candidate, and improves with every candidate seen.</li>
+        </ul>
+        <div class="callout">The point is not the vendor — it is the requirement set: <strong>adaptive probing, process capture, perfect consistency, and scale economics</strong>. Any instrument your organization adopts should pass all four.</div>`},
+      {h:'Build vs buy: the standards argument', body:`
+        <p>"We could build this ourselves." You could. It wouldn’t work, for three structural reasons:</p>
+        <ul>
+          <li><strong>Calibration</strong> — a meaningful score is calibrated across many companies’ cohorts, not invented from your own sample.</li>
+          <li><strong>Network scale</strong> — every additional organization’s data improves the instrument; a private rubric is stale on day one.</li>
+          <li><strong>Neutrality</strong> — standards cannot be built inside the market they arbitrate. You are the market you would be trying to arbitrate; candidates take the test that is <em>portable</em>.</li>
+        </ul>
+        <p>The real decision is not "buy software vs. write our own" — it is <strong>buy access to a multi-company calibrated standard vs. build a private rubric no one outside your walls accepts</strong>.</p>`},
+      {h:'Your 90-day mandate', body:`
+        <p>Leaving this program, whatever your seat — analyst, manager, or executive — the playbook is the same:</p>
+        <ul>
+          <li><strong>Days 1–30</strong>: apply the five-part prompt and the refinement loop to your three most frequent deliverables. Start the prompt library.</li>
+          <li><strong>Days 31–60</strong>: run one team workflow through the before/after redesign (the tender example is the template). Measure hours and quality honestly.</li>
+          <li><strong>Days 61–90</strong>: propose how your unit should measure capability — signals, not tool logins — and where assessment belongs in your hiring funnel.</li>
+        </ul>
+        <div class="callout">Your AI budget is extending. This program exists so that your <strong>capability</strong> extends with it — and so you can prove it.</div>`},
+    ],
+    quiz:[
+      {q:'What are the three stages of an enterprise capability stack?',
+       o:['Procurement, deployment, renewal','Assessment, embedded training, continuous evaluation','Hiring, onboarding, exit interviews','Pilots, press releases, dashboards'],c:1,
+       e:'Measure the signals (assessment), develop them inside real workflows (embedded training), and re-measure over time (continuous evaluation). Any stage alone fails.'},
+      {q:'Why do static skills tests fail in an AI-saturated hiring funnel?',
+       o:['They are too expensive','Candidates paste fixed questions into a chatbot; only the artifact is graded and the process is invisible','They take too long to administer','Regulators prohibit them in the GCC'],c:1,
+       e:'Fixed questions + artifact-only grading is exactly the failure mode: AI-generated work is indistinguishable, and the process — where capability lives — is never observed.'},
+      {q:'What is the strongest structural argument against building a capability standard purely in-house?',
+       o:['Internal IT teams are too slow','A standard needs cross-company calibration, network-scale data, and neutrality — a private rubric is uncalibrated, stale, and accepted by no one outside your walls','Building software is always more expensive than buying','Employees would refuse internal tests'],c:1,
+       e:'Standards cannot be built inside the market they arbitrate. The choice is access to a multi-company calibrated standard vs. a private rubric with no external currency.'},
+      {q:'Per the 90-day mandate, what belongs in days 1–30?',
+       o:['Propose a company-wide reorganization','Apply the five-part prompt and refinement loop to your three most frequent deliverables and start a prompt library','Purchase additional AI subscriptions for the team','Wait for the annual training calendar'],c:1,
+       e:'The mandate starts with personal capability on real recurring work — the habits from Modules 3–5 — before scaling to team workflows and unit-level measurement.'},
+    ],
+  },
+];
+
+const PASS = 3;
+const STORE_KEY = 'benableAiAcademy.v1';
+const app = document.getElementById('app');
+
+let state = load();
+function load(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return {scores:{}, name:''};
+}
+function save(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
+}
+function passedCount(){
+  return MODULES.filter(m => (state.scores[m.id]||0) >= PASS).length;
+}
+function updateRing(){
+  const n = passedCount();
+  const fill = document.getElementById('ringFill');
+  fill.style.strokeDashoffset = String(100.5 * (1 - n/MODULES.length));
+  document.getElementById('ringLabel').textContent = n + ' / ' + MODULES.length + ' modules';
+}
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+
+/* ---------- home ---------- */
+function renderHome(){
+  const n = passedCount();
+  const allDone = n === MODULES.length;
+  app.innerHTML = `
+  <div class="screen">
+    <section class="hero">
+      <span class="eyebrow">AI capability training · GCC edition</span>
+      <h1>Your workforce, <span class="hl">AI&#8209;enabled.</span></h1>
+      <div class="ar-line" lang="ar">القدرة، لا الأدوات، هي المعيار</div>
+      <p class="lede">Six modules by benable ai that train the four signals of AI capability — Recognition, Direction, Judgement, Refinement — for professionals at Gulf enterprises. Built for the era in which output stopped being proof.</p>
+      <div class="cta-row">
+        <button class="btn btn-primary" id="startBtn">${n===0?'Begin Module 1':(allDone?'Review the program':'Continue training')}</button>
+        ${allDone?'<button class="btn btn-ghost" id="certBtn">View certificate</button>':''}
+      </div>
+    </section>
+
+    <div class="stats" aria-label="Key statistics">
+      <div class="stat"><div class="num" data-count="92" data-suffix="%">0%</div><div class="lbl">of recent graduates routinely use generative AI in their work — up from 56% in 2024</div></div>
+      <div class="stat"><div class="num" data-count="5" data-prefix="3–" data-suffix="×">3–0×</div><div class="lbl">productivity spread between AI-capable and AI-incapable workers on the same tools</div></div>
+      <div class="stat"><div class="num" data-count="40" data-suffix="%">0%</div><div class="lbl">of HR leaders say existing assessment tools are no longer fit for purpose</div></div>
+    </div>
+    <div class="stats-src">Source: AI-Native Workforce enterprise briefing, 2026</div>
+
+    <h2 class="sec-title">The curriculum</h2>
+    <p class="sec-sub">Pass each module quiz (${PASS} of 4 or better) to earn your certificate. Progress is saved on this device.</p>
+    <div class="mod-grid">
+      ${MODULES.map((m,i)=>{
+        const score = state.scores[m.id];
+        const passed = (score||0) >= PASS;
+        const chip = passed ? '<span class="chip chip-done">Passed '+score+'/4</span>'
+                   : (score!==undefined ? '<span class="chip chip-part">Retry · '+score+'/4</span>'
+                   : '<span class="chip chip-todo">Not started</span>');
+        return `
+        <button class="mod-card" data-mod="${i}">
+          <span class="idx"><span>Module 0${i+1}</span>${chip}</span>
+          <h3>${m.title}</h3>
+          <span class="ar" lang="ar">${m.ar}</span>
+          <p>${m.tagline}</p>
+          <span class="meta">${m.lessons.length} lessons · 4 questions</span>
+          <span class="bar"><i style="width:${passed?100:(score!==undefined?Math.round(score/4*100):0)}%"></i></span>
+        </button>`;
+      }).join('')}
+    </div>
+  </div>`;
+
+  document.getElementById('startBtn').addEventListener('click', ()=>{
+    const next = MODULES.findIndex(m => (state.scores[m.id]||0) < PASS);
+    openModule(next === -1 ? 0 : next);
+  });
+  const certBtn = document.getElementById('certBtn');
+  if(certBtn) certBtn.addEventListener('click', renderCertificate);
+  app.querySelectorAll('.mod-card').forEach(el=>{
+    el.addEventListener('click', ()=> openModule(Number(el.dataset.mod)));
+  });
+  animateCounters();
+  updateRing();
+  window.scrollTo({top:0});
+}
+
+function animateCounters(){
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  app.querySelectorAll('[data-count]').forEach(el=>{
+    const target = Number(el.dataset.count);
+    const pre = el.dataset.prefix || '';
+    const suf = el.dataset.suffix || '';
+    if(reduced){ el.textContent = pre + target + suf; return; }
+    const t0 = performance.now(), dur = 1400;
+    function tick(t){
+      const p = Math.min(1,(t-t0)/dur);
+      const eased = 1 - Math.pow(1-p,3);
+      el.textContent = pre + Math.round(target*eased) + suf;
+      if(p<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+/* ---------- lesson ---------- */
+function openModule(mi){ renderLesson(mi, 0); }
+
+function renderLesson(mi, li){
+  const m = MODULES[mi];
+  const lesson = m.lessons[li];
+  app.innerHTML = `
+  <div class="screen">
+    <nav class="crumbs"><button id="homeLink">Curriculum</button><span>›</span><span>Module 0${mi+1}</span><span>›</span><span>Lesson ${li+1} of ${m.lessons.length}</span></nav>
+    <div class="lesson-head">
+      <h2>${m.title}</h2>
+      <div class="ar" lang="ar">${m.ar}</div>
+    </div>
+    <div class="dots">${m.lessons.map((_,i)=>`<i class="${i<=li?'on':''}"></i>`).join('')}<i></i></div>
+    <div class="card">
+      <h4>${lesson.h}</h4>
+      ${lesson.body}
+    </div>
+    <div class="lesson-nav">
+      <button class="btn btn-ghost" id="backBtn">${li===0?'Back to curriculum':'Previous'}</button>
+      <button class="btn btn-primary" id="nextBtn">${li===m.lessons.length-1?'Start the quiz':'Continue'}</button>
+    </div>
+  </div>`;
+  document.getElementById('homeLink').addEventListener('click', renderHome);
+  document.getElementById('backBtn').addEventListener('click', ()=> li===0 ? renderHome() : renderLesson(mi, li-1));
+  document.getElementById('nextBtn').addEventListener('click', ()=> li===m.lessons.length-1 ? renderQuiz(mi,0,0) : renderLesson(mi, li+1));
+  updateRing();
+  window.scrollTo({top:0});
+}
+
+/* ---------- quiz ---------- */
+function renderQuiz(mi, qi, correctSoFar){
+  const m = MODULES[mi];
+  const q = m.quiz[qi];
+  app.innerHTML = `
+  <div class="screen">
+    <nav class="crumbs"><button id="homeLink">Curriculum</button><span>›</span><span>Module 0${mi+1}</span><span>›</span><span>Quiz</span></nav>
+    <div class="lesson-head"><h2>${m.title}</h2><div class="ar" lang="ar">${m.ar}</div></div>
+    <div class="dots">${m.lessons.map(()=>'<i class="on"></i>').join('')}<i class="on"></i></div>
+    <div class="card">
+      <div class="q-count">Question ${qi+1} of ${m.quiz.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="opts">
+        ${q.o.map((opt,i)=>`<button class="opt" data-i="${i}"><span class="key">${'ABCD'[i]}</span><span>${opt}</span></button>`).join('')}
+      </div>
+      <div id="explainSlot"></div>
+      <div class="lesson-nav no-print">
+        <button class="btn btn-ghost" id="reviewBtn">Review lessons</button>
+        <button class="btn btn-primary" id="nextQ" disabled>${qi===m.quiz.length-1?'See results':'Next question'}</button>
+      </div>
+    </div>
+  </div>`;
+  document.getElementById('homeLink').addEventListener('click', renderHome);
+  document.getElementById('reviewBtn').addEventListener('click', ()=> renderLesson(mi,0));
+
+  let answeredCorrect = null;
+  app.querySelectorAll('.opt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(answeredCorrect !== null) return;
+      const pick = Number(btn.dataset.i);
+      answeredCorrect = (pick === q.c);
+      app.querySelectorAll('.opt').forEach(b=>{
+        b.disabled = true;
+        const bi = Number(b.dataset.i);
+        if(bi === q.c) b.classList.add('correct');
+        else if(bi === pick) b.classList.add('wrong');
+      });
+      document.getElementById('explainSlot').innerHTML =
+        `<div class="explain ${answeredCorrect?'ok':'no'}">
+           <span class="verdict">${answeredCorrect?'Correct':'Not quite'}</span>${q.e}
+         </div>`;
+      document.getElementById('nextQ').disabled = false;
+    });
+  });
+  document.getElementById('nextQ').addEventListener('click', ()=>{
+    const total = correctSoFar + (answeredCorrect?1:0);
+    if(qi === m.quiz.length-1) renderResult(mi, total);
+    else renderQuiz(mi, qi+1, total);
+  });
+  window.scrollTo({top:0});
+}
+
+function renderResult(mi, score){
+  const m = MODULES[mi];
+  const prev = state.scores[m.id];
+  if(prev === undefined || score > prev){ state.scores[m.id] = score; save(); }
+  const passed = state.scores[m.id] >= PASS;
+  const pct = score / m.quiz.length;
+  const allDone = passedCount() === MODULES.length;
+  const nextIdx = MODULES.findIndex(x => (state.scores[x.id]||0) < PASS);
+  app.innerHTML = `
+  <div class="screen">
+    <div class="result-hero">
+      <svg class="score-ring" viewBox="0 0 150 150" style="--target:${408*(1-pct)}">
+        <circle class="t" cx="75" cy="75" r="65"></circle>
+        <circle class="f" cx="75" cy="75" r="65"></circle>
+      </svg>
+      <div class="score-num">${score} / ${m.quiz.length}</div>
+      <h2 class="sec-title" style="margin-top:8px">${passed ? 'Module passed' : 'Not passed yet'}</h2>
+      <p class="sec-sub">
+        ${passed
+          ? (score===m.quiz.length ? 'Perfect score. ' : '') + 'You have demonstrated the working knowledge this module trains.'
+          : 'You need '+PASS+' of '+m.quiz.length+' to pass. Review the lessons — the explanations under each question tell you exactly where to look.'}
+      </p>
+      <div class="cta-row" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:28px">
+        ${passed
+          ? (allDone
+              ? '<button class="btn btn-primary" id="certBtn">Claim your certificate</button>'
+              : (nextIdx!==-1 ? '<button class="btn btn-primary" id="nextModBtn">Next: Module 0'+(nextIdx+1)+'</button>' : ''))
+          : '<button class="btn btn-primary" id="retryBtn">Review & retry</button>'}
+        <button class="btn btn-ghost" id="homeBtn">Curriculum</button>
+      </div>
+    </div>
+  </div>`;
+  const certBtn = document.getElementById('certBtn');
+  if(certBtn) certBtn.addEventListener('click', renderCertificate);
+  const nextModBtn = document.getElementById('nextModBtn');
+  if(nextModBtn) nextModBtn.addEventListener('click', ()=> openModule(nextIdx));
+  const retryBtn = document.getElementById('retryBtn');
+  if(retryBtn) retryBtn.addEventListener('click', ()=> renderLesson(mi,0));
+  document.getElementById('homeBtn').addEventListener('click', renderHome);
+  updateRing();
+  window.scrollTo({top:0});
+}
+
+/* ---------- certificate ---------- */
+function renderCertificate(){
+  const total = MODULES.reduce((s,m)=> s + (state.scores[m.id]||0), 0);
+  const max = MODULES.length * 4;
+  const today = new Date().toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'});
+  app.innerHTML = `
+  <div class="screen">
+    <nav class="crumbs no-print"><button id="homeLink">Curriculum</button><span>›</span><span>Certificate</span></nav>
+    <div class="cert" id="certBox">
+      <div class="cert-brand">benable ai</div>
+      <h2>Certificate of Completion</h2>
+      <p>This certifies that</p>
+      <div class="who" id="certName">${state.name ? esc(state.name) : '—'}</div>
+      <p>has completed the <strong>benable ai</strong> enterprise capability program — six modules on the Four Signals of AI capability: Recognition, Direction, Judgement, and Refinement — with a cumulative score of <strong>${total} / ${max}</strong>.</p>
+      <p style="color:var(--muted);font-size:14px">${today} · AI-Native Workforce Curriculum · GCC Edition</p>
+      <div class="no-print">
+        <input id="nameInput" maxlength="60" placeholder="Type your full name" value="${esc(state.name||'')}" aria-label="Your full name">
+        <div class="name-error" id="nameErr"></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+          <button class="btn btn-primary" id="printBtn">Print certificate</button>
+          <button class="btn btn-ghost" id="homeBtn">Back to curriculum</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+  const input = document.getElementById('nameInput');
+  input.addEventListener('input', ()=>{
+    state.name = input.value.trim(); save();
+    document.getElementById('certName').textContent = state.name || '—';
+    document.getElementById('nameErr').textContent = '';
+  });
+  document.getElementById('printBtn').addEventListener('click', ()=>{
+    if(!state.name){
+      document.getElementById('nameErr').textContent = 'Type your name first — it goes on the certificate.';
+      input.focus();
+      return;
+    }
+    window.print();
+  });
+  document.getElementById('homeLink').addEventListener('click', renderHome);
+  document.getElementById('homeBtn').addEventListener('click', renderHome);
+  updateRing();
+  window.scrollTo({top:0});
+}
+
+renderHome();
+</script>
+
+</body>
+</html>

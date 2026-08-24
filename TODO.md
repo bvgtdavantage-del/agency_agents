@@ -17,6 +17,11 @@ Last Updated: 2026-08-22
   - Fixed: setup.py python_requires was '>=3.8' but PEP 585 annotations require 3.9
   - Excluded: the 8 agent_router test files (254 pre-existing failures) - widening path documented in CLAUDE.md
 
+- [x] Gulf AI Academy training app (`gulf_ai_academy/`)
+  - Completed: 2026-08-19
+  - Self-contained learning app: 6 modules, 24 quiz questions, animations, certificate
+  - Based on the AI-Native Workforce briefing PDF (Four-Signal framework)
+
 - [x] README.md updated with complete documentation
   - Completed: 2024-10-14
   - Commit: 2c635ec
