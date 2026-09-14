@@ -8,30 +8,13 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
 :root{
-  --bg:#F4F0E6; --panel:#FFFFFF; --panel-2:#EDE7D9; --line:#D6CDB8; --line-strong:#B9AC8C;
-  --ink:#14213A; --ink-2:#3B4760; --muted:#6F7A8E;
-  --gold:#A6812A; --gold-soft:#C9A24E; --gold-ink:#7E6014;
-  --navy:#14213A; --navy-ink:#F2ECDF;
-  --good:#2E6B4F; --warn:#9A5B1E;
-  --shadow:0 1px 0 rgba(20,33,58,.06), 0 12px 32px -20px rgba(20,33,58,.35);
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0B1524; --panel:#121F33; --panel-2:#182841; --line:#26364F; --line-strong:#3A4C69;
-    --ink:#EDE6D6; --ink-2:#C6BFAE; --muted:#8C97AA;
-    --gold:#D2AC55; --gold-soft:#E4C87F; --gold-ink:#F0D89B;
-    --navy:#0E1A2C; --navy-ink:#EDE6D6;
-    --good:#7FC29B; --warn:#E0A96A;
-    --shadow:0 1px 0 rgba(0,0,0,.3), 0 14px 36px -20px rgba(0,0,0,.7);
-  }
-}
-:root[data-theme="dark"]{
   --bg:#0B1524; --panel:#121F33; --panel-2:#182841; --line:#26364F; --line-strong:#3A4C69;
   --ink:#EDE6D6; --ink-2:#C6BFAE; --muted:#8C97AA;
   --gold:#D2AC55; --gold-soft:#E4C87F; --gold-ink:#F0D89B;
   --navy:#0E1A2C; --navy-ink:#EDE6D6;
   --good:#7FC29B; --warn:#E0A96A;
   --shadow:0 1px 0 rgba(0,0,0,.3), 0 14px 36px -20px rgba(0,0,0,.7);
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:15.5px;line-height:1.55;padding-block:0 64px;padding-inline:20px}
@@ -47,7 +30,7 @@ h2 .n{color:var(--gold);font-variant-numeric:tabular-nums;margin-right:10px;font
 section{padding:36px 0 8px}
 p{max-width:66ch;margin:0 0 12px}
 .lede{font-size:17.5px;color:var(--ink)}
-.verdict{background:var(--navy);color:var(--navy-ink);padding:28px 30px;margin-top:32px;border-top:2px solid var(--gold-soft);box-shadow:var(--shadow)}
+.verdict{background:var(--navy);color:var(--navy-ink);padding:28px 30px;margin-top:32px;border:1px solid var(--line-strong);border-top:2px solid var(--gold-soft);box-shadow:var(--shadow)}
 .verdict .eyebrow{color:var(--gold-soft)}
 .verdict p{color:var(--navy-ink);max-width:70ch}
 .verdict p strong{color:var(--gold-soft);font-weight:600}
