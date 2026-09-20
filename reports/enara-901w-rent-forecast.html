@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Прогноз аренды Enara 901W</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0B1524; --panel:#121F33; --panel-2:#182841; --line:#26364F; --line-strong:#3A4C69;
+  --ink:#EDE6D6; --ink-2:#C6BFAE; --muted:#8C97AA;
+  --gold:#D2AC55; --gold-soft:#E4C87F; --gold-ink:#F0D89B;
+  --navy:#0E1A2C; --navy-ink:#EDE6D6;
+  --good:#7FC29B; --warn:#E0A96A; --bad:#D98B8B;
+  --shadow:0 1px 0 rgba(0,0,0,.3), 0 14px 36px -20px rgba(0,0,0,.7);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:15.5px;line-height:1.55;padding-block:0 64px;padding-inline:20px}
+.wrap{max-width:900px;margin:0 auto}
+.mast{padding:44px 0 28px;border-bottom:1px solid var(--line-strong)}
+.eyebrow{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
+h1{font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;font-weight:600;font-size:clamp(38px,6vw,58px);line-height:1.02;margin:14px 0 10px;text-wrap:balance;letter-spacing:-.01em}
+.sub{font-family:"Cormorant Garamond",Georgia,serif;font-size:22px;font-style:italic;color:var(--ink-2);margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:22px;font-size:13px;color:var(--muted)}
+.meta b{color:var(--ink-2);font-weight:500}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:30px;line-height:1.1;margin:0 0 14px;text-wrap:balance}
+h2 .n{color:var(--gold);font-variant-numeric:tabular-nums;margin-right:10px;font-weight:500}
+section{padding:36px 0 8px}
+p{max-width:66ch;margin:0 0 12px}
+.lede{font-size:17.5px;color:var(--ink)}
+.verdict{background:var(--navy);color:var(--navy-ink);padding:28px 30px;margin-top:32px;border:1px solid var(--line-strong);border-top:2px solid var(--gold-soft);box-shadow:var(--shadow)}
+.verdict .eyebrow{color:var(--gold-soft)}
+.verdict p{color:var(--navy-ink);max-width:70ch}
+.verdict p strong{color:var(--gold-soft);font-weight:600}
+.verdict .big{font-family:"Cormorant Garamond",Georgia,serif;font-size:29px;line-height:1.2;font-weight:600;margin:10px 0 14px;text-wrap:balance}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:26px 0 6px}
+.kpi{background:var(--panel);padding:16px 18px}
+.kpi .l{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.kpi .v{font-family:"Cormorant Garamond",Georgia,serif;font-size:36px;font-weight:600;line-height:1.05;margin-top:6px;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:16px;font-family:"IBM Plex Sans",sans-serif;font-weight:500;color:var(--muted);margin-left:4px}
+.kpi .d{font-size:12.5px;color:var(--muted);margin-top:4px}
+.bridge{list-style:none;padding:0;margin:18px 0 8px;border-top:1px solid var(--line)}
+.bridge li{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line)}
+.bridge .t{max-width:60ch}
+.bridge .t small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.bridge .delta{font-variant-numeric:tabular-nums;font-weight:600;color:var(--gold);min-width:78px;text-align:right}
+.bridge .run{font-variant-numeric:tabular-nums;color:var(--ink-2);min-width:70px;text-align:right}
+.bridge li.total{border-bottom:2px solid var(--line-strong);border-top:1px solid var(--line-strong)}
+.bridge li.total .run{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums;margin:16px 0 6px}
+th{text-align:left;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line-strong)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.num,th.num{text-align:right}
+tr.hl td{background:var(--panel-2);font-weight:600}
+tr.hl td:first-child{border-left:3px solid var(--gold)}
+.tbl{overflow-x:auto}
+.note{font-size:13.5px;color:var(--muted);max-width:70ch;margin-top:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.card{background:var(--panel);border:1px solid var(--line);padding:20px 22px;box-shadow:var(--shadow)}
+.card h3{font-family:"Cormorant Garamond",Georgia,serif;font-size:22px;font-weight:600;margin:0 0 8px}
+.card ul{margin:0;padding-left:18px}
+.card li{margin:0 0 8px;max-width:52ch}
+.pill{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--line-strong);color:var(--ink-2);border-radius:2px;margin-left:6px;vertical-align:1px}
+.pill.good{border-color:var(--good);color:var(--good)}
+.pill.warn{border-color:var(--warn);color:var(--warn)}
+.pill.bad{border-color:var(--bad);color:var(--bad)}
+.tier{display:inline-block;font-size:10.5px;letter-spacing:.08em;padding:1px 6px;border:1px solid var(--line-strong);color:var(--muted);border-radius:2px;margin-right:6px;vertical-align:1px}
+.heat td.c{text-align:right}
+.heat td.hot{color:var(--gold-soft);font-weight:600}
+.heat td.pick{background:var(--panel-2);color:var(--gold-soft);font-weight:600;outline:1px solid var(--gold)}
+.timeline{list-style:none;padding:0;margin:14px 0 0;border-left:2px solid var(--line-strong)}
+.timeline li{padding:6px 0 10px 18px;position:relative}
+.timeline li::before{content:"";position:absolute;left:-7px;top:13px;width:10px;height:10px;border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
+.timeline b{color:var(--gold-soft);font-weight:600;margin-right:8px;font-variant-numeric:tabular-nums}
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line-strong);font-size:12.5px;color:var(--muted);max-width:80ch}
+@media (max-width:640px){
+  .kpis{grid-template-columns:1fr 1fr}
+  .two{grid-template-columns:1fr}
+  .bridge li{grid-template-columns:1fr auto}
+  .bridge .run{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div class="eyebrow">Constant Estate · Частный меморандум</div>
+    <h1>Прогноз аренды Enara 901W</h1>
+    <p class="sub">Годовая арендная ставка юнита 901 West на дату первой сдачи в аренду, с раскладкой до каждого множителя и с указанием того, что этот множитель может сдвинуть.</p>
+    <div class="meta">
+      <span><b>Объект</b> Enara by Omniyat, Marasi Bay, Business Bay. Юнит 901W, 4 449 кв. футов, 9 этаж из 22, вид Marina / Zabeel / Burj Khalifa, 8 парковочных мест, shell &amp; core</span>
+      <span><b>Горизонт</b> первая аренда, второе полугодие 2028 — первое полугодие 2029</span>
+      <span><b>Дата</b> 14.09.2026, цифры перепроверены по источникам на эту дату</span>
+      <span><b>Валюта</b> AED в год</span>
+    </div>
+  </header>
+
+  <div class="verdict">
+    <div class="eyebrow">Вердикт</div>
+    <div class="big">Базовый прогноз: 1 350 000 AED в год, 303 AED за кв. фут, shell &amp; core, без сервисного сбора. Коридор от 1 050 000 до 1 640 000. С отделкой от арендодателя 1 690 000.</div>
+    <p>Точка стоит на трёх опорах: прямой аналог The Opus by Omniyat в том же Business Bay, поправки на сам юнит и путь рынка до конца 2028 года. Поправки на юнит дают <strong>+15,8%</strong> к аналогу. Рынок к дате сдачи даёт <strong>+9%</strong> в базовом сценарии, при том что второй квартал 2026 года стал первым без роста ставок с 2021 года.</p>
+    <p>Главный вывод для владельца: маркетинговые «5,7–7% доходности» от девелопера требуют ставки <strong>427–524 за фут</strong>. Рынок 2028 года таких ставок для shell &amp; core в Business Bay не даст. Реалистичная валовая доходность на цену покупки <strong>4,0%</strong>, с отделкой за свой счёт <strong>5,1%</strong>. Это не проблема юнита, это цена, в которую рост уже зашит.</p>
+    <p>Ожидание <strong>5 000 000 в год</strong> это <strong>1 124 за фут</strong>. Это в 2,6 раза выше среднего shell &amp; core в DIFC, в 3 раза выше рекордных prime-ставок Downtown и DIFC и в 1,6 раза выше самого дорогого меблированного лота The Opus. Потолок для 901W при полной меблировке, делении на три сьюта и операторской модели около <strong>3,1 млн валовых</strong> и <strong>2,0 млн чистых</strong> после капекса и эксплуатации. Разбор в разделе XI.</p>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="l">База, shell &amp; core</div><div class="v">1,35<small>млн</small></div><div class="d">303 за фут, вероятность 50%</div></div>
+    <div class="kpi"><div class="l">Коридор</div><div class="v">1,05–1,64</div><div class="d">P10 и P90, 236–369 за фут</div></div>
+    <div class="kpi"><div class="l">С отделкой Cat B</div><div class="v">1,69<small>млн</small></div><div class="d">379 за фут, капекс 0,9–1,3 млн</div></div>
+    <div class="kpi"><div class="l">Валовая доходность</div><div class="v">4,05<small>%</small></div><div class="d">на 33,3 млн, база</div></div>
+  </div>
+
+  <section>
+    <h2><span class="n">0</span>Перепроверка цифр по данным на 14.09.2026</h2>
+    <p class="lede">Все опорные значения проверены повторно по самым свежим публичным источникам. Отчёты за третий квартал 2026 ещё не вышли, последняя официальная точка это второй квартал.</p>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Факт</th><th class="num">Значение</th><th>Дата</th><th>Источник</th><th>Статус</th></tr></thead>
+      <tbody>
+        <tr><td>Средняя ставка Дубая</td><td class="num">238 за фут</td><td>Q1 и Q2 2026</td><td><span class="tier">T1</span>Savills. Плоско два квартала подряд, +14% к Q1 2025</td><td><span class="pill good">подтверждено</span></td></tr>
+        <tr><td>Рост Grade A год к году</td><td class="num">+26,2%</td><td>Q2 2026</td><td><span class="tier">T1</span>JLL. Grade B +31,5%: арендаторы уходят из prime в более дешёвые классы</td><td><span class="pill good">добавлено</span></td></tr>
+        <tr><td>Рост средних и prime</td><td class="num">+13% и +16%</td><td>Q2 2026</td><td><span class="tier">T1</span>CBRE</td><td><span class="pill good">подтверждено</span></td></tr>
+        <tr><td>Доля сделок до 3 000 кв. футов</td><td class="num">97%</td><td>Q1 2026</td><td><span class="tier">T1</span>Savills. Юнит 901W крупнее 97% сделок рынка</td><td><span class="pill warn">важно</span></td></tr>
+        <tr><td>Ввод офисов</td><td class="num">2,0 млн кв. футов в 2026, 1,6 млн в 2027</td><td>Q1 2026</td><td><span class="tier">T1</span>Savills. Knight Frank даёт выше: 379 тыс. кв. м в 2027. Принят коридор</td><td><span class="pill warn">расхождение</span></td></tr>
+        <tr><td>Рекорд prime-ставок Downtown и DIFC</td><td class="num">300–380 за фут</td><td>2026</td><td><span class="tier">T2</span>обзоры рынка, Burj Khalifa 320–350</td><td><span class="pill good">подтверждено</span></td></tr>
+        <tr><td>DIFC shell &amp; core, среднее</td><td class="num">425 за фут</td><td>H2 2025</td><td><span class="tier">T1</span>Knight Frank</td><td><span class="pill good">подтверждено</span></td></tr>
+        <tr><td>The Opus, отделанные премиум-лоты</td><td class="num">600 тыс. – 2,3 млн в год за 1 500 – 3 500 кв. футов</td><td>2026</td><td><span class="tier">T2</span>листинги: 400–657 за фут, меблированные, малые</td><td><span class="pill good">добавлено</span></td></tr>
+        <tr><td>The Opus, самый дорогой лот</td><td class="num">4,0 млн за 6 084 кв. футов</td><td>2026</td><td><span class="tier">T2</span>объединённые меблированные юниты, 657 за фут</td><td><span class="pill good">добавлено</span></td></tr>
+        <tr><td>ICD Brookfield, меблированные микро-юниты</td><td class="num">до 900 за фут</td><td>2026</td><td><span class="tier">T2</span>1 000 – 1 500 кв. футов, уровни 28–30 и 50. Верхняя точка рынка</td><td><span class="pill good">добавлено</span></td></tr>
+        <tr><td>Serviced office, Business Bay</td><td class="num">5–9 тыс. в месяц за кабинет</td><td>2026</td><td><span class="tier">T2</span>операторы; выделенный стол 2–2,5 тыс. в месяц</td><td><span class="pill good">добавлено</span></td></tr>
+        <tr><td>Enara: парковка и площадь</td><td class="num">595 мест, 317 939 кв. футов офисов</td><td>2026</td><td><span class="tier">T3</span>агентские страницы; сдача Q1–Q4 2028</td><td><span class="pill good">подтверждено</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">Базовый прогноз после перепроверки не изменился: 1,35 млн. Новые данные JLL о +26% для Grade A относятся к году, закончившемуся во втором квартале 2026, и уже отражены в якоре Opus. Цифра Savills о 97% сделок до 3 000 кв. футов усиливает аргумент за отделку и деление: голый юнит в 4 449 футов ищет арендатора среди 3% рынка.</p>
+  </section>
+
+  <section>
+    <h2><span class="n">I</span>Опоры: что рынок говорит сегодня</h2>
+    <p class="lede">Каждая цифра помечена уровнем источника. Уровень 1 это отчёты брокерских домов, уровень 2 это профильная пресса и площадки, уровень 3 это маркетинг девелопера или агентов.</p>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Показатель</th><th class="num">Значение</th><th>Источник</th></tr></thead>
+      <tbody>
+        <tr><td>Средняя ставка офисов Дубая, Q2 2026</td><td class="num">238 за фут</td><td><span class="tier">T1</span>Savills, Dubai Office Market Q2 2026. Первый квартал без роста с первого полугодия 2021</td></tr>
+        <tr><td>Рост ставок год к году, Q2 2026</td><td class="num">+13% все, +16% prime</td><td><span class="tier">T1</span>CBRE, Q2 2026 review</td></tr>
+        <tr><td>Вакансия Grade A в DIFC, Downtown, Business Bay</td><td class="num">ниже 5%</td><td><span class="tier">T1</span>CBRE, Q2 2026</td></tr>
+        <tr><td>DIFC shell &amp; core, среднее</td><td class="num">425 за фут</td><td><span class="tier">T1</span>Knight Frank, H2 2025 review</td></tr>
+        <tr><td>Business Bay Grade A, запрашиваемые</td><td class="num">160 → 190+ за фут</td><td><span class="tier">T2</span>начало 2024 → середина 2026, обзоры по CBRE</td></tr>
+        <tr class="hl"><td>The Opus by Omniyat, Grade A, среднее</td><td class="num">276 за фут</td><td><span class="tier">T2</span>декабрь 2025, справочник здания. Прямой аналог: тот же девелопер, тот же район</td></tr>
+        <tr><td>The Opus, диапазон fitted</td><td class="num">350–600 за фут</td><td><span class="tier">T2</span>листинги 2026, меблированные и с отделкой</td></tr>
+        <tr><td>Burj Khalifa, офисы</td><td class="num">320–350 за фут</td><td><span class="tier">T2</span>листинги 2026, сервисный сбор 75 за фут</td></tr>
+        <tr><td>Предложение офисов: 2027 / 2028</td><td class="num">379 / 718 тыс. кв. м</td><td><span class="tier">T1</span>Knight Frank и CBRE. Business Bay несёт крупнейший пайплайн, 4,6 млн кв. футов</td></tr>
+        <tr><td>Сдача Enara</td><td class="num">Q1–Q4 2028</td><td><span class="tier">T3</span>агентские страницы расходятся; принят конец 2028</td></tr>
+        <tr><td>Доходность Enara по маркетингу</td><td class="num">5,7–7%, до 11,3%</td><td><span class="tier">T3</span>агентские страницы; в разделе V показано, что это требует</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">Отчёты Savills, Knight Frank, JLL и CBRE недоступны для прямого чтения из этой среды, цифры взяты из их публичных анонсов и цитат в прессе. Зарегистрированные договоры аренды по The Opus в DXB Interact дали бы точку без допущений: это первое, что стоит запросить.</p>
+  </section>
+
+  <section>
+    <h2><span class="n">II</span>От аналога к юниту: пять множителей</h2>
+    <p>Якорь это The Opus в состоянии shell &amp; core на середину 2026 года. Среднее 276 по зданию смешивает отделанные и голые площади; для голых принято 240 в базе, 210 и 270 по краям. Дальше пять поправок, каждая с обоснованием.</p>
+    <ul class="bridge">
+      <li><div class="t">Якорь: The Opus, shell &amp; core, середина 2026<small>Тот же девелопер, тот же район, сопоставимый класс. Opus имеет отель и статус здания Zaha Hadid, Enara имеет год постройки 2028, набережную Marasi Bay и свежую инженерию</small></div><div class="delta">&nbsp;</div><div class="run">240</div></li>
+      <li><div class="t">Здание: Enara против Opus<small>Новая постройка против здания 2018 года. Разница поколений инженерии и фасада стоит 5–8%, минус отсутствие «иконы». Принято +6%</small></div><div class="delta">+6%</div><div class="run">254</div></li>
+      <li><div class="t">Размер юнита<small>4 449 кв. футов против средних 5–8 тыс. по Opus. В аренде, как и в продаже, меньшие лоты идут дороже за фут: шире круг арендаторов. Принято +4%</small></div><div class="delta">+4%</div><div class="run">265</div></li>
+      <li><div class="t">Этаж и вид<small>Девятый из 22 с видом на Burj Khalifa. Средний этаж без премии верхних, но вид на башню продаётся. Принято +3%</small></div><div class="delta">+3%</div><div class="run">273</div></li>
+      <li><div class="t">Парковка<small>8 мест на 4 449 кв. футов, одно место на 556 футов. Для Business Bay это щедро, аренда места 3 000–8 000 в год. Принято +2%</small></div><div class="delta">+2%</div><div class="run">278</div></li>
+      <li><div class="t">Терраса<small>Отсутствует. Аренда считается от внутренней площади, поэтому поправка нулевая. Соседи с террасой получат за неё меньше, чем заплатили</small></div><div class="delta">0%</div><div class="run">278</div></li>
+      <li class="total"><div class="t">901W в ценах середины 2026, shell &amp; core<small>Композит поправок +15,8%</small></div><div class="delta">+15,8%</div><div class="run">278</div></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="n">III</span>Путь рынка до первой аренды</h2>
+    <p>Первая аренда 901W не раньше сдачи здания. Между серединой 2026 и этой датой рынок пройдёт три фазы, и каждая имеет свою цифру.</p>
+    <ul class="timeline">
+      <li><b>2026 H2</b>Стабилизация. Savills зафиксировал первый плоский квартал за пять лет, крупные арендаторы удлинили решения. Принято +2%.</li>
+      <li><b>2027</b>Дефицит сохраняется: 379 тыс. кв. м ввода при вакансии Grade A ниже 5%, CBRE ожидает, что большая часть ввода 2026–2028 будет сдана до завершения. Принято +5%.</li>
+      <li><b>2028</b>Крупнейший ввод цикла, 718 тыс. кв. м, и первая волна «следующего поколения» Grade A. Давление на ставки вторичных зданий, расслоение в пользу новых. Принято +2%.</li>
+      <li><b>2028 Q4 – 2029 Q1</b>Сдача Enara, 3–6 месяцев на отделку арендатора, первый платёж. Композит +9% к середине 2026.</li>
+    </ul>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Сценарий</th><th>Что должно случиться</th><th class="num">Якорь Opus</th><th class="num">Рынок к сдаче</th><th class="num">Ставка 901W</th><th class="num">Аренда в год</th><th class="num">Вероятность</th></tr></thead>
+      <tbody>
+        <tr><td>Медвежий</td><td>Ввод 2028 приходит вовремя, нефть и геополитика режут спрос, Opus реально сдаётся по 210</td><td class="num">210</td><td class="num">−3%</td><td class="num">236</td><td class="num">1,05 млн</td><td class="num">25%</td></tr>
+        <tr class="hl"><td>Базовый</td><td>Стабилизация 2026, умеренный рост 2027, расслоение 2028 в пользу новых зданий</td><td class="num">240</td><td class="num">+9%</td><td class="num">303</td><td class="num">1,35 млн</td><td class="num">50%</td></tr>
+        <tr><td>Бычий</td><td>Задержки ввода, банки и финтех продолжают экспансию, Opus держит 270 за голые площади</td><td class="num">270</td><td class="num">+18%</td><td class="num">369</td><td class="num">1,64 млн</td><td class="num">25%</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">Взвешенное по вероятностям ожидание 1,347 млн, оно совпадает с базовым сценарием. Медвежий и бычий сценарии симметричны по деньгам, около ±0,3 млн.</p>
+  </section>
+
+  <section>
+    <h2><span class="n">IV</span>Чувствительность: где именно лежит точка</h2>
+    <p>Две переменные, которые нельзя знать сегодня: реальная голая ставка Opus и рост рынка до сдачи. Таблица показывает годовую аренду 901W в млн AED для каждой пары.</p>
+    <div class="tbl">
+    <table class="heat">
+      <thead><tr><th>Якорь Opus, за фут</th><th class="num">−5%</th><th class="num">0%</th><th class="num">+5%</th><th class="num">+10%</th><th class="num">+15%</th><th class="num">+20%</th></tr></thead>
+      <tbody>
+        <tr><td>200</td><td class="c">0,98</td><td class="c">1,03</td><td class="c">1,08</td><td class="c">1,13</td><td class="c">1,19</td><td class="c">1,24</td></tr>
+        <tr><td>220</td><td class="c">1,08</td><td class="c">1,13</td><td class="c">1,19</td><td class="c">1,25</td><td class="c">1,30</td><td class="c">1,36</td></tr>
+        <tr><td>240</td><td class="c">1,17</td><td class="c">1,24</td><td class="c">1,30</td><td class="c pick">1,36</td><td class="c">1,42</td><td class="c">1,48</td></tr>
+        <tr><td>260</td><td class="c">1,27</td><td class="c">1,34</td><td class="c">1,41</td><td class="c">1,47</td><td class="c">1,54</td><td class="c">1,61</td></tr>
+        <tr><td>280</td><td class="c">1,37</td><td class="c">1,44</td><td class="c">1,51</td><td class="c">1,59</td><td class="c">1,66</td><td class="c">1,73</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">Каждые 20 AED в якоре стоят около 100 тыс. в год. Каждые 5% роста рынка стоят около 60 тыс. Якорь весит больше, чем прогноз рынка, поэтому реестр аренд Opus важнее любого макропрогноза.</p>
+  </section>
+
+  <section>
+    <h2><span class="n">V</span>Проверка через доходность</h2>
+    <p>Цена покупки 33,3 млн, или 7 493 за фут. Любая ставка аренды переводится в доходность, и это самый жёсткий тест прогноза.</p>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Ставка, за фут</th><th class="num">Аренда в год</th><th class="num">Валовая на 33,3 млн</th><th class="num">Валовая на 32,63 млн</th><th>Что это</th></tr></thead>
+      <tbody>
+        <tr><td>236</td><td class="num">1,05 млн</td><td class="num">3,15%</td><td class="num">3,22%</td><td>Медвежий сценарий</td></tr>
+        <tr class="hl"><td>303</td><td class="num">1,35 млн</td><td class="num">4,05%</td><td class="num">4,13%</td><td>Базовый сценарий</td></tr>
+        <tr><td>369</td><td class="num">1,64 млн</td><td class="num">4,93%</td><td class="num">5,03%</td><td>Бычий сценарий</td></tr>
+        <tr><td>379</td><td class="num">1,69 млн</td><td class="num">5,06%</td><td class="num">5,16%</td><td>База с отделкой Cat B за счёт владельца</td></tr>
+        <tr><td>427</td><td class="num">1,90 млн</td><td class="num">5,70%</td><td class="num">5,82%</td><td>Нижняя граница маркетинга девелопера</td></tr>
+        <tr><td>524</td><td class="num">2,33 млн</td><td class="num">7,00%</td><td class="num">7,14%</td><td>Верхняя граница маркетинга девелопера</td></tr>
+        <tr><td>719</td><td class="num">3,20 млн</td><td class="num">9,60%</td><td class="num">9,81%</td><td>Агентские «9,6–11,3%». Выше любой сделки по Opus</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>Ставка 427 за фут на shell &amp; core в Business Bay в 2028 году означала бы, что Enara сдаётся дороже среднего DIFC сегодня. Это возможно только для отделанных и меблированных лотов, и то на верхних этажах. Для голого юнита на девятом этаже честная валовая доходность на цену покупки лежит между 3,2% и 5%, с центром 4%. Это ниже ставок по депозитам в AED, и это означает, что покупка была сделана под рост капитала и под план платежей, а не под текущий доход.</p>
+  </section>
+
+  <section>
+    <h2><span class="n">VI</span>Полная раскладка денег за первый год</h2>
+    <p>Базовый сценарий, shell &amp; core, договор на 5 лет. Кто что платит по обычаю Business Bay.</p>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Статья</th><th class="num">AED в год</th><th class="num">За фут</th><th>Платит</th><th>Комментарий</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td>Базовая аренда</td><td class="num">1 348 000</td><td class="num">303</td><td>Арендатор</td><td>2–4 чека; один чек даёт скидку 3–5%</td></tr>
+        <tr><td>Сервисный сбор здания</td><td class="num">200 000</td><td class="num">45</td><td>По договору</td><td>Оценка для премиального здания, коридор 35–60. В Business Bay средний сбор ниже, Opus и Burj Khalifa выше. Если договор gross, это вычет из дохода владельца</td></tr>
+        <tr><td>Chiller, ёмкостная плата</td><td class="num">40 000–70 000</td><td class="num">9–16</td><td>Арендатор</td><td>Начисляется круглый год независимо от потребления; депозит 2–4 тыс. при подключении</td></tr>
+        <tr><td>DEWA, потребление</td><td class="num">по счётчику</td><td class="num">—</td><td>Арендатор</td><td>Плюс муниципальный сбор 5% от аренды, 67 400, в счёте DEWA</td></tr>
+        <tr><td>Парковка, 8 мест</td><td class="num">включено</td><td class="num">—</td><td>—</td><td>Рыночная стоимость 24–64 тыс. в год, принято 40 тыс. Это аргумент в ставке, а не отдельная строка</td></tr>
+        <tr><td>Комиссия брокера</td><td class="num">67 400</td><td class="num">—</td><td>Арендатор</td><td>5% от годовой аренды, разово. При слабом спросе владелец берёт на себя половину</td></tr>
+        <tr><td>Rent-free на отделку</td><td class="num">−45 000</td><td class="num">−10</td><td>Владелец</td><td>2 месяца при пятилетнем договоре, размазанные по сроку: −3,3% к эффективной ставке</td></tr>
+        <tr class="hl"><td>Чистый доход владельца, gross-договор</td><td class="num">1 103 000</td><td class="num">248</td><td>—</td><td>1 348 000 минус сервисный сбор минус амортизированный rent-free. Чистая доходность 3,3%</td></tr>
+        <tr class="hl"><td>Чистый доход владельца, net-договор</td><td class="num">1 303 000</td><td class="num">293</td><td>—</td><td>Сервисный сбор перевыставлен арендатору. Чистая доходность 3,9%</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">VII</span>Пятилетний договор: как растёт цифра</h2>
+    <p>Рынок Дубая для новых договоров ставку не ограничивает, индекс RERA применяется к продлениям. На пять лет принята ступень 5% в год, стандартная для Grade A.</p>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Год договора</th><th>Календарь</th><th class="num">Аренда, база</th><th class="num">С отделкой Cat B</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>2029</td><td class="num">1 348 000</td><td class="num">1 685 000</td></tr>
+        <tr><td>2</td><td>2030</td><td class="num">1 415 000</td><td class="num">1 769 000</td></tr>
+        <tr><td>3</td><td>2031</td><td class="num">1 486 000</td><td class="num">1 858 000</td></tr>
+        <tr><td>4</td><td>2032</td><td class="num">1 560 000</td><td class="num">1 950 000</td></tr>
+        <tr><td>5</td><td>2033</td><td class="num">1 638 000</td><td class="num">2 048 000</td></tr>
+        <tr class="hl"><td>Итого за 5 лет</td><td></td><td class="num">7 448 000</td><td class="num">9 310 000</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">VIII</span>Решение: сдавать голым или с отделкой</h2>
+    <div class="two">
+      <div class="card">
+        <h3>Shell &amp; core <span class="pill">база</span></h3>
+        <ul>
+          <li>303 за фут, 1,35 млн в год. Ноль капекса.</li>
+          <li>Круг арендаторов уже: только те, кто готов вложить 0,9–1,5 млн в чужие стены и ждать 4–6 месяцев.</li>
+          <li>Пустой период после сдачи здания 4–8 месяцев, потому что каждый претендент считает отделку заново.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Отделка Cat B от владельца <span class="pill good">рекомендация</span></h3>
+        <ul>
+          <li>379 за фут, 1,69 млн в год, премия к голому 25%. Это середина между Opus fitted 350 и 600.</li>
+          <li>Капекс 200–300 за фут, 0,9–1,3 млн. Прирост дохода 337 тыс. в год: возврат капекса 25–38%, окупаемость 2,6–4 года.</li>
+          <li>Пустой период сжимается до 2–3 месяцев, круг арендаторов расширяется на финтех, семейные офисы и региональные штабы, которые платят за готовое.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">Отделка должна быть нейтральной: открытая планировка, две переговорные, кухня, серверная, без брендированных элементов. Меблировка добавляет ещё 40–80 за фут к ставке, но она портится и стареет; её лучше отдать арендатору.</p>
+  </section>
+
+  <section>
+    <h2><span class="n">IX</span>Что сдвинет прогноз и на сколько</h2>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Событие</th><th>Направление</th><th class="num">Эффект на аренду 901W</th><th>Как узнать заранее</th></tr></thead>
+      <tbody>
+        <tr><td>Реестр аренд Opus показывает голые ставки 260+</td><td><span class="pill good">вверх</span></td><td class="num">+100–150 тыс.</td><td>Выгрузка DXB Interact по The Opus, договоры 2025–2026</td></tr>
+        <tr><td>Ввод 2028 приходит в срок и целиком, 718 тыс. кв. м</td><td><span class="pill bad">вниз</span></td><td class="num">−60–120 тыс.</td><td>Квартальные обзоры Cavendish Maxwell и CBRE по фактическим сдачам</td></tr>
+        <tr><td>Ввод 2028 сдвигается на 2029, что Cavendish Maxwell считает вероятным</td><td><span class="pill good">вверх</span></td><td class="num">+60–100 тыс.</td><td>Те же обзоры; исторически Дубай сдаёт 50–70% плана в срок</td></tr>
+        <tr><td>Сдача Enara уходит на 2029</td><td><span class="pill warn">сдвиг</span></td><td class="num">год без дохода, ставка выше на 3–5%</td><td>Отчёты о ходе строительства от Omniyat, вехи плана платежей</td></tr>
+        <tr><td>Пре-лизинг за 6 месяцев до сдачи</td><td><span class="pill good">вверх</span></td><td class="num">убирает пустой период, 300–600 тыс. разово</td><td>Начать маркетинг в Q1 2028 через два брокерских дома</td></tr>
+        <tr><td>Региональный шок, нефть ниже 55, конфликт</td><td><span class="pill bad">вниз</span></td><td class="num">−150–300 тыс. на год-два</td><td>Не прогнозируется; закладывается в медвежий сценарий</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">XI</span>Тест гипотезы: 5 000 000 в год</h2>
+    <p class="lede">Ожидание владельца проверено против каждой верхней точки рынка, а затем построен предельный сценарий, в котором из юнита выжимается максимум.</p>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Ориентир</th><th class="num">За фут</th><th class="num">5 млн для 901W</th><th class="num">Кратность</th><th>Комментарий</th></tr></thead>
+      <tbody>
+        <tr><td>Средняя ставка Дубая, Savills Q2 2026</td><td class="num">238</td><td class="num">1 124</td><td class="num">4,7×</td><td>Все классы, все районы</td></tr>
+        <tr><td>Рекорд prime Downtown и DIFC</td><td class="num">380</td><td class="num">1 124</td><td class="num">3,0×</td><td>Верх рынка для обычных договоров</td></tr>
+        <tr><td>DIFC shell &amp; core, среднее</td><td class="num">425</td><td class="num">1 124</td><td class="num">2,6×</td><td>Самый дорогой район города</td></tr>
+        <tr><td>The Opus, самый дорогой лот</td><td class="num">657–691</td><td class="num">1 124</td><td class="num">1,6–1,7×</td><td>Меблированный, малый, тот же девелопер</td></tr>
+        <tr><td>ICD Brookfield, меблированные микро-юниты</td><td class="num">900</td><td class="num">1 124</td><td class="num">1,25×</td><td>На 1 000 – 1 500 кв. футов, с сервисом, Level 50</td></tr>
+        <tr class="hl"><td>Доходность, которую требует 5 млн</td><td class="num">—</td><td class="num">15,0%</td><td class="num">—</td><td>На 33,3 млн. Grade A офисы Дубая торгуются под 5–7%, маркетинг Enara обещает до 7%</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>Ни один зарегистрированный или выставленный лот в Дубае не сдаётся по 1 124 за фут. Самая высокая точка города, меблированные микро-юниты ICD Brookfield, стоит 900 и работает только на 1 000 – 1 500 кв. футов с полным сервисом. Чтобы 901W вышел на 5 млн обычным договором, prime-ставки Дубая должны утроиться к 2028 году. За лучший год цикла они выросли на 26%.</p>
+    <h3 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;font-weight:600;margin:18px 0 8px">Предельный сценарий: максимум, который юнит физически может дать</h3>
+    <p>Полная отделка Cat B, меблировка, деление на три сьюта по 1 300 – 1 500 кв. футов, ресепшн и сервис, ставка на уровне верхней границы Opus и ICD Brookfield с ростом рынка к 2028 году.</p>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Статья</th><th class="num">AED</th><th>Основание</th></tr></thead>
+      <tbody>
+        <tr><td>Ставка сьютов, 2028</td><td class="num">700 за фут</td><td>Верх Opus 657–691 плюс 5–10% роста, ниже ICD Brookfield 900, потому что Business Bay не DIFC</td></tr>
+        <tr><td>Валовая аренда при 100% заполнении</td><td class="num">3 114 000</td><td>4 449 × 700</td></tr>
+        <tr><td>Заполняемость сьютов</td><td class="num">85%</td><td>Малые меблированные лоты имеют оборот арендаторов; операторы работают на 80–90%</td></tr>
+        <tr class="hl"><td>Валовая аренда, реалистичная</td><td class="num">2 647 000</td><td>595 за фут</td></tr>
+        <tr><td>Эксплуатация: ресепшн, уборка, ИТ, коммуналка, брокеры</td><td class="num">−600 000</td><td>130–150 за фут для сервисной модели</td></tr>
+        <tr><td>Сервисный сбор здания</td><td class="num">−200 000</td><td>45 за фут, оценка</td></tr>
+        <tr class="hl"><td>Чистый операционный доход</td><td class="num">1 847 000</td><td>Чистая доходность 5,5% на 33,3 млн</td></tr>
+        <tr><td>Капекс единовременно</td><td class="num">−2 450 000</td><td>Отделка 300, мебель 150, деление и инженерия 100 за фут</td></tr>
+        <tr><td>Прирост чистого дохода против базы shell &amp; core</td><td class="num">+744 000 в год</td><td>1 847 000 против 1 103 000</td></tr>
+        <tr><td>Окупаемость капекса</td><td class="num">3,3 года</td><td>Без учёта износа мебели и повторных отделок раз в 5–7 лет</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">Операторская модель с выделенными столами даёт меньше: около 50 столов по 2 500 в месяц это 1,5 млн валовых, десять кабинетов по 8 000 в месяц это 0,96 млн. Предел для 901W лежит в сьютах, а не в коворкинге.</p>
+    <div class="two">
+      <div class="card">
+        <h3>Вероятности <span class="pill">оценка</span></h3>
+        <ul>
+          <li>Аренда не ниже 5 млн в год: <b>меньше 2%</b>. Требует утроения prime-ставок или прецедента, которого в Дубае нет.</li>
+          <li>Аренда не ниже 3 млн валовых: <b>около 10%</b>. Только сьюты с полным сервисом при бычьем рынке и 100% заполнении.</li>
+          <li>Аренда не ниже 2 млн валовых: <b>около 40%</b>. Отделка плюс меблировка при базовом рынке.</li>
+          <li>Аренда 1,2–1,7 млн: <b>около 50%</b>. Базовый коридор для голого или отделанного юнита.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Что могло породить цифру 5 млн <span class="pill warn">проверить источник</span></h3>
+        <ul>
+          <li>Ставка «4 500 – 5 000 за фут» в агентских материалах по Enara. Это цена продажи Opus, а не аренда; в аренде такой цифры не существует.</li>
+          <li>Доходность «9,6–11,3%» из тех же материалов. При 33,3 млн она даёт 3,2–3,8 млн, и даже она ниже 5 млн.</li>
+          <li>Аренда целого этажа Opus около 4 млн, перенесённая на половину этажа Enara без пересчёта на площадь.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">XII</span>Позиция</h2>
+    <div class="two">
+      <div class="card">
+        <h3>Ответ в одну строку</h3>
+        <ul>
+          <li>Голым: <b>1,35 млн в год</b>, коридор 1,05–1,64.</li>
+          <li>С отделкой: <b>1,69 млн в год</b>, капекс около 1,1 млн, окупаемость 3,3 года.</li>
+          <li>Потолок в сьютах с сервисом: <b>2,6–3,1 млн валовых</b>, 1,85 млн чистых, капекс 2,45 млн.</li>
+          <li>5 млн в год: <b>вне рынка</b>, вероятность меньше 2%.</li>
+          <li>Первый полный год дохода: 2029.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Что сделать до сдачи</h3>
+        <ul>
+          <li>Запросить реестр аренд The Opus и One by Omniyat, это заменяет допущение на факт.</li>
+          <li>Зафиксировать сервисный сбор Enara у Omniyat письменно; разница 35 против 60 за фут это 110 тыс. в год.</li>
+          <li>Заложить отделку Cat B в бюджет 2028 года и начать пре-лизинг в первом квартале 2028.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">Рыночные показатели взяты из публичных анонсов Savills, CBRE, Knight Frank и профильной прессы за 2025–2026 годы, доступ к полным отчётам из этой среды закрыт. Ставки The Opus и Burj Khalifa взяты из справочников зданий и листингов 2026 года. Все поправки и сценарии являются оценками автора и помечены как таковые. Площадь 4 449 кв. футов по регистрации DXB Interact. Прогноз не учитывает НДС и налоговые последствия.</div>
+</div>
+</body>
+</html>
