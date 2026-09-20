@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ценовая стратегия Enara 901W</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0B1524; --panel:#121F33; --panel-2:#182841; --line:#26364F; --line-strong:#3A4C69;
+  --ink:#EDE6D6; --ink-2:#C6BFAE; --muted:#8C97AA;
+  --gold:#D2AC55; --gold-soft:#E4C87F; --gold-ink:#F0D89B;
+  --navy:#0E1A2C; --navy-ink:#EDE6D6;
+  --good:#7FC29B; --warn:#E0A96A; --bad:#D98B8B;
+  --shadow:0 1px 0 rgba(0,0,0,.3), 0 14px 36px -20px rgba(0,0,0,.7);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:15.5px;line-height:1.55;padding-block:0 64px;padding-inline:20px}
+.wrap{max-width:900px;margin:0 auto}
+.mast{padding:44px 0 28px;border-bottom:1px solid var(--line-strong)}
+.eyebrow{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
+h1{font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;font-weight:600;font-size:clamp(38px,6vw,58px);line-height:1.02;margin:14px 0 10px;text-wrap:balance;letter-spacing:-.01em}
+.sub{font-family:"Cormorant Garamond",Georgia,serif;font-size:22px;font-style:italic;color:var(--ink-2);margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:22px;font-size:13px;color:var(--muted)}
+.meta b{color:var(--ink-2);font-weight:500}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:30px;line-height:1.1;margin:0 0 14px;text-wrap:balance}
+h2 .n{color:var(--gold);font-variant-numeric:tabular-nums;margin-right:10px;font-weight:500}
+h3{font-family:"Cormorant Garamond",Georgia,serif;font-size:22px;font-weight:600;margin:18px 0 8px}
+section{padding:36px 0 8px}
+p{max-width:66ch;margin:0 0 12px}
+.lede{font-size:17.5px;color:var(--ink)}
+.verdict{background:var(--navy);color:var(--navy-ink);padding:28px 30px;margin-top:32px;border:1px solid var(--line-strong);border-top:2px solid var(--gold-soft);box-shadow:var(--shadow)}
+.verdict .eyebrow{color:var(--gold-soft)}
+.verdict p{color:var(--navy-ink);max-width:70ch}
+.verdict p strong{color:var(--gold-soft);font-weight:600}
+.verdict .big{font-family:"Cormorant Garamond",Georgia,serif;font-size:29px;line-height:1.2;font-weight:600;margin:10px 0 14px;text-wrap:balance}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:26px 0 6px}
+.kpi{background:var(--panel);padding:16px 18px}
+.kpi .l{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.kpi .v{font-family:"Cormorant Garamond",Georgia,serif;font-size:36px;font-weight:600;line-height:1.05;margin-top:6px;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:16px;font-family:"IBM Plex Sans",sans-serif;font-weight:500;color:var(--muted);margin-left:4px}
+.kpi .d{font-size:12.5px;color:var(--muted);margin-top:4px}
+.bridge{list-style:none;padding:0;margin:18px 0 8px;border-top:1px solid var(--line)}
+.bridge li{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line)}
+.bridge .t{max-width:60ch}
+.bridge .t small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.bridge .delta{font-variant-numeric:tabular-nums;font-weight:600;color:var(--gold);min-width:78px;text-align:right}
+.bridge .run{font-variant-numeric:tabular-nums;color:var(--ink-2);min-width:70px;text-align:right}
+.bridge li.total{border-bottom:2px solid var(--line-strong);border-top:1px solid var(--line-strong)}
+.bridge li.total .run{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums;margin:16px 0 6px}
+th{text-align:left;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line-strong)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.num,th.num{text-align:right}
+tr.hl td{background:var(--panel-2);font-weight:600}
+tr.hl td:first-child{border-left:3px solid var(--gold)}
+.tbl{overflow-x:auto}
+.note{font-size:13.5px;color:var(--muted);max-width:70ch;margin-top:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin:18px 0 6px}
+.tier-card{background:var(--panel);padding:20px 22px}
+.tier-card .l{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.tier-card .v{font-family:"Cormorant Garamond",Georgia,serif;font-size:40px;font-weight:600;line-height:1;margin:8px 0 2px;font-variant-numeric:tabular-nums}
+.tier-card .v small{font-size:15px;font-family:"IBM Plex Sans",sans-serif;color:var(--muted);font-weight:500;margin-left:4px}
+.tier-card .y{font-size:13px;color:var(--ink-2);margin-top:4px}
+.tier-card .d{font-size:12.5px;color:var(--muted);margin-top:8px}
+.card{background:var(--panel);border:1px solid var(--line);padding:20px 22px;box-shadow:var(--shadow)}
+.card h3{margin:0 0 8px}
+.card ul{margin:0;padding-left:18px}
+.card li{margin:0 0 8px;max-width:52ch}
+.pill{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--line-strong);color:var(--ink-2);border-radius:2px;margin-left:6px;vertical-align:1px}
+.pill.good{border-color:var(--good);color:var(--good)}
+.pill.warn{border-color:var(--warn);color:var(--warn)}
+.pill.bad{border-color:var(--bad);color:var(--bad)}
+.timeline{list-style:none;padding:0;margin:14px 0 0;border-left:2px solid var(--line-strong)}
+.timeline li{padding:6px 0 10px 18px;position:relative;max-width:70ch}
+.timeline li::before{content:"";position:absolute;left:-7px;top:13px;width:10px;height:10px;border-radius:50%;background:var(--gold);border:2px solid var(--bg)}
+.timeline b{color:var(--gold-soft);font-weight:600;margin-right:8px;font-variant-numeric:tabular-nums}
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line-strong);font-size:12.5px;color:var(--muted);max-width:80ch}
+@media (max-width:640px){
+  .kpis{grid-template-columns:1fr 1fr}
+  .two,.three{grid-template-columns:1fr}
+  .bridge li{grid-template-columns:1fr auto}
+  .bridge .run{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div class="eyebrow">Constant Estate · Частный меморандум</div>
+    <h1>Ценовая стратегия Enara 901W</h1>
+    <p class="sub">Арендная ставка и условия сдачи юнита 901 West при позиционировании Enara как первого ultra-luxury коммерческого объекта Дубая. Запрос, цель, пол, и что должно быть сделано, чтобы цена держалась.</p>
+    <div class="meta">
+      <span><b>Объект</b> Enara by Omniyat, Marasi Bay, Business Bay. Юнит 901W, 4 449 кв. футов, 9 этаж из 22, вид Marina / Zabeel / Burj Khalifa, 8 парковочных мест</span>
+      <span><b>Предпосылка</b> Enara не имеет прямого аналога; цена строится сверху от лучших зданий Дубая, а не снизу от среднего по району</span>
+      <span><b>Горизонт</b> пре-лизинг с первого квартала 2028, первая аренда конец 2028 — начало 2029</span>
+      <span><b>Дата</b> 20.09.2026</span>
+      <span><b>Валюта</b> AED в год</span>
+    </div>
+  </header>
+
+  <div class="verdict">
+    <div class="eyebrow">Позиция</div>
+    <div class="big">Запрос 650 за фут голым и 850 с отделкой. Цель сделки 550–600 голым, 700–750 с отделкой. Ниже 480 голым и 620 с отделкой не идти без общего пола, согласованного с другими владельцами здания.</div>
+    <p>В деньгах для 901W: запрос <strong>2,9 млн</strong> голым и <strong>3,8 млн</strong> с отделкой; цель <strong>2,45–2,67 млн</strong> и <strong>3,1–3,3 млн</strong>. На цену покупки 33,3 млн это валовых <strong>7,4–8,0%</strong> голым и <strong>9,3–9,9%</strong> с отделкой. Обещанные девелопером 8% лежат в цели, а не в потолке, при одном условии: здание действительно сдаётся выше ICD Brookfield и One Za'abeel.</p>
+    <p>Цена держится не аргументами, а тремя действиями: общий пол между владельцами до сдачи, пре-лизинг за 6–9 месяцев под одного профильного арендатора, и подтверждение премии по реестру аренд верхних зданий DIFC. Без первого действия любой сосед, сдавший этаж за 400, обнулит запрос 650 на первом просмотре.</p>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="l">Запрос, голым</div><div class="v">2,9<small>млн</small></div><div class="d">650 за фут</div></div>
+    <div class="kpi"><div class="l">Цель, голым</div><div class="v">2,45–2,67</div><div class="d">550–600 за фут, 7,4–8,0%</div></div>
+    <div class="kpi"><div class="l">Цель, с отделкой</div><div class="v">3,1–3,3</div><div class="d">700–750 за фут, 9,3–9,9%</div></div>
+    <div class="kpi"><div class="l">Пол, голым</div><div class="v">2,14<small>млн</small></div><div class="d">480 за фут, 6,4%</div></div>
+  </div>
+
+  <section>
+    <h2><span class="n">I</span>Откуда берётся цена: сверху вниз</h2>
+    <p class="lede">При отсутствии аналога якорь это не средний Business Bay и не The Opus, а самые дорогие здания города. Премия «первого в своём роде» ставится над ними.</p>
+    <ul class="bridge">
+      <li><div class="t">Верх рынка сегодня: ICD Brookfield Place и One Za'abeel, shell &amp; core<small>Оценка 450 за фут на середину 2026. Knight Frank даёт среднее DIFC shell &amp; core 425; лучшие здания района выше среднего. Меблированные микро-юниты ICD Brookfield идут до 900</small></div><div class="delta">&nbsp;</div><div class="run">450</div></li>
+      <li><div class="t">Рынок к сдаче Enara<small>Плоский 2026 по Savills, дефицит 2027, расслоение 2028 в пользу новых зданий. Композит +9%</small></div><div class="delta">+9%</div><div class="run">491</div></li>
+      <li><div class="t">Премия «первого в своём роде»<small>Новое поколение против зданий 2019–2020 годов, набережная Marasi Bay, приватный клуб, 595 парковочных мест на 22 юнита. Коридор 10–20%, принято 15%</small></div><div class="delta">+15%</div><div class="run">564</div></li>
+      <li><div class="t">Поправки на юнит<small>Малый лот +4%: шире круг арендаторов. Девятый этаж с видом на Burj Khalifa +3%. Восемь парковок на 4 449 футов +2%</small></div><div class="delta">+9%</div><div class="run">615</div></li>
+      <li class="total"><div class="t">Справедливая ставка 901W, shell &amp; core, 2028<small>Округлено. Запрос ставится на 5–6% выше, цель на 3–10% ниже</small></div><div class="delta">&nbsp;</div><div class="run">600</div></li>
+    </ul>
+    <p class="note">Для сравнения: базовый прогноз по аналогу The Opus без премии «первого в своём роде» даёт 303 за фут. Разница между 303 и 600 это цена предпосылки. Она либо подтверждается реестром аренд верхних зданий DIFC и первыми договорами в самой Enara, либо нет. Раздел IV описывает, как это проверить до сдачи.</p>
+  </section>
+
+  <section>
+    <h2><span class="n">II</span>Ценовая лестница по трём форматам</h2>
+    <p>Каждый формат имеет три уровня. Запрос это цифра в маркетинге. Цель это где закрывается сделка с профильным арендатором. Пол это граница, ниже которой сделка не подписывается без общего решения владельцев.</p>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Формат</th><th>Уровень</th><th class="num">За фут</th><th class="num">В год</th><th class="num">Валовых на 33,3 млн</th><th class="num">Капекс</th><th class="num">Чистых после капекса и сервис. сбора</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="3">Shell &amp; core</td><td>Запрос</td><td class="num">650</td><td class="num">2 890 000</td><td class="num">8,7%</td><td class="num">0</td><td class="num">8,1%</td></tr>
+        <tr class="hl"><td>Цель</td><td class="num">550–600</td><td class="num">2 450 000 – 2 670 000</td><td class="num">7,4–8,0%</td><td class="num">0</td><td class="num">6,8–7,4%</td></tr>
+        <tr><td>Пол</td><td class="num">480</td><td class="num">2 140 000</td><td class="num">6,4%</td><td class="num">0</td><td class="num">5,8%</td></tr>
+        <tr><td rowspan="3">Отделка Cat B от владельца</td><td>Запрос</td><td class="num">850</td><td class="num">3 780 000</td><td class="num">11,4%</td><td class="num">1 100 000</td><td class="num">10,4%</td></tr>
+        <tr class="hl"><td>Цель</td><td class="num">700–750</td><td class="num">3 110 000 – 3 340 000</td><td class="num">9,3–10,0%</td><td class="num">1 100 000</td><td class="num">8,5–9,1%</td></tr>
+        <tr><td>Пол</td><td class="num">620</td><td class="num">2 760 000</td><td class="num">8,3%</td><td class="num">1 100 000</td><td class="num">7,4%</td></tr>
+        <tr><td rowspan="3">Три меблированных сьюта с сервисом</td><td>Запрос</td><td class="num">1 000</td><td class="num">4 450 000</td><td class="num">13,4%</td><td class="num">2 450 000</td><td class="num">9,6%</td></tr>
+        <tr class="hl"><td>Цель, 85% заполнение</td><td class="num">850</td><td class="num">3 210 000</td><td class="num">9,6%</td><td class="num">2 450 000</td><td class="num">6,7%</td></tr>
+        <tr><td>Пол, 85% заполнение</td><td class="num">700</td><td class="num">2 650 000</td><td class="num">8,0%</td><td class="num">2 450 000</td><td class="num">5,1%</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">Чистых после капекса: аренда минус сервисный сбор 200 тыс., делённая на цену покупки плюс капекс. Для сьютов дополнительно вычтена эксплуатация 600 тыс. в год: ресепшн, уборка, ИТ, коммуналка. Сервисный сбор оценён в 45 за фут и должен быть подтверждён у Omniyat письменно.</p>
+    <div class="three">
+      <div class="tier-card"><div class="l">Shell &amp; core</div><div class="v">2,5<small>млн</small></div><div class="y">цель, 7,5% валовых</div><div class="d">Ноль капекса, самый узкий круг арендаторов, пустой период 4–8 месяцев после сдачи</div></div>
+      <div class="tier-card"><div class="l">Отделка Cat B</div><div class="v">3,2<small>млн</small></div><div class="y">цель, 9,6% валовых</div><div class="d">Капекс 1,1 млн, окупаемость меньше двух лет, пустой период 2–3 месяца. Рекомендуемый формат</div></div>
+      <div class="tier-card"><div class="l">Сьюты с сервисом</div><div class="v">3,2<small>млн</small></div><div class="y">цель при 85%, 6,7% чистых</div><div class="d">Капекс 2,45 млн, операционная нагрузка, оборот арендаторов. Формат для оператора, не для владельца</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">III</span>Пакет условий, который идёт вместе с ценой</h2>
+    <p>Ставка 600+ за фут продаётся не сама по себе, а вместе с условиями. Ниже стандарт для 901W и границы уступок.</p>
+    <div class="tbl">
+    <table>
+      <thead><tr><th>Условие</th><th>Стандарт 901W</th><th>Предел уступки</th><th>Что даёт взамен</th></tr></thead>
+      <tbody>
+        <tr><td>Срок</td><td>5 лет</td><td>3 года при ставке выше цели</td><td>Короткий срок оплачивается надбавкой 5–8%</td></tr>
+        <tr><td>Ступень</td><td>5% в год</td><td>3% при семилетнем сроке</td><td>Длина договора против ступени</td></tr>
+        <tr><td>Чеки</td><td>2 в год</td><td>4 при надбавке 3%; 1 при скидке 3%</td><td>Один чек ускоряет кэш, стоит 3% ставки</td></tr>
+        <tr><td>Отделка</td><td>Cat B от владельца при ставке 700+</td><td>Взнос 150 за фут при ставке 600–700</td><td>Отделка это единственный рычаг, который поднимает и ставку, и скорость сдачи</td></tr>
+        <tr><td>Rent-free</td><td>2 месяца при пятилетнем сроке</td><td>3 месяца при ставке выше цели</td><td>Каждый месяц это 1,7% эффективной ставки на пять лет</td></tr>
+        <tr><td>Сервисный сбор</td><td>Net: перевыставляется арендатору</td><td>Gross при ставке на 45 выше</td><td>Разница 200 тыс. в год</td></tr>
+        <tr><td>Парковка</td><td>8 мест включены</td><td>Не отделять</td><td>Рыночная стоимость 40 тыс., аргумент в ставке</td></tr>
+        <tr><td>Депозит</td><td>10% годовой аренды</td><td>5% для арендатора с рейтингом</td><td>Обеспечение против скорости подписания</td></tr>
+        <tr><td>Продление</td><td>Право арендатора на 5 лет по рыночной ставке</td><td>Фиксированная ступень 5% на продление</td><td>RERA-индекс на продление арендатора защищает; рыночная переоценка защищает владельца</td></tr>
+        <tr><td>Субаренда</td><td>Запрещена</td><td>С согласия владельца, без прибыли арендатора</td><td>Иначе арендатор перепродаёт вашу премию</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">IV</span>Что должно быть сделано, чтобы цена держалась</h2>
+    <p class="lede">Три действия по убыванию силы. Первое важнее двух остальных вместе.</p>
+    <div class="two">
+      <div class="card">
+        <h3>1. Общий пол между владельцами <span class="pill good">решающее</span></h3>
+        <ul>
+          <li>Omniyat продал 22 юнита примерно двадцати владельцам. Первые три зарегистрированных договора в здании зададут ставку для всех остальных.</li>
+          <li>Владельцы 501W и 502W уже знакомы. Через них и через брокера Omniyat собрать список владельцев West и East.</li>
+          <li>Предмет соглашения: минимальная ставка shell &amp; core 480, с отделкой 620, до конца 2029 года. Письменно, с подписями, без юридической силы, но с репутационной.</li>
+          <li>Если пол не собрать, запрос снижается до 550 сразу, потому что первый сосед, сдавший за 400, станет рынком.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>2. Пре-лизинг под одного арендатора <span class="pill good">важное</span></h3>
+        <ul>
+          <li>Старт маркетинга в первом квартале 2028, за 6–9 месяцев до сдачи. Два брокерских дома с эксклюзивом на 4 месяца каждый, не одновременно.</li>
+          <li>Целевой профиль: семейный офис, private bank, финтех с региональным штабом, инвестиционный бутик. Они платят за адрес и торгуются за срок и отделку, не за фут.</li>
+          <li>Не выставлять на порталы. Портал это сигнал «ищу любого», и он режет запрос на 10–15%.</li>
+          <li>Показ только по готовой отделке или по визуализации Cat B. Голый бетон на девятом этаже не продаёт 650.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="two" style="margin-top:28px">
+      <div class="card">
+        <h3>3. Подтверждение премии реестром <span class="pill warn">проверка</span></h3>
+        <ul>
+          <li>Запросить из DXB Interact зарегистрированные договоры аренды по ICD Brookfield Place и One Za'abeel за 2025–2026, отдельно голые и отделанные.</li>
+          <li>Если голые площади идут 450+, лестница стоит как есть.</li>
+          <li>Если 350–400, все строки лестницы снижаются на 15%: запрос 550, цель 470–510, пол 410.</li>
+          <li>Если 500+, лестница поднимается на 10%: запрос 715, цель 605–660.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Что снимает премию <span class="pill bad">риски</span></h3>
+        <ul>
+          <li>Сдача Enara уходит на 2029, а ввод 2028 приходит в срок: 718 тыс. кв. м нового Grade A конкурируют за тех же арендаторов.</li>
+          <li>Соседи сдают голые этажи ниже 450, и здание получает репутацию «дорого купили, дёшево сдают».</li>
+          <li>Региональный шок: нефть ниже 55, конфликт. Все уровни лестницы минус 20–30% на год-два.</li>
+          <li>Сервисный сбор оказывается 70+ за фут: net-договор становится труднее продать, и 110 тыс. в год уходит из чистого дохода.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">V</span>Календарь до первого платежа</h2>
+    <ul class="timeline">
+      <li><b>Q4 2026</b>Запрос реестра аренд ICD Brookfield и One Za'abeel. Письменный запрос Omniyat о сервисном сборе, спецификации shell &amp; core и дате сдачи. Первый контакт с владельцами 501W и 502W по общему полу.</li>
+      <li><b>Q1–Q2 2027</b>Список владельцев West и East. Встреча владельцев, письменный пол. Бюджет отделки Cat B: 1,1 млн, дизайн-проект нейтральный: открытая планировка, две переговорные, кухня, серверная.</li>
+      <li><b>Q3–Q4 2027</b>Визуализации отделки. Выбор двух брокерских домов. Подготовка тизера без цены для узкой рассылки по семейным офисам и private banks.</li>
+      <li><b>Q1 2028</b>Старт пре-лизинга. Запрос 650 голым или 850 с отделкой. Первый эксклюзив 4 месяца.</li>
+      <li><b>Q2–Q3 2028</b>Переговоры. Цель 550–600 или 700–750. Второй эксклюзив при отсутствии сделки.</li>
+      <li><b>Q4 2028</b>Сдача здания. Отделка 3–4 месяца, если договор с отделкой.</li>
+      <li><b>Q1–Q2 2029</b>Первый платёж. При пятилетнем договоре и ступени 5% пять лет дают 13,5–14,8 млн при цели голым и 17,2–18,5 млн при цели с отделкой.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="n">VI</span>Ответ в одну строку</h2>
+    <div class="two">
+      <div class="card">
+        <h3>Цифры</h3>
+        <ul>
+          <li>Запрос: <b>650</b> голым, <b>850</b> с отделкой.</li>
+          <li>Цель: <b>550–600</b> голым, 2,45–2,67 млн, 7,4–8,0%. <b>700–750</b> с отделкой, 3,1–3,3 млн, 9,3–10,0%.</li>
+          <li>Пол: <b>480</b> голым, <b>620</b> с отделкой. Ниже только по общему решению владельцев.</li>
+          <li>Рекомендуемый формат: отделка Cat B за 1,1 млн, цель 3,2 млн в год.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Три действия</h3>
+        <ul>
+          <li>Общий пол между владельцами до конца второго квартала 2027.</li>
+          <li>Реестр аренд ICD Brookfield и One Za'abeel до конца 2026: подтверждает или сдвигает лестницу на 15%.</li>
+          <li>Пре-лизинг с первого квартала 2028 через два брокерских дома, без порталов, под одного профильного арендатора.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">Лестница построена на предпосылке владельца о позиционировании Enara как первого ultra-luxury коммерческого объекта Дубая. Якорь 450 за фут для shell &amp; core верхних зданий DIFC это оценка на базе среднего DIFC 425 по Knight Frank за второе полугодие 2025 и листингов 2026 года; он подлежит подтверждению реестром аренд. Базовый прогноз без этой предпосылки, 303 за фут и 1,35 млн в год, изложен в отдельном меморандуме «Прогноз аренды Enara 901W». Сервисный сбор, дата сдачи и спецификация shell &amp; core не подтверждены документами Omniyat. Прогноз не учитывает НДС.</div>
+</div>
+</body>
+</html>
