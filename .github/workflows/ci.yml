@@ -54,7 +54,7 @@ jobs:
 
       - name: Unit tests
         run: |
-          python -m pytest tests/hackingtool tests/test_second_brain.py -q -p no:cacheprovider
+          python -m pytest tests/hackingtool tests/test_second_brain.py tests/test_marketplace.py -q -p no:cacheprovider
 
   checks:
     name: "checks (coverage, network isolation, hygiene)"

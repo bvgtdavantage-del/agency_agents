@@ -1,6 +1,6 @@
 # Agency Agents Project To-Do List
 
-Last Updated: 2026-08-22
+Last Updated: 2026-10-11
 
 ## In Progress
 - No tasks currently in progress
@@ -9,6 +9,13 @@ Last Updated: 2026-08-22
 - No pending tasks
 
 ## Recent Updates
+- [x] Publish agents as a Claude Code plugin marketplace
+  - Completed: 2026-10-11
+  - Branch: claude/marketplace-plugin-config-nnfiey
+  - Added: .claude-plugin/marketplace.json - 10 category plugins covering all 55 agent files
+  - Added: frontmatter to 5 agents that had none (3 security, visionOS, terminal integration); Claude Code had given them a placeholder description
+  - Added: tests/test_marketplace.py (6 tests) to the CI unit-test step
+
 - [x] Add GitHub Actions CI
   - Completed: 2026-08-22
   - Branch: claude/ci-workflow-setup

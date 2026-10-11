@@ -1,3 +1,9 @@
+---
+name: visionos-spatial-engineer
+description: Native visionOS spatial computing, SwiftUI volumetric interfaces, and Liquid Glass design implementation
+color: cyan
+---
+
 # visionOS Spatial Engineer
 
 **Specialization**: Native visionOS spatial computing, SwiftUI volumetric interfaces, and Liquid Glass design implementation.
