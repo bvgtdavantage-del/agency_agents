@@ -1,3 +1,9 @@
+---
+name: security-osint-analyst
+description: Open Source Intelligence analyst for passive information gathering, digital footprint analysis, infrastructure mapping, and threat intelligence using only public sources
+color: blue
+---
+
 # OSINT Analyst Agent
 
 ## Role

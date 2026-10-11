@@ -55,6 +55,7 @@ agency_agents/
 │   ├── support/            # 6 agents (Analytics, Finance, Legal, Infrastructure, etc.)
 │   └── testing/            # 7 agents (Reality Checker, API Tester, Performance, etc.)
 │
+├── .claude-plugin/         # marketplace.json: agents/ published as 10 Claude Code plugins
 ├── .github/workflows/      # CI: ci.yml (narrow gate, see Continuous Integration)
 │
 ├── protocols/              # Mandatory workflow documentation
@@ -206,7 +207,7 @@ second-brain stats
 
 | Job | Scope |
 |---|---|
-| `tests (narrow: hackingtool + second_brain)` | 225 tests on Python 3.9, 3.12, 3.14, plus an import smoke of all three packages and a CLI smoke of `hackingtool` and `second-brain` |
+| `tests (narrow: hackingtool + second_brain)` | 225 tests plus the 6 in `test_marketplace.py` on Python 3.9, 3.12, 3.14, plus an import smoke of all three packages and a CLI smoke of `hackingtool` and `second-brain` |
 | `checks (coverage, network isolation, hygiene)` | Coverage floor 65% on the gated packages, a guard proving no gated test performs real network or subprocess I/O, a tracked-artifact check, and a floor on the gate's own test count |
 
 **What it does NOT gate.** The 8 `agent_router` test files are excluded — they contribute 254 failures, every one terminating in `AgentConfigError` from the absolute `file_path` values described under "Absolute Path Issue" below. The job names say "narrow" so a green check is never mistaken for a green repo: a PR touching only `agent_router/`, `agents.yaml`, or `protocols.py` gets a passing CI that proves nothing about the change.
@@ -284,6 +285,12 @@ color: blue
 ```
 
 The body contains the agent's identity, mission, tools, workflow, and communication style. These files are the source of truth for agent behavior — `agents.yaml` references them via `file_path`.
+
+### Claude Code Marketplace
+
+`.claude-plugin/marketplace.json` publishes every file in `agents/` as a Claude Code plugin, one plugin per category directory (`source: ./agents/<category>`, `strict: false`, an explicit `agents` list of `./<file>.md`). It is independent of `agents.yaml`: the 14 unregistered agents below are published too.
+
+When adding an agent file, add its path to the matching plugin's `agents` list. `tests/test_marketplace.py` (in the CI gate) fails on an unlisted file, a listed file that does not exist, or a file without `name` and `description` frontmatter — Claude Code loads such a file but shows a placeholder description, so it is never delegated to. Verify locally with `claude plugin validate .`.
 
 ### Known Issue: Unregistered Agent Files
 

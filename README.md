@@ -22,6 +22,28 @@ This repository contains a comprehensive **Development Workflow Protocol** that 
 
 ---
 
+## 🧩 Install as a Claude Code Plugin
+
+`.claude-plugin/marketplace.json` publishes the agents as a Claude Code marketplace named `agency-agents`, one plugin per category: `design`, `engineering`, `marketing`, `product`, `project-management`, `security`, `spatial-computing`, `specialized`, `support`, `testing`.
+
+```
+/plugin marketplace add bvgtdavantage-del/agency_agents
+/plugin install engineering@agency-agents
+```
+
+All ten from a shell:
+
+```bash
+claude plugin marketplace add bvgtdavantage-del/agency_agents
+for c in design engineering marketing product project-management security spatial-computing specialized support testing; do
+  claude plugin install "$c@agency-agents"
+done
+```
+
+Installed agents are namespaced by plugin, e.g. `engineering:engineering-senior-developer` or `security:security-penetration-tester`. `tests/test_marketplace.py` fails if an agent file is added without a manifest entry or without `name`/`description` frontmatter.
+
+---
+
 ## 📚 Repository Structure
 
 ```

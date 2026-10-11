@@ -1,0 +1,157 @@
+{
+  "name": "agency-agents",
+  "owner": {
+    "name": "bvgtdavantage-del"
+  },
+  "metadata": {
+    "description": "Specialized Claude Code subagents grouped by discipline",
+    "version": "0.3.0"
+  },
+  "plugins": [
+    {
+      "name": "design",
+      "description": "Design agents: brand guardian, UI designer, UX architect, UX researcher, visual storyteller, whimsy injector",
+      "source": "./agents/design",
+      "strict": false,
+      "category": "design",
+      "agents": [
+        "./design-brand-guardian.md",
+        "./design-ui-designer.md",
+        "./design-ux-architect.md",
+        "./design-ux-researcher.md",
+        "./design-visual-storyteller.md",
+        "./design-whimsy-injector.md"
+      ]
+    },
+    {
+      "name": "engineering",
+      "description": "Engineering agents: senior developer, frontend, backend architect, AI engineer, DevOps automator, mobile app builder, rapid prototyper",
+      "source": "./agents/engineering",
+      "strict": false,
+      "category": "engineering",
+      "agents": [
+        "./engineering-ai-engineer.md",
+        "./engineering-backend-architect.md",
+        "./engineering-devops-automator.md",
+        "./engineering-frontend-developer.md",
+        "./engineering-mobile-app-builder.md",
+        "./engineering-rapid-prototyper.md",
+        "./engineering-senior-developer.md"
+      ]
+    },
+    {
+      "name": "marketing",
+      "description": "Marketing agents: content creator, growth hacker, social media strategist, App Store optimizer, and Instagram, Reddit, TikTok, Twitter specialists",
+      "source": "./agents/marketing",
+      "strict": false,
+      "category": "marketing",
+      "agents": [
+        "./marketing-app-store-optimizer.md",
+        "./marketing-content-creator.md",
+        "./marketing-growth-hacker.md",
+        "./marketing-instagram-curator.md",
+        "./marketing-reddit-community-builder.md",
+        "./marketing-social-media-strategist.md",
+        "./marketing-tiktok-strategist.md",
+        "./marketing-twitter-engager.md"
+      ]
+    },
+    {
+      "name": "product",
+      "description": "Product agents: sprint prioritizer, feedback synthesizer, trend researcher",
+      "source": "./agents/product",
+      "strict": false,
+      "category": "product",
+      "agents": [
+        "./product-feedback-synthesizer.md",
+        "./product-sprint-prioritizer.md",
+        "./product-trend-researcher.md"
+      ]
+    },
+    {
+      "name": "project-management",
+      "description": "Project management agents: senior project manager, project shepherd, experiment tracker, studio operations, studio producer",
+      "source": "./agents/project-management",
+      "strict": false,
+      "category": "project-management",
+      "agents": [
+        "./project-management-experiment-tracker.md",
+        "./project-management-project-shepherd.md",
+        "./project-management-studio-operations.md",
+        "./project-management-studio-producer.md",
+        "./project-manager-senior.md"
+      ]
+    },
+    {
+      "name": "security",
+      "description": "Security agents: CTF specialist, OSINT analyst, penetration tester for authorized assessments",
+      "source": "./agents/security",
+      "strict": false,
+      "category": "security",
+      "agents": [
+        "./security-ctf-specialist.md",
+        "./security-osint-analyst.md",
+        "./security-penetration-tester.md"
+      ]
+    },
+    {
+      "name": "spatial-computing",
+      "description": "Spatial computing agents: visionOS, XR immersive, XR interface, XR cockpit, macOS Metal, terminal integration",
+      "source": "./agents/spatial-computing",
+      "strict": false,
+      "category": "spatial-computing",
+      "agents": [
+        "./macos-spatial-metal-engineer.md",
+        "./terminal-integration-specialist.md",
+        "./visionos-spatial-engineer.md",
+        "./xr-cockpit-interaction-specialist.md",
+        "./xr-immersive-developer.md",
+        "./xr-interface-architect.md"
+      ]
+    },
+    {
+      "name": "specialized",
+      "description": "Specialized agents: agents orchestrator, Second Brain manager, LSP/index engineer, data analytics reporter",
+      "source": "./agents/specialized",
+      "strict": false,
+      "category": "specialized",
+      "agents": [
+        "./agents-orchestrator.md",
+        "./data-analytics-reporter.md",
+        "./lsp-index-engineer.md",
+        "./second-brain-manager.md"
+      ]
+    },
+    {
+      "name": "support",
+      "description": "Support agents: analytics reporter, executive summaries, finance tracker, infrastructure maintainer, legal compliance, support responder",
+      "source": "./agents/support",
+      "strict": false,
+      "category": "support",
+      "agents": [
+        "./support-analytics-reporter.md",
+        "./support-executive-summary-generator.md",
+        "./support-finance-tracker.md",
+        "./support-infrastructure-maintainer.md",
+        "./support-legal-compliance-checker.md",
+        "./support-support-responder.md"
+      ]
+    },
+    {
+      "name": "testing",
+      "description": "Testing agents: reality checker, evidence collector, API tester, performance benchmarker, test results analyzer, tool evaluator, workflow optimizer",
+      "source": "./agents/testing",
+      "strict": false,
+      "category": "testing",
+      "agents": [
+        "./testing-api-tester.md",
+        "./testing-evidence-collector.md",
+        "./testing-performance-benchmarker.md",
+        "./testing-reality-checker.md",
+        "./testing-test-results-analyzer.md",
+        "./testing-tool-evaluator.md",
+        "./testing-workflow-optimizer.md"
+      ]
+    }
+  ]
+}
