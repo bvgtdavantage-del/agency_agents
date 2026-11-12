@@ -16,7 +16,9 @@ concurrency:
 jobs:
   tests:
     name: "tests (narrow: hackingtool + second_brain + mt5_agent)"
-    runs-on: ubuntu-latest
+    # ubuntu-latest is Ubuntu 26.04, for which setup-python publishes no 3.9 build; 3.9 is
+    # the declared floor (setup.py), so that leg stays on the last image that has it.
+    runs-on: ${{ matrix.python-version == '3.9' && 'ubuntu-24.04' || 'ubuntu-latest' }}
     timeout-minutes: 10
     strategy:
       fail-fast: false
