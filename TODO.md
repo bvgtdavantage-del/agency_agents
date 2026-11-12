@@ -1,6 +1,6 @@
 # Agency Agents Project To-Do List
 
-Last Updated: 2026-08-22
+Last Updated: 2026-11-12
 
 ## In Progress
 - No tasks currently in progress
@@ -9,6 +9,15 @@ Last Updated: 2026-08-22
 - No pending tasks
 
 ## Recent Updates
+- [x] Add MetaTrader 5 trading agent (mt5_agent)
+  - Completed: 2026-11-12
+  - Branch: claude/stoic-allen-vigs5m
+  - Added: mql5/AgencyMT5Agent.mq5 (compiles 0 errors / 0 warnings on MetaEditor build 6257)
+  - Added: stdlib-only Python backtester, MT5-faithful indicators, `mt5-agent backtest` CLI
+  - Added: agents/specialized/mt5-trading-agent.md (not registered in agents.yaml - absolute-path issue)
+  - Validated: 2005-2020 OANDA data, 1% risk: CAGR 5.3%, max DD 8.9%, PF 1.79, 365 trades
+  - CI: tests/mt5_agent joins the gate; baseline 225 -> 278 tests
+
 - [x] Add GitHub Actions CI
   - Completed: 2026-08-22
   - Branch: claude/ci-workflow-setup
