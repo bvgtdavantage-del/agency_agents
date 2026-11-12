@@ -6,8 +6,8 @@ from setuptools import setup, find_packages
 
 setup(
     name='agency_agents',
-    version='0.3.0',
-    description='Intelligent task routing, persistent knowledge, and all-in-one security research framework',
+    version='0.4.0',
+    description='Intelligent task routing, persistent knowledge, security research tooling, and a MetaTrader 5 trading agent',
     author='Agency Agents',
     packages=find_packages(),
     python_requires='>=3.9',
@@ -24,10 +24,12 @@ setup(
         'console_scripts': [
             'second-brain=second_brain.cli:main',
             'hackingtool=hackingtool.cli:main',
+            'mt5-agent=mt5_agent.cli:main',
         ],
     },
     package_data={
         'agent_router': ['agents.yaml'],
+        'mt5_agent': ['mql5/*.mq5', 'README.md'],
     },
     include_package_data=True,
 )

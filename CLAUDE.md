@@ -2,13 +2,14 @@
 
 ## Repository Overview
 
-This repository is an **intelligent agent routing and tooling system** with three main components:
+This repository is an **intelligent agent routing and tooling system** with four main components:
 
 1. **`agent_router/`** — Routes tasks to the appropriate specialized agent via keyword scoring
 2. **`second_brain/`** — Persistent JSON-backed knowledge store for cross-session agent memory
 3. **`hackingtool/`** — CLI security research framework (WHOIS, DNS, port scanning, crypto, OSINT, CTF, forensics)
+4. **`mt5_agent/`** — MetaTrader 5 trading agent: an MQL5 Expert Advisor plus a stdlib-only Python backtester of the same rules
 
-It also contains **`agents/`**, a library of 55 Claude agent definition markdown files (41 registered in `agents.yaml`), and **`protocols/`**, mandatory development workflow documentation.
+It also contains **`agents/`**, a library of 56 Claude agent definition markdown files (41 registered in `agents.yaml`), and **`protocols/`**, mandatory development workflow documentation.
 
 ---
 
@@ -43,6 +44,16 @@ agency_agents/
 │       ├── ctf/            # CipherTools (caesar, vigenere, morse, xor), PatternSearch
 │       └── forensics/      # FileAnalyzer, SteganographyDetector
 │
+├── mt5_agent/              # MetaTrader 5 trading agent (stdlib-only Python)
+│   ├── mql5/AgencyMT5Agent.mq5  # The Expert Advisor that trades in MT5
+│   ├── indicators.py       # SMA/EMA/ATR/RSI reproducing MT5 built-in formulas
+│   ├── strategy.py         # Breakout and MeanReversion rules (defaults == EA inputs)
+│   ├── backtest.py         # Portfolio backtester mirroring the EA's execution and risk limits
+│   ├── metrics.py          # CAGR, max drawdown, Sharpe, profit factor, R-multiples
+│   ├── data.py             # Bars + CSV loader for MT5 "Export bars" files
+│   ├── cli.py              # `mt5-agent backtest` entry point
+│   └── README.md           # Install guide, validation results, known limitations
+│
 ├── agents/                 # Claude agent personality definition files (.md)
 │   ├── design/             # 6 agents (UI Designer, UX Architect, UX Researcher, etc.)
 │   ├── engineering/        # 7 agents (Senior Developer [default], Frontend, Backend, AI, etc.)
@@ -51,7 +62,7 @@ agency_agents/
 │   ├── project-management/ # 5 agents (Project Shepherd, Experiment Tracker, Studio Producer, etc.)
 │   ├── security/           # 3 agents (CTF Specialist, OSINT Analyst, Penetration Tester)
 │   ├── spatial-computing/  # 6 agents (visionOS, XR Immersive, XR Interface, XR Cockpit, macOS Metal, Terminal)
-│   ├── specialized/        # 4 agents (Agents Orchestrator, Second Brain Manager, LSP Engineer, Data Analytics Reporter)
+│   ├── specialized/        # 5 agents (Agents Orchestrator, Second Brain Manager, LSP Engineer, Data Analytics Reporter, MT5 Trading Agent)
 │   ├── support/            # 6 agents (Analytics, Finance, Legal, Infrastructure, etc.)
 │   └── testing/            # 7 agents (Reality Checker, API Tester, Performance, etc.)
 │
@@ -96,7 +107,7 @@ Python requirement: **>=3.8**. Use a virtual environment — activate it before 
 
 ```bash
 # Full test suite with coverage
-pytest tests/ -v --cov=agent_router --cov=second_brain --cov=hackingtool
+pytest tests/ -v --cov=agent_router --cov=second_brain --cov=hackingtool --cov=mt5_agent
 
 # Run a specific test file
 pytest tests/test_agent_router.py -v
@@ -196,6 +207,21 @@ second-brain stats
 - Global flags: `--timeout`, `--threads`, `--verbose`, `--no-banner`
 - `Config` dataclass (`core/config.py`): `timeout`, `verbose`, `max_threads`
 
+### MT5 Agent (`mt5_agent/`)
+
+- **Two implementations of one rule set**: `mql5/AgencyMT5Agent.mq5` trades live; `strategy.py` + `backtest.py` replay it on history. Change both together — `tests/mt5_agent/test_mt5_strategy.py::test_default_parameters_match_the_expert_advisor_inputs` fails if the Python defaults and the EA `input` defaults drift apart
+- **Indicators match MT5 built-ins**, not textbook variants: `ema` seeds with the first price (iMA), `atr` is a *simple* mean of true range (iATR, not Wilder), `rsi` uses MT5's seed and Wilder recursion
+- **Strategies**: `breakout` (close beyond prior 55-bar channel + EMA200 filter, 2×ATR stop trailing the 20-bar channel) and `meanrev` (RSI(2) < 10 above SMA200, exit on close above SMA5 or after 10 bars, 3×ATR stop, long only by default)
+- **Execution model**: signal on bar close → fill next open at bid/ask from mid data; gap through stop fills at the open; entry and stop in the same bar is a loss; swap charged per calendar day on notional; P&L computed per price unit so non-USD quote currencies need no conversion
+- **Risk limits**: size = risk% of marked-to-market equity / stop distance; daily loss limit blocks new entries; drawdown halt flattens everything and stops trading for the rest of the run (the EA shares this state across instances via terminal global variables keyed by account login)
+- **Validation** (2005–2020 OANDA data, results in `mt5_agent/README.md`) is not reproducible from the repo: the dataset is not committed. Re-verify on MT5-exported history with `mt5-agent backtest`
+- The EA compiles with MetaEditor 5 build 6257 at 0 errors / 0 warnings; CI does not compile MQL5 (no MetaEditor on GitHub runners)
+
+```bash
+mt5-agent backtest --market US500 meanrev US500_D1.csv --market XAUUSD breakout XAUUSD_D1.csv \
+  --spread US500=0.6 --spread XAUUSD=0.35 --risk 1 --start 2015-01-01 --trades-csv trades.csv
+```
+
 ---
 
 ## Continuous Integration
@@ -206,7 +232,7 @@ second-brain stats
 
 | Job | Scope |
 |---|---|
-| `tests (narrow: hackingtool + second_brain)` | 225 tests on Python 3.9, 3.12, 3.14, plus an import smoke of all three packages and a CLI smoke of `hackingtool` and `second-brain` |
+| `tests (narrow: hackingtool + second_brain + mt5_agent)` | 278 tests on Python 3.9, 3.12, 3.14, plus an import smoke of all four packages and a CLI smoke of `hackingtool`, `second-brain` and `mt5-agent` |
 | `checks (coverage, network isolation, hygiene)` | Coverage floor 65% on the gated packages, a guard proving no gated test performs real network or subprocess I/O, a tracked-artifact check, and a floor on the gate's own test count |
 
 **What it does NOT gate.** The 8 `agent_router` test files are excluded — they contribute 254 failures, every one terminating in `AgentConfigError` from the absolute `file_path` values described under "Absolute Path Issue" below. The job names say "narrow" so a green check is never mistaken for a green repo: a PR touching only `agent_router/`, `agents.yaml`, or `protocols.py` gets a passing CI that proves nothing about the change.
@@ -220,7 +246,7 @@ second-brain stats
 
 Order: fix path resolution in `AgentConfig._validate_agent`, rewrite the three machine-coupled tests, settle the 41-vs-37 count and the protocol-flag contradiction, then replace the two gate paths with `tests/` and drop "narrow" from the job names.
 
-**Coverage is a regression guard, not a correctness signal.** Measured 68.7% on the gated packages against a 65% floor. Line coverage overstates rigour here: `second_brain/memory.py` reports 100% while its documented atomic-write invariant has no test — replacing `os.replace` with a non-atomic copy leaves the suite green.
+**Coverage is a regression guard, not a correctness signal.** Measured 75.9% on the gated packages against a 65% floor (68.7% before `mt5_agent` joined the gate). Line coverage overstates rigour here: `second_brain/memory.py` reports 100% while its documented atomic-write invariant has no test — replacing `os.replace` with a non-atomic copy leaves the suite green.
 
 **Python floor is 3.9, not 3.8.** Ten modules use PEP 585 builtin generics (`list[tuple]`, `dict[str, str]`) in runtime-evaluated annotations without `from __future__ import annotations`, so 3.8 aborts collection with import errors before any test runs. `setup.py` declares `>=3.9` accordingly.
 
@@ -287,9 +313,9 @@ The body contains the agent's identity, mission, tools, workflow, and communicat
 
 ### Known Issue: Unregistered Agent Files
 
-14 agent `.md` files exist in `agents/` subdirectories but are **not registered in `agents.yaml`**:
+15 agent `.md` files exist in `agents/` subdirectories but are **not registered in `agents.yaml`**:
 
-- `agents/specialized/`: `agents-orchestrator.md`, `data-analytics-reporter.md`, `lsp-index-engineer.md`
+- `agents/specialized/`: `agents-orchestrator.md`, `data-analytics-reporter.md`, `lsp-index-engineer.md`, `mt5-trading-agent.md`
 - `agents/project-management/`: `project-management-experiment-tracker.md`, `project-management-project-shepherd.md`, `project-management-studio-operations.md`, `project-management-studio-producer.md`, `project-manager-senior.md`
 - `agents/spatial-computing/`: `macos-spatial-metal-engineer.md`, `terminal-integration-specialist.md`, `visionos-spatial-engineer.md`, `xr-cockpit-interaction-specialist.md`, `xr-immersive-developer.md`, `xr-interface-architect.md`
 
@@ -343,4 +369,4 @@ Add to `agent_router/agents.yaml`:
 - Do not commit `__pycache__/`, `.env`, or `*.pyc` files
 - Do not skip the `AgentConfig.clear_cache()` in test fixtures — it causes cross-test contamination
 - Do not update `agents.yaml` `file_path` values to non-existent paths without updating the validation logic
-- Do not add the 14 unregistered agents to `agents.yaml` without first verifying their `.md` files parse correctly via `AgentPersonality.load_agent()`
+- Do not add the 15 unregistered agents to `agents.yaml` without first verifying their `.md` files parse correctly via `AgentPersonality.load_agent()`

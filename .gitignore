@@ -63,3 +63,6 @@ temp/
 
 # Nested Git Repositories (exclude third-party agent templates)
 agency-agents/
+
+# MetaTrader compiled binaries
+*.ex5

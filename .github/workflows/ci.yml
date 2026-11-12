@@ -15,8 +15,10 @@ concurrency:
 
 jobs:
   tests:
-    name: "tests (narrow: hackingtool + second_brain)"
-    runs-on: ubuntu-latest
+    name: "tests (narrow: hackingtool + second_brain + mt5_agent)"
+    # ubuntu-latest is Ubuntu 26.04, for which setup-python publishes no 3.9 build; 3.9 is
+    # the declared floor (setup.py), so that leg stays on the last image that has it.
+    runs-on: ${{ matrix.python-version == '3.9' && 'ubuntu-24.04' || 'ubuntu-latest' }}
     timeout-minutes: 10
     strategy:
       fail-fast: false
@@ -40,7 +42,7 @@ jobs:
       # agent_router at collection time, so the dev extra is what the gate needs.
       - name: Import smoke
         run: |
-          python -c "import hackingtool, hackingtool.cli, second_brain, second_brain.cli, agent_router.config, agent_router.router, agent_router.personality, agent_router.coordination, agent_router.protocols"
+          python -c "import hackingtool, hackingtool.cli, second_brain, second_brain.cli, mt5_agent.cli, agent_router.config, agent_router.router, agent_router.personality, agent_router.coordination, agent_router.protocols"
 
       # hackingtool/cli.py has no test coverage and its argparse wiring resolves at
       # call time, so importing it proves nothing. These invocations do.
@@ -51,10 +53,11 @@ jobs:
           python -m hackingtool.cli --no-banner encode b64e hello > /dev/null
           python -m hackingtool.cli --no-banner cipher caesar "hello" --shift 3 > /dev/null
           python -m second_brain --help > /dev/null
+          python -m mt5_agent backtest --help > /dev/null
 
       - name: Unit tests
         run: |
-          python -m pytest tests/hackingtool tests/test_second_brain.py -q -p no:cacheprovider
+          python -m pytest tests/hackingtool tests/test_second_brain.py tests/mt5_agent -q -p no:cacheprovider
 
   checks:
     name: "checks (coverage, network isolation, hygiene)"
@@ -78,11 +81,11 @@ jobs:
       # repo-wide picture rather than only the gated slice.
       - name: Coverage (gated packages, floor 65%)
         run: |
-          python -m pytest tests/hackingtool tests/test_second_brain.py -q -p no:cacheprovider \
-            --cov=hackingtool --cov=second_brain \
+          python -m pytest tests/hackingtool tests/test_second_brain.py tests/mt5_agent -q -p no:cacheprovider \
+            --cov=hackingtool --cov=second_brain --cov=mt5_agent \
             --cov-report=term-missing --cov-report=xml \
             --cov-fail-under=65
-          python -m pytest tests/hackingtool tests/test_second_brain.py -q -p no:cacheprovider \
+          python -m pytest tests/hackingtool tests/test_second_brain.py tests/mt5_agent -q -p no:cacheprovider \
             --cov=agent_router --cov-report=term \
             --cov-fail-under=0 > /dev/null 2>&1 || true
 
@@ -123,7 +126,7 @@ jobs:
           subprocess.Popen = _blocked("subprocess.Popen")
           PLUGIN
           PYTHONPATH="$RUNNER_TEMP/ciguard" python -m pytest \
-            tests/hackingtool tests/test_second_brain.py -q -p no:cacheprovider -p netguard
+            tests/hackingtool tests/test_second_brain.py tests/mt5_agent -q -p no:cacheprovider -p netguard
 
       # GIT-WORKFLOW-PROTOCOL check 2. The other three are post-push, human, or would
       # fail this repo outright, so they are not automated here.
@@ -139,11 +142,10 @@ jobs:
 
       # A narrow gate can be hollowed out by deleting test files while still reporting
       # green. Raise the baseline when tests are added; lower it deliberately.
-      # Baseline is main's current count; PR #17 raises it to 234 once merged.
       - name: Gate has not shrunk
         run: |
           set +e
-          collected=$(python -m pytest tests/hackingtool tests/test_second_brain.py \
+          collected=$(python -m pytest tests/hackingtool tests/test_second_brain.py tests/mt5_agent \
             -q --collect-only -p no:cacheprovider 2>/dev/null | grep -c '::')
           status=$?
           set -e
@@ -151,9 +153,9 @@ jobs:
             echo "could not collect tests (exit $status) - treating as failure"
             exit 1
           fi
-          echo "collected $collected tests (baseline 225)"
-          if [ "$collected" -lt 225 ]; then
-            echo "the narrow gate shrank below its 225-test baseline."
+          echo "collected $collected tests (baseline 278)"
+          if [ "$collected" -lt 278 ]; then
+            echo "the narrow gate shrank below its 278-test baseline."
             echo "if tests were removed on purpose, lower the baseline in this step."
             exit 1
           fi
